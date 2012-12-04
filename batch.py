@@ -1,3 +1,13 @@
+'''
+batch.py
+natural-mixer
+
+2012 Brandon Mechtley
+Arizona State University
+
+Batch resynthesis for generating soundfiles for use with an Amazon Mechanical Turk user study.
+'''
+
 from sys import argv
 from subprocess import call
 from pylab import *

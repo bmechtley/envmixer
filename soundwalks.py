@@ -1,3 +1,12 @@
+'''
+soundwalks.py
+natural-mixer
+
+Defines a class to describe a Soundwalk, annotated with Sonic Visualizer, along with a number of helpful mathematical functions.
+
+Two layers are interpreted at the moment, one titled "cut," which will specify segments to cut from the recording in resynthesis, such as speech. Another layer, "jasa-el" specifies portions of the recordings to use for resynthesis in an upcoming JASA-EL letter.
+'''
+
 from xml.dom.minidom import parse, parseString
 from pylab import *
 from os.path import splitext

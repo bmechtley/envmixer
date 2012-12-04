@@ -1,25 +1,32 @@
-'''mixer.py
-	Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
+'''
+mixer.py
+natural-mixer
+
+2012 Brandon Mechtley
+Arizona State University
 	
-	Creates a mixed environmental sound recording from 3 source recordings. Source recordings are 
-	assumed to be of equal duration. The paths that define along which they were recorded are fake, 
-	organized along on equilateral triangle:
+Creates a mixed environmental sound recording from 3 source recordings. Source recordings are 
+assumed to be of equal duration. The paths that define along which they were recorded are fake, 
+organized along on equilateral triangle:
 	
-				 p1 (.5, sin(pi / 3))
-			   /	\
-		p0 (0,0) --	p2 (1, 0)
+			 p1 (.5, sin(pi / 3))
+		   /	\
+	p0 (0,0) --	p2 (1, 0)
 	
-	Soundwalk 0: p0->p1
-	Soundwalk 1: p1->p2
-	Soundwalk 2: p2->p0
+Soundwalk 0: p0->p1
+Soundwalk 1: p1->p2
+Soundwalk 2: p2->p0
 	
-	The mixed synthesized version will be fixed at coordinates (x, y) and last for the specified 
-	duration (in seconds).
+The mixed synthesized version will be fixed at coordinates (x, y) and last for the specified 
+duration (in seconds).
 	
-	Various methods are used for resynthesis. See the appropriate functions for details. The basic 
-	rule of thumb is that the closer to a given walk the cursor is, the more similar the 
-	synthesized version will be to it. Additionally, the output should be most similar to the 
-	region of each soundwalk that is closest to the cursor.'''
+Various methods are used for resynthesis. See the appropriate functions for details. The basic 
+rule of thumb is that the closer to a given walk the cursor is, the more similar the 
+synthesized version will be to it. Additionally, the output should be most similar to the 
+region of each soundwalk that is closest to the cursor.
+
+Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
+'''
 
 from sys import argv
 from scipy.io import wavfile
