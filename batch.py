@@ -31,13 +31,15 @@ parser.add_argument('-o', '--output', metavar='file', default='./', type=str,
     help='base path for output')
 args = parser.parse_args()
 
-coords = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (1./3, 1./3, 1./3)]
-for i in range(len(coords)):
-    coords[i] = np.array(coords[i])
+# Corners and center.
+coords = np.array([(1, 0, 0), (0, 1, 0), (0, 0, 1), (1./3, 1./3, 1./3)])
 
+# Interior.
 coords.append((coords[0] + coords[1] + coords[3]) / 3)
 coords.append((coords[0] + coords[2] + coords[3]) / 3)
 coords.append((coords[1] + coords[2] + coords[3]) / 3)
+
+# Sides.
 coords.append((coords[0] + coords[3]) / 2)
 coords.append((coords[1] + coords[3]) / 2)
 coords.append((coords[2] + coords[3]) / 2)
