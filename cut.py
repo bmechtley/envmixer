@@ -1,7 +1,7 @@
 '''
 cut.py
-
 natural-mixer
+
 2012 Brandon Mechtley
 Arizona State University
 

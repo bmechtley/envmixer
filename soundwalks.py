@@ -2,6 +2,9 @@
 soundwalks.py
 natural-mixer
 
+2012 Brandon Mechtley
+Arizona State University
+
 Defines a class to describe a Soundwalk, annotated with Sonic Visualizer, along with a number of 
 helpful mathematical functions.
 

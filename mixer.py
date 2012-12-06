@@ -4,22 +4,22 @@ natural-mixer
 
 2012 Brandon Mechtley
 Arizona State University
-    
+
 Creates a mixed environmental sound recording from 3 source recordings. Source recordings are 
 assumed to be of equal duration. The paths that define along which they were recorded are fake, 
 organized along on equilateral triangle:
-    
+
              p1 (.5, sin(pi / 3))
            /    \
     p0 (0,0) -- p2 (1, 0)
-    
+
 Soundwalk 0: p0->p1
 Soundwalk 1: p1->p2
 Soundwalk 2: p2->p0
-    
+
 The mixed synthesized version will be fixed at coordinates (x, y) and last for the specified 
 duration (in seconds).
-    
+
 Various methods are used for resynthesis. See the appropriate functions for details. The basic 
 rule of thumb is that the closer to a given walk the cursor is, the more similar the 
 synthesized version will be to it. Additionally, the output should be most similar to the 
@@ -28,28 +28,26 @@ region of each soundwalk that is closest to the cursor.
 Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
 '''
 
-from sys import argv
+import os, bz2, argparse
 from scipy.io import wavfile
 from soundwalks import *
-import os
-import bz2
 
-class Grain: 
+class Grain:
     def __str__(self):
         return '%d %d %d %d' % (self.outpos, self.srcpos, self.dur, self.src)
 
 def output_grain_annotations(grains, rate, wavname, filename):
     outstr = open('template.xml', 'r').read() % (
-        wavname, 
-        rate, 
+        wavname,
+        rate,
         grains[-1].outpos + grains[-1].dur,
-        os.path.join(os.getcwd(), wavname), 
+        os.path.join(os.getcwd(), wavname),
         rate,
         grains[0].outpos,
         grains[-1].outpos + grains[-1].dur,
         len(grains),
         '\n\t\t\t\t'.join([
-            '<point frame="%d" value="%d" duration="%d" label=""/>' % (g.outpos, i, g.dur) 
+            '<point frame="%d" value="%d" duration="%d" label=""/>' % (g.outpos, i, g.dur)
             for i, g in enumerate(grains)
         ]),
         (grains[-1].outpos + grains[-1].dur) / 2
@@ -118,10 +116,10 @@ def simple_grain_train(coords, sounds, length = 10, graindur = [500, 2000], jump
     
     grains[-1].dur = min(grains[-1].dur, rate * length - grains[-1].outpos)
     
-    return grains 
+    return grains
 
 def output_grain_train(sounds, grains, filename):
-    '''Write a synthesized version from a sequence of grains from different sources, with optional 
+    '''Write a synthesized version from a sequence of grains from different sources, with optional
     overlap.'''
     
     rate = min([s.rate for s in sounds])
@@ -138,30 +136,42 @@ def output_grain_train(sounds, grains, filename):
             
             half = 1 - (cos(linspace(0, pi, fadedur)) + 1) / 2
             
-            p.data[-fadedur:] *= sqrt(1 - half)
-            g.data[:fadedur] *= sqrt(half)
+            if len(p.data[-fadedur:]):
+                p.data[-fadedur:] = p.data[-fadedur:] * sqrt(1 - half)
+            
+            if len(g.data[:fadedur]):
+                g.data[:fadedur] = g.data[:fadedur] * sqrt(half)
     
     for g in grains:
-        sound[g.outpos:g.outpos + g.dur] += g.data
+        if len(g.data):
+            sound[g.outpos:g.outpos + g.dur] += g.data
     
     wavfile.write(filename, rate, sound)
 
 def main():
+    parser = argparse.ArgumentParser(description='Create a mixture of two or more sound textures.')
+    parser.add_argument('inputs', metavar='wav', nargs=3, type=str, 
+        help='wav or sv files to mix.')
+    parser.add_argument('-c', '--coords', nargs=2, metavar='float', default=[0.5, 0.5], type=float,
+        help='cartesian coordinates within the triangle.')
+    parser.add_argument('-l', '--length', metavar='s', default=10, type=float,
+        help='length of output in seconds')
+    parser.add_argument('-g', '--graindur', nargs=2, metavar='ms', default=[100, 500], type=float,
+        help='duration of grains in milliseconds')
+    parser.add_argument('-j', '--jumpdev', metavar='s', default=60, type=float,
+        help='standard deviation of random jumps in seconds')
+    parser.add_argument('-o', '--output', metavar='file', default='output.wav', type=str,
+        help='wav file for output')
+    parser.add_argument('-s', '--svl', metavar='file', default='output.svl', type=str,
+        help='sonic visualiser layer output')
+    args = parser.parse_args()
+    
     # Load commandline arguments.
-    sounds = [Soundwalk(argv[i]) for i in [1, 2, 3]]
-    coords = array([float(argv[i]) for i in [4, 5]])
-    length = float(argv[6])
-    graindur = [float(argv[7]), float(argv[8])]
-    jumpdev = float(argv[9])
-    outputwav = argv[10].replace('\ ', ' ')
+    sounds = [Soundwalk(w) for w in args.inputs]
     
-    grains = simple_grain_train(coords, sounds, length, graindur, jumpdev)
-    
-    output_grain_train(sounds, grains, outputwav)
-    
-    if len(argv) > 11:
-        outputsvl = argv[11].replace('\ ', ' ')
-        output_grain_annotations(grains, sounds[0].rate, outputwav, outputsvl)
+    grains = simple_grain_train(args.coords, sounds, args.length, args.graindur, args.jumpdev)
+    output_grain_train(sounds, grains, args.output)
+    output_grain_annotations(grains, sounds[0].rate, args.output, args.svl)
 
 if __name__=='__main__':
     main()
