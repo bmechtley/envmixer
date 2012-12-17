@@ -5,8 +5,8 @@ natural-mixer
 2012 Brandon Mechtley
 Arizona State University
 
-Creates a mixed environmental sound recording from 3 source recordings. Source recordings are 
-assumed to be of equal duration. The paths that define along which they were recorded are fake, 
+Creates a mixed environmental sound recording from 3 source recordings. Source recordings are
+assumed to be of equal duration. The paths that define along which they were recorded are fake,
 organized along on equilateral triangle:
 
              p1 (.5, sin(pi / 3))
@@ -17,13 +17,13 @@ Soundwalk 0: p0->p1
 Soundwalk 1: p1->p2
 Soundwalk 2: p2->p0
 
-The mixed synthesized version will be fixed at coordinates (x, y) and last for the specified 
+The mixed synthesized version will be fixed at coordinates (x, y) and last for the specified
 duration (in seconds).
 
-Various methods are used for resynthesis. See the appropriate functions for details. The basic 
-rule of thumb is that the closer to a given walk the cursor is, the more similar the 
-synthesized version will be to it. Additionally, the output should be most similar to the 
-region of each soundwalk that is closest to the cursor.
+Various methods are used for resynthesis. See the appropriate functions for details. The basic rule
+of thumb is that the closer to a given walk the cursor is, the more similar the synthesized version
+will be to it. Additionally, the output should be most similar to the region of each soundwalk that
+is closest to the cursor.
 
 Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
 '''
@@ -58,16 +58,16 @@ def output_grain_annotations(grains, rate, wavname, filename):
     f.close()
 
 def simple_grain_train(coords, sounds, length = 10, graindur = [500, 2000], jumpdev=60):
-    '''Simplest synthesis algorithm. Creates a sequence of overlapping grains, each selected from a 
-    different source recording. The source recording is randomly selected, weighted according to 
+    '''Simplest synthesis algorithm. Creates a sequence of overlapping grains, each selected from a
+    different source recording. The source recording is randomly selected, weighted according to
     which recording is closest to the input coordinates.
     
-    Each grain has a random duration, sampled from a beta distribution (a = 2, b = 5) on the 
-    interval [100, 2000] milliseconds. Each grain is copied from that point in the selected source 
-    recording that is closest to the input coordinates with a random offset, selected from a normal 
+    Each grain has a random duration, sampled from a beta distribution (a = 2, b = 5) on the
+    interval [100, 2000] milliseconds. Each grain is copied from that point in the selected source
+    recording that is closest to the input coordinates with a random offset, selected from a normal
     distribution with mean = 0, variance = 60 seconds.'''
     
-    # List of grains, each grain is a tuple of frame numbers: (output frame offset, duration in 
+    # List of grains, each grain is a tuple of frame numbers: (output frame offset, duration in
     # frames, source recording frame offset, source # (1-3))
     grains = []
     
@@ -150,7 +150,7 @@ def output_grain_train(sounds, grains, filename):
 
 def main():
     parser = argparse.ArgumentParser(description='Create a mixture of two or more sound textures.')
-    parser.add_argument('inputs', metavar='wav', nargs=3, type=str, 
+    parser.add_argument('inputs', metavar='wav', nargs=3, type=str,
         help='wav or sv files to mix.')
     parser.add_argument('-c', '--coords', nargs=2, metavar='float', default=[0.5, 0.5], type=float,
         help='cartesian coordinates within the triangle.')
