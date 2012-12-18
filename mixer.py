@@ -150,16 +150,15 @@ def output_grain_train(sounds, grains, filename):
 
 def main():
     parser = argparse.ArgumentParser(description='Create a mixture of two or more sound textures.')
-    parser.add_argument('inputs', metavar='wav', nargs=3, type=str,
-        help='wav or sv files to mix.')
+    parser.add_argument('inputs', metavar='wav', nargs=3, type=str, help='wav or sv files to mix.')
     parser.add_argument('-c', '--coords', nargs=2, metavar='float', default=[0.5, 0.5], type=float,
         help='cartesian coordinates within the triangle.')
     parser.add_argument('-l', '--length', metavar='s', default=10, type=float,
         help='length of output in seconds')
     parser.add_argument('-g', '--graindur', nargs=2, metavar='ms', default=[100, 500], type=float,
-        help='duration of grains in milliseconds')
+        help='shortest and longest duration of grains in milliseconds')
     parser.add_argument('-j', '--jumpdev', metavar='s', default=60, type=float,
-        help='standard deviation of random jumps in seconds')
+        help='standard deviation of normally distributed jumps between grains in seconds')
     parser.add_argument('-o', '--output', metavar='file', default='output.wav', type=str,
         help='wav file for output')
     parser.add_argument('-s', '--svl', metavar='file', default='output.svl', type=str,
@@ -173,5 +172,5 @@ def main():
     output_grain_train(sounds, grains, args.output)
     output_grain_annotations(grains, sounds[0].rate, args.output, args.svl)
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()
