@@ -116,7 +116,7 @@ def polyshow(coords, color=None):
     ax = pp.axes(frameon=False)
     corners = polycorners(dim)
     
-    ax.add_patch(Polygon(corners, closed=True, fill=False))
+    ax.add_patch(pp.Polygon(corners, closed=True, fill=False))
     ax.scatter(corners[:,0], corners[:,1], color='red', s=50, alpha=0.5)
     map(lambda i: verttext(corners[i], i), range(len(corners)))
     
