@@ -84,7 +84,7 @@ def verttext(pt, txt, center=[.5,.5], dist=1./15, color='red'):
     
     vert = pt - center
     vert /= sum(abs(vert))
-    vert /= div
+    vert *= dist
     
     text(
         pt[0] + vert[0],
