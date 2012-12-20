@@ -31,6 +31,8 @@ Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
 import os, bz2, argparse
 from scipy.io import wavfile
 from soundwalks import *
+from coordinates import bary2cart, lattice, polycorners
+import matplotlib.pyplot as pp
 
 class Grain:
     def __str__(self):
@@ -67,26 +69,65 @@ def simple_grain_train(coords, sounds, length = 10, graindur = [500, 2000], jump
     recording that is closest to the input coordinates with a random offset, selected from a normal
     distribution with mean = 0, variance = 60 seconds.'''
     
-    # List of grains, each grain is a tuple of frame numbers: (output frame offset, duration in
-    # frames, source recording frame offset, source # (1-3))
+    coords = np.array(coords)
+    
+    # 2-dimensional barycentric coordinates of the point in terms of each side of the triangle.
+    barysides = np.array([
+        list(coords[:i]) + list(coords[i+1:])
+        for i in range(len(sounds))
+    ])
+    
+    # Avoid nans in divide.
+    for b in barysides:
+        if b[0] == b[1] == 0:
+            b[0] = b[1] = 1
+    
+    barysides = (barysides.T / sum(barysides, axis=1)).T
+    
+    barysides = np.roll(barysides, 1, axis=0)
+    print barysides
+    # Percentage completion along each soundwalk (side).
+    percs = np.array([barysides[0,0], barysides[1, 0], barysides[2, 1]])
+    
+    # Prior probability of playing each soundwalk (side).
+    prob = np.roll(coords, 1)
+    
+    corners = polycorners(3)
+    pp.triplot(corners[:,0], corners[:,1])
+    pp.scatter(corners[:,0], corners[:,1], c='r', s=100, alpha=.5)
+    pp.text(corners[0,0], corners[0,1] + .025, '0', horizontalalignment='center')
+    pp.text(corners[1,0] - .025, corners[1,1] - .025, '1')
+    pp.text(corners[2,0] + .025, corners[2,1] - .025, '2')
+    
+    mps = np.array([
+        (corners[0] + corners[1]) / 2,
+        (corners[1] + corners[2]) / 2,
+        (corners[2] + corners[0]) / 2
+    ])
+    
+    pp.text(mps[0,0] - .025, mps[0,1] + .025, 's0', verticalalignment='center')
+    pp.text(mps[1,0], mps[1,1] + .025, 's1', verticalalignment='center')
+    pp.text(mps[2,0] + .025, mps[2,1] + .025, 's2', verticalalignment='center')
+    
+    print barysides
+    bps = np.array([
+        barysides[0,0] * corners[0] + barysides[0,1] * corners[1],
+        barysides[1,0] * corners[1] + barysides[1,1] * corners[2],
+        barysides[2,0] * corners[2] + barysides[2,1] * corners[0]
+    ])
+    print bps[:,0], bps[:,1]
+    pp.scatter(bps[:,0], bps[:,1], c='g', s=200, alpha=.5)
+    pp.text(bps[0,0], bps[0,1], 't0')
+    pp.text(bps[1,0], bps[1,1], 't1')
+    pp.text(bps[2,0], bps[2,1], 't2')
+    pt = np.dot(coords,corners)
+    pp.scatter(pt[0], pt[1], c='b', s=300, alpha=.5)
+    
+    show()
+    exit()
+    # Create list of sound grains. Eeach grain is a tuple of frame numbers: (output frame offset, 
+    # duration in frames, source recording frame offset, source # (0-2))
     grains = []
-    
-    # List of start and end points for each walk.
-    p0 = array([(0, 0), (0.5, sin(pi / 3)), (1, 0)])
-    p1 = array([(0.5, sin(pi / 3)), (1, 0), (0, 0)])
-    
-    # List of closest points to the coordinates for each walk.
-    cp = array([closepoint(p0[i], p1[i], coords) for i in range(3)])
-    
-    # List of percentage along segment for each walk.
-    perc = array([percline(cp[i], p0[i], p1[i]) for i in range(3)])
-    
-    # Probability of playing each walk / mixing %.
-    prob = array([norm(cp[i] - coords) for i in range(3)])
-    prob = max(prob) - prob
-    prob /= sum(prob)
-    
-    # Create list of sound grains.
     rate = min([s.rate for s in sounds])
     pos = ol = 0
     
@@ -150,9 +191,10 @@ def output_grain_train(sounds, grains, filename):
 
 def main():
     parser = argparse.ArgumentParser(description='Create a mixture of two or more sound textures.')
-    parser.add_argument('inputs', metavar='wav', nargs=3, type=str, help='wav or sv files to mix.')
-    parser.add_argument('-c', '--coords', nargs=2, metavar='float', default=[0.5, 0.5], type=float,
-        help='cartesian coordinates within the triangle.')
+    parser.add_argument('inputs', metavar='wav', nargs='+', type=str, 
+        help='wav or sv files to mix.')
+    parser.add_argument('-c', '--coords', nargs='+', metavar='float', default=[0.5, 0.5], 
+        type=float, help='barycentric coordinates of the observation point.')
     parser.add_argument('-l', '--length', metavar='s', default=10, type=float,
         help='length of output in seconds')
     parser.add_argument('-g', '--graindur', nargs=2, metavar='ms', default=[100, 500], type=float,
