@@ -103,7 +103,7 @@ def polyshow(coords, color=None):
              color in which to draw the coords. If color is a list of the same length as coords, 
              each entry will correspond to the respective coordinates.'''
     
-    coords = array(coords)
+    coords = np.array(coords)
     if len(coords.shape) < 2: coords = [coords]
     dim = len(coords[0])
     
