@@ -1,4 +1,6 @@
+from itertools import izip
 import numpy as np
+import matplotlib.pyplot as pp
 
 def bary2cart(bary, corners):
     '''Convert barycentric coordinates to cartesian coordinates given the cartesian coordinates of 
@@ -110,8 +112,8 @@ def polyshow(coords, color=None):
     if color == None: color = ['blue']
     elif type(color) == str: color = [color] * len(coords)
     
-    f = figure(figsize=(4,4), frameon=False)
-    ax = axes(frameon=False)
+    f = pp.figure(figsize=(4,4), frameon=False)
+    ax = pp.axes(frameon=False)
     corners = polycorners(dim)
     
     ax.add_patch(Polygon(corners, closed=True, fill=False))
@@ -125,7 +127,7 @@ def polyshow(coords, color=None):
         ax.scatter(cart[0], cart[1], color=color[i], s=100, alpha=0.5)
         verttext(cart, i, div=8, color=color[i])
     
-    xticks([])
-    yticks([])
+    pp.xticks([])
+    pp.yticks([])
     
     return f
