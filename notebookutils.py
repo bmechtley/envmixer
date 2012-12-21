@@ -12,7 +12,7 @@ from IPython.core.pylabtools import print_figure
 from IPython.core.display import display, HTML, Math, Latex
 from sympy import Matrix, latex
 
-def showmat(m, prelabel='', postlabel='', eqtype='$'):
+def showmat(m, prelabel='', postlabel='', eqtype='$$'):
     '''Display a numpy.ndarray as a latex matrix in an IPython notebook with optional caption.
         m: np.ndarray
             array to display
