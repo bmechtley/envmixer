@@ -1,3 +1,15 @@
+'''
+sources.py
+natural-mixer
+
+2012 Brandon Mechtley
+Arizona State University
+
+This utility takes in a list of source sounds and a list of barycentric coordinates and outputs the 
+"closest" portion of each source sound of a specified length, where each source sound is the side 
+of the regular convex polygon in which the coordinates sit. . . . see mixer.py for more information.
+'''
+
 import argparse
 from os.path import splitext, basename, join
 from scipy.io import wavfile
