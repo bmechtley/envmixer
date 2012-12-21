@@ -1,3 +1,14 @@
+'''
+coordinates.py
+natural-mixer
+
+2012 Brandon Mechtley
+Arizona State University
+
+Various tools for working with barycentric coordinates of arbitrary dimension, including routines 
+for display. All routines automatically convert coordinates to exact coordinates, i.e. they add to 1.0.
+'''
+
 from itertools import izip
 import numpy as np
 import matplotlib.pyplot as pp
@@ -12,9 +23,9 @@ def bary2cart(bary, corners):
             cartesian coordinates of the corners.'''
     
     if len(bary.shape) > 1:
-        return np.array([np.sum(b * corners.T, axis=1) for b in bary])
+        return np.array([np.sum(b / np.sum(b) * corners.T, axis=1) for b in bary])
     else:
-        return np.sum(bary * corners.T, axis=1)
+        return np.sum(bary / np.sum(bary) * corners.T, axis=1)
 
 def lattice(ncorners=3, sides=False):
     '''Create a lattice of linear combinations of barycentric coordinates with ncorners corners. 
@@ -83,10 +94,10 @@ def verttext(pt, txt, center=[.5,.5], dist=1./15, color='red'):
             matplotlib color of the text (default 'red').'''
     
     vert = pt - center
-    vert /= sum(abs(vert))
+    vert /= np.sum(abs(vert))
     vert *= dist
     
-    text(
+    pp.text(
         pt[0] + vert[0],
         pt[1] + vert[1],
         txt,
@@ -109,8 +120,8 @@ def polyshow(coords, color=None):
     if len(coords.shape) < 2: coords = [coords]
     dim = len(coords[0])
     
-    if color == None: color = ['blue']
-    elif type(color) == str: color = [color] * len(coords)
+    if color == None: color = 'blue'
+    if type(color) == str: color = [color] * len(coords)
     
     f = pp.figure(figsize=(4,4), frameon=False)
     ax = pp.axes(frameon=False)
@@ -121,11 +132,11 @@ def polyshow(coords, color=None):
     map(lambda i: verttext(corners[i], i), range(len(corners)))
     
     for i, coord in enumerate(coords):
-        s = sum(coord)
+        s = np.sum(coord)
         if s > 0: coord /= s
-        cart = sum([c * cnr for c, cnr in izip(coord, corners)], axis=0)
+        cart = np.sum([c * cnr for c, cnr in izip(coord, corners)], axis=0)
         ax.scatter(cart[0], cart[1], color=color[i], s=100, alpha=0.5)
-        verttext(cart, i, div=8, color=color[i])
+        verttext(cart, i, dist=1./8, color=color[i])
     
     pp.xticks([])
     pp.yticks([])
