@@ -94,7 +94,13 @@ def verttext(pt, txt, center=[.5,.5], dist=1./15, color='red'):
             matplotlib color of the text (default 'red').'''
     
     vert = pt - center
-    vert /= np.sum(abs(vert))
+    s = np.sum(np.abs(vert))
+    
+    if s == 0:
+        vert = np.array([0., 1.])
+    else:
+        vert /= s
+    
     vert *= dist
     
     pp.text(
@@ -136,9 +142,31 @@ def polyshow(coords, color=None):
         if s > 0: coord /= s
         cart = np.sum([c * cnr for c, cnr in izip(coord, corners)], axis=0)
         ax.scatter(cart[0], cart[1], color=color[i], s=100, alpha=0.5)
-        verttext(cart, i, dist=1./8, color=color[i])
+        verttext(cart, i, dist=1./10, color=color[i])
     
     pp.xticks([])
     pp.yticks([])
     
     return f
+
+def baryedges(coords):
+    '''Return an array of 2-dimensional barycentric coordinates corresponding to the closest point 
+    on each edge of the respective polygon in terms of its two endpoints. Each row of the array 
+    corresponds to a unique edge, ordered as s01, s12, s23, ... where sxy refers to the edge formed 
+    by vertices x and y.
+        coords: np.ndarray
+            input coordinates'''
+    
+    edges = np.array([
+        list(coords[:i]) + list(coords[i+1:])
+        for i in range(len(coords))
+    ])
+    
+    for e in edges:
+        if e[0] == e[1] == 0:
+            e[0] = e[1] = .5
+    
+    edges = (edges.T / np.sum(edges, axis=1)).T
+    edges = np.roll(edges, 1, axis=0)
+    
+    return edges
