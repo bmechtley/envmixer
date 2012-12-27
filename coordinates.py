@@ -5,22 +5,36 @@ natural-mixer
 2012 Brandon Mechtley
 Arizona State University
 
-Various tools for working with barycentric coordinates of arbitrary dimension, including routines 
-for display. All routines automatically convert coordinates to exact coordinates, i.e. they add to 1.0.
+Various tools for working with barycentric coordinates of arbitrary dimension including routines
+for display. All routines automatically normalize barycentric coordinates.
 '''
 
 from itertools import izip
 import numpy as np
 import matplotlib.pyplot as pp
 
-def bary2cart(bary, corners):
+def project_pointline(p, a, b):
+    '''Euclidean projection of a point onto a line segment.
+        p: np.ndarray
+            point of arbitrary dimensionality.
+        a: np.ndarray
+            first endpoint of the line segment.
+        b: np.ndarray
+            second endpoint of the line segment.'''
+    
+    return a + (np.dot(p - a, b - a) / np.dot(b - a, b - a)) * (b - a)
+
+def bary2cart(bary, corners=None):
     '''Convert barycentric coordinates to cartesian coordinates given the cartesian coordinates of 
-    the corners. 
+    the corners.
         bary: np.ndarray
-            barycentric coordinates to convert. If this matrix has multiple rows, each row is 
+            barycentric coordinates to convert. If this matrix has multiple rows, each row is
             interpreted as an individual coordinate to convert.
         corners: np.ndarray
             cartesian coordinates of the corners.'''
+    
+    if corners == None:
+        corners = polycorners(bary.shape[-1])
     
     if len(bary.shape) > 1:
         return np.array([np.sum(b / np.sum(b) * corners.T, axis=1) for b in bary])
@@ -28,10 +42,10 @@ def bary2cart(bary, corners):
         return np.sum(bary / np.sum(bary) * corners.T, axis=1)
 
 def lattice(ncorners=3, sides=False):
-    '''Create a lattice of linear combinations of barycentric coordinates with ncorners corners. 
-    This lattice is constructed from the corners, the center point between them, points between the 
+    '''Create a lattice of linear combinations of barycentric coordinates with ncorners corners.
+    This lattice is constructed from the corners, the center point between them, points between the
     corners and the center, and pairwise combinations of the corners and the center.
-        ncorners: int, optional 
+        ncorners: int, optional
             number of corners of the boundary polygon (default 3).
         sides: bool, optional
             whether or not to include pairwise combinations of the corners (i.e. sides) in the
@@ -63,7 +77,8 @@ def lattice(ncorners=3, sides=False):
     return np.array(list(set(tuple(c) for c in coords)))
 
 def polycorners(ncorners=3):
-    '''Return 2D cartesian coordinates of a regular convex polygon of a specified number of corners.
+    '''Return 2D cartesian coordinates of a regular convex polygon of a specified number of
+    corners.
         ncorners: int, optional
             number of corners for the polygon (default 3).'''
     
@@ -79,8 +94,8 @@ def polycorners(ncorners=3):
     return np.array(points)
 
 def verttext(pt, txt, center=[.5,.5], dist=1./15, color='red'):
-    '''Display a text label for a vertex with respect to the center. The text will be a certain 
-    distance from the specified vertex in the direction of the vector extending from the center 
+    '''Display a text label for a vertex with respect to the center. The text will be a certain
+    distance from the specified vertex in the direction of the vector extending from the center
     point.
         pt: np.ndarray
             two-dimensional array of cartesian coordinates of the point to label.
@@ -112,7 +127,7 @@ def verttext(pt, txt, center=[.5,.5], dist=1./15, color='red'):
         color=color
     )
 
-def polyshow(coords, color=None):
+def polyshow(coords, color=None, label=None, labelvertices=False, polycolor=None):
     '''Plot a regular convex polygon surrounding one or more barycentric coordinates within the 
     it. Vertices and corners will be labeled sequentially starting at 0.
         coords: np.ndarray or list
@@ -129,20 +144,28 @@ def polyshow(coords, color=None):
     if color == None: color = 'blue'
     if type(color) == str: color = [color] * len(coords)
     
-    f = pp.figure(figsize=(4,4), frameon=False)
+    if label == None: label = ''
+    if type(label) == str: label = [label] * len(coords)
+    
+    f = pp.figure(frameon=False)
     ax = pp.axes(frameon=False)
+    ax.axis('equal')
     corners = polycorners(dim)
     
     ax.add_patch(pp.Polygon(corners, closed=True, fill=False))
     ax.scatter(corners[:,0], corners[:,1], color='red', s=50, alpha=0.5)
-    map(lambda i: verttext(corners[i], i), range(len(corners)))
     
-    for i, coord in enumerate(coords):
+    if labelvertices:
+        map(lambda i: verttext(corners[i], '$v_%d$' % i), range(len(corners)))
+    
+    for coord, clr, txt in izip(coords, color, label):
         s = np.sum(coord)
         if s > 0: coord /= s
         cart = np.sum([c * cnr for c, cnr in izip(coord, corners)], axis=0)
-        ax.scatter(cart[0], cart[1], color=color[i], s=100, alpha=0.5)
-        verttext(cart, i, dist=1./10, color=color[i])
+        ax.scatter(cart[0], cart[1], color=clr, s=100, alpha=0.5)
+        
+        if len(txt):
+            verttext(cart, txt, color=clr)
     
     pp.xticks([])
     pp.yticks([])
@@ -150,23 +173,23 @@ def polyshow(coords, color=None):
     return f
 
 def baryedges(coords):
-    '''Return an array of 2-dimensional barycentric coordinates corresponding to the closest point 
-    on each edge of the respective polygon in terms of its two endpoints. Each row of the array 
-    corresponds to a unique edge, ordered as s01, s12, s23, ... where sxy refers to the edge formed 
-    by vertices x and y.
+    '''Return an array of barycentric coordinates corresponding to the closest point on each edge 
+    of the respective polygon.
         coords: np.ndarray
-            input coordinates'''
+            input coordinates.'''
     
-    edges = np.array([
-        list(coords[:i]) + list(coords[i+1:])
-        for i in range(len(coords))
-    ])
+    # There ought to be an easier way to do this without switching out of barycentric coordinates,
+    # but after obsessing over it for an entire day, I'll have to work on that later.
     
-    for e in edges:
-        if e[0] == e[1] == 0:
-            e[0] = e[1] = .5
+    d = len(coords)
+    corners = polycorners(d)
+    cart = bary2cart(coords, corners)
     
-    edges = (edges.T / np.sum(edges, axis=1)).T
-    edges = np.roll(edges, 1, axis=0)
+    e = np.zeros((d, d))
     
-    return edges
+    for i1, i2 in izip(np.arange(d), np.roll(np.arange(d), 1)):
+        proj = project_pointline(cart, corners[i1], corners[i2])
+        distances = np.array([np.linalg.norm(corners[a] - proj, 2) for a in [i1, i2]])
+        e[i1, (i1, i2)] = np.sum(distances) - distances
+    
+    return e
