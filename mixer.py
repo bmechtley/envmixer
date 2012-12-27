@@ -71,60 +71,18 @@ def simple_grain_train(coords, sounds, length = 10, graindur = [500, 2000], jump
     
     coords = np.array(coords)
     
-    # 2-dimensional barycentric coordinates of the point in terms of each side of the triangle.
-    barysides = np.array([
-        list(coords[:i]) + list(coords[i+1:])
-        for i in range(len(sounds))
-    ])
-    
-    # Avoid nans in divide.
-    for b in barysides:
-        if b[0] == b[1] == 0:
-            b[0] = b[1] = 1
-    
-    barysides = (barysides.T / sum(barysides, axis=1)).T
-    
-    barysides = np.roll(barysides, 1, axis=0)
-    print barysides
     # Percentage completion along each soundwalk (side).
-    percs = np.array([barysides[0,0], barysides[1, 0], barysides[2, 1]])
+    sideproj = baryedges(coords)
+    percs = np.diagonal(sideproj)
     
     # Prior probability of playing each soundwalk (side).
-    prob = np.roll(coords, 1)
+    sidecart = bary2cart(sideproj)
+    cart = bary2cart(coords)
     
-    corners = polycorners(3)
-    pp.triplot(corners[:,0], corners[:,1])
-    pp.scatter(corners[:,0], corners[:,1], c='r', s=100, alpha=.5)
-    pp.text(corners[0,0], corners[0,1] + .025, '0', horizontalalignment='center')
-    pp.text(corners[1,0] - .025, corners[1,1] - .025, '1')
-    pp.text(corners[2,0] + .025, corners[2,1] - .025, '2')
+    prob = np.array([np.norm(sidecart - row) for row in cart])
+    prob = log(prob + eps)
+    prob /= np.sum(prob)
     
-    mps = np.array([
-        (corners[0] + corners[1]) / 2,
-        (corners[1] + corners[2]) / 2,
-        (corners[2] + corners[0]) / 2
-    ])
-    
-    pp.text(mps[0,0] - .025, mps[0,1] + .025, 's0', verticalalignment='center')
-    pp.text(mps[1,0], mps[1,1] + .025, 's1', verticalalignment='center')
-    pp.text(mps[2,0] + .025, mps[2,1] + .025, 's2', verticalalignment='center')
-    
-    print barysides
-    bps = np.array([
-        barysides[0,0] * corners[0] + barysides[0,1] * corners[1],
-        barysides[1,0] * corners[1] + barysides[1,1] * corners[2],
-        barysides[2,0] * corners[2] + barysides[2,1] * corners[0]
-    ])
-    print bps[:,0], bps[:,1]
-    pp.scatter(bps[:,0], bps[:,1], c='g', s=200, alpha=.5)
-    pp.text(bps[0,0], bps[0,1], 't0')
-    pp.text(bps[1,0], bps[1,1], 't1')
-    pp.text(bps[2,0], bps[2,1], 't2')
-    pt = np.dot(coords,corners)
-    pp.scatter(pt[0], pt[1], c='b', s=300, alpha=.5)
-    
-    show()
-    exit()
     # Create list of sound grains. Eeach grain is a tuple of frame numbers: (output frame offset, 
     # duration in frames, source recording frame offset, source # (0-2))
     grains = []
