@@ -13,6 +13,7 @@ from IPython.core.display import display, HTML, Math, Latex
 from sympy import Matrix, latex
 import numpy as np
 
+
 def limitprec(m, prec=3):
     '''Silly function to limit the maximum number of decimal places for a matrix of floats.
         m: np.ndarray

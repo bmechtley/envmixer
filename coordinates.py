@@ -127,7 +127,7 @@ def verttext(pt, txt, center=[.5,.5], dist=1./15, color='red'):
         color=color
     )
 
-def polyshow(coords, color=None, label=None, labelvertices=False, polycolor=None):
+def polyshow(coords, color=None, label=None, labelvertices=False, polycolor=None, lines=[]):
     '''Plot a regular convex polygon surrounding one or more barycentric coordinates within the 
     it. Vertices and corners will be labeled sequentially starting at 0.
         coords: np.ndarray or list
@@ -137,9 +137,13 @@ def polyshow(coords, color=None, label=None, labelvertices=False, polycolor=None
              color in which to draw the coords. If color is a list of the same length as coords, 
              each entry will correspond to the respective coordinates.'''
     
+    
+    # Defaults.
     coords = np.array(coords)
     if len(coords.shape) < 2: coords = [coords]
-    dim = len(coords[0])
+    for coord in coords:
+        if np.sum(coord) > 0:
+            coord /= np.sum(coord)
     
     if color == None: color = 'blue'
     if type(color) == str: color = [color] * len(coords)
@@ -147,28 +151,35 @@ def polyshow(coords, color=None, label=None, labelvertices=False, polycolor=None
     if label == None: label = ''
     if type(label) == str: label = [label] * len(coords)
     
+    # Number of sides.
+    d = len(coords[0])
+    
+    # Cartesian coordinates of the vertices of the polygon and each point.
+    corners = polycorners(d)
+    cart = [np.sum([c * cnr for c, cnr in izip(coord, corners)], axis=0) for coord in coords]
+    cart = np.array(cart)
+    
+    # Figure/axes setup.
     f = pp.figure(frameon=False)
     ax = pp.axes(frameon=False)
     ax.axis('equal')
-    corners = polycorners(dim)
+    pp.xticks([])
+    pp.yticks([])
     
-    ax.add_patch(pp.Polygon(corners, closed=True, fill=False))
-    ax.scatter(corners[:,0], corners[:,1], color='red', s=50, alpha=0.5)
-    
+    # Add the polygon and its vertices to the figure.
+    ax.add_patch(pp.Polygon(corners, closed=True, fill=False, alpha=0.5))
+    ax.scatter(corners[:,0], corners[:,1], color='red', s=50)
     if labelvertices:
         map(lambda i: verttext(corners[i], '$v_%d$' % i), range(len(corners)))
     
-    for coord, clr, txt in izip(coords, color, label):
-        s = np.sum(coord)
-        if s > 0: coord /= s
-        cart = np.sum([c * cnr for c, cnr in izip(coord, corners)], axis=0)
-        ax.scatter(cart[0], cart[1], color=clr, s=100, alpha=0.5)
-        
-        if len(txt):
-            verttext(cart, txt, color=clr)
+    # Add any extra lines to the figure.
+    map(ax.add_line, lines)
     
-    pp.xticks([])
-    pp.yticks([])
+    # Add the interior points and their labels.
+    ax.scatter(cart[:,0], cart[:,1], color=color, s=100)
+    
+    for c, txt, clr in izip(cart, label, color):
+        verttext(c, txt, color=clr)
     
     return f
 
@@ -181,12 +192,13 @@ def baryedges(coords):
     # There ought to be an easier way to do this without switching out of barycentric coordinates,
     # but after obsessing over it for an entire day, I'll have to work on that later.
     
-    d = len(coords)
-    corners = polycorners(d)
-    cart = bary2cart(coords, corners)
+    d = len(coords)                     # number of edges.
+    corners = polycorners(d)            # cartesian corners of the polygon.
+    cart = bary2cart(coords, corners)   # cartesian coordinates of the input point.
     
-    e = np.zeros((d, d))
+    e = np.zeros((d, d))                # final bary. coords. for projection to each side.
     
+    # Project the point onto each edge in cartesian space, put it back into bary. coords.
     for i1, i2 in izip(np.arange(d), np.roll(np.arange(d), 1)):
         proj = project_pointline(cart, corners[i1], corners[i2])
         distances = np.array([np.linalg.norm(corners[a] - proj, 2) for a in [i1, i2]])
