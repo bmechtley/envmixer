@@ -12,7 +12,7 @@ import os, argparse, multiprocessing, subprocess
 from itertools import izip, product
 import numpy as np
 import matplotlib.pyplot as pp
-from coordinates import polycorners, lattice, bary2cart
+from barycentric import *
 
 def work(command):
     '''Wrapper function to call a subprocess. For use with multiprocessing.Pool in order to spawn
@@ -44,18 +44,18 @@ def main():
     bary = lattice(len(args.inputs))
     corners = polycorners(len(args.inputs))
     cart = bary2cart(bary, corners)
-    
+	
     # 2. Save unmodified clips centered around the coordinates for all three source sounds.
     print 'Writing source comparisons.'
     
     multiprocessing.Pool(processes = multiprocessing.cpu_count()).map(work, [
-        ['python', 'sources.py'] + args.inputs + ['-c'] + b + 
+        ['python', 'sources.py'] + ['-c'] + list(b) + 
         [
             '-l', args.length,
             '-o', args.output,
             '-s', 'source-' + '-'.join('%.2f' % p for p in b)
-        ]
-     for b, c in izip(bary, cart)])
+        ] + args.inputs
+     for b, c in izip(list(bary), list(cart))])
     
     # 3. Save mixed versions at the specified coordinates.
     print '\nWriting mixed versions.'
@@ -71,7 +71,8 @@ def main():
                 'mix-naive-' + '-'.join(['%.2f' % p for p in b]) + '-%03d.wav' % r
             )
         ]
-    for r, (b, c) in product(range(args.instances), zip(bary, cart))])
+    for r, (b, c) in product(range(args.instances), zip(list(bary), list(cart)))])
 
 if __name__ == '__main__':
     main()
+

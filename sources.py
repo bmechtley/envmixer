@@ -14,7 +14,7 @@ import argparse
 from os.path import splitext, basename, join
 from scipy.io import wavfile
 from itertools import izip
-
+from barycentric import *
 from soundwalks import *
 
 def main():
@@ -22,7 +22,7 @@ def main():
         source sound textures to a given set of coordinates in a triangle.')
     parser.add_argument('inputs', metavar='wav', nargs=3, type=str,
         help='wav or sv files to mix.')
-    parser.add_argument('-c', '--coords', nargs=2, metavar='float', default=[0.5, 0.5], type=float,
+    parser.add_argument('-c', '--coords', nargs=3, metavar='float', default=[1, 0, 0], type=float,
         help='cartesian coordinates within the triangle.')
     parser.add_argument('-l', '--length', metavar='s', default=10, type=float,
         help='length of output in seconds.')
@@ -35,18 +35,21 @@ def main():
     # Load commandline arguments.
     sounds = [Soundwalk(w) for w in args.inputs]
     
-    # List of start and end cartesian coordinates for each walk.
-    starts = array([(0, 0), (0.5, sin(pi / 3)), (1, 0)])
-    ends = array([(0.5, sin(pi / 3)), (1, 0), (0, 0)])
+    # Make sure barycentric coordinates are normalized.
+    coords = np.array(args.coords / sum(args.coords))
     
-    # List of closest points to the coordinates for each walk.
-    cp = array([closepoint(s, e, args.coords) for s,e in izip(starts, ends)])
-    percs = [percline(c, s, e) for c,s,e in izip(cp, starts, ends)]
+    # Percentage completion for each soundwalk.
+    percs = baryedges(coords, sidecoords=True)[:,1]
     frames = [int(p * sw.len) for p, sw in izip(percs, sounds)]
+    fs = zip(frames, sounds)
     
-    starts = [max(0, int(f - (args.length * sw.rate) / 2)) for f, sw in izip(frames, sounds)]
-    ends = [min(sw.len, int(f + (args.length * sw.rate) / 2)) for f, sw in izip(frames, sounds)]
+    # Get start frames and end frames. If we are too close to the start point, clip it to the
+    # beginning of the sound and adjust the end point.
+    starts = np.array([max(0, int(f - (args.length * s.rate) / 2)) for f, s in fs])
+    ends = np.array([min(s.len, int(f + (args.length * s.rate) / 2)) for f, s in fs])
     
+    # If we are too close to the end point, clip it to the end of the sound and adjust the start
+    # point.
     for s, e, sw in izip(starts, ends, sounds):
         seglen = int(sw.rate * args.length)
         
@@ -55,6 +58,7 @@ def main():
     
     starts, ends = np.array(starts), np.array(ends)
     
+    # Write the 
     for s, e, sw in izip(starts, ends, sounds):
         filename = '%s-%s.wav' % (splitext(basename(sw.wavfile))[0], args.suffix)
         wavfile.write(join(args.output, filename), sw.rate, sw.frames[s:e])
