@@ -61,7 +61,7 @@ def main():
     print '\nWriting mixed versions.'
     
     multiprocessing.Pool(processes = multiprocessing.cpu_count()).map(work, [
-        ['python', 'mixer.py'] + args.inputs + ['-c'] + b + 
+        ['python', 'mixer.py'] + args.inputs + ['-c'] + list(b) + 
         [
             '-l', args.length,
             '-g', args.graindur[0], args.graindur[1],
