@@ -31,7 +31,7 @@ Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
 import os, bz2, argparse
 from scipy.io import wavfile
 from soundwalks import *
-from coordinates import bary2cart, lattice, polycorners
+from barycentric import *
 import matplotlib.pyplot as pp
 
 class Grain:
@@ -73,14 +73,14 @@ def simple_grain_train(coords, sounds, length = 10, graindur = [500, 2000], jump
     
     # Percentage completion along each soundwalk (side).
     sideproj = baryedges(coords)
-    percs = np.diagonal(sideproj)
+    percs =  baryedges(coords, sidecoords=True)[:,1]
     
     # Prior probability of playing each soundwalk (side).
     sidecart = bary2cart(sideproj)
     cart = bary2cart(coords)
     
-    prob = np.array([np.norm(sidecart - row) for row in cart])
-    prob = log(prob + eps)
+    prob = np.array([np.linalg.norm(sc - cart) for sc in sidecart])
+    prob = log(prob + np.finfo(float).eps)
     prob /= np.sum(prob)
     
     # Create list of sound grains. Eeach grain is a tuple of frame numbers: (output frame offset, 
@@ -93,14 +93,14 @@ def simple_grain_train(coords, sounds, length = 10, graindur = [500, 2000], jump
         g = Grain()
         
         # Random source.
-        g.src = choice(3, p = prob)[0]
-        g.dur = randint(graindur[0] * rate, graindur[1] * rate)
+        g.src = choice(range(3), p = prob)[0]
+        g.dur = randint(graindur[0] / 1000. * rate, graindur[1] / 1000. * rate)
         
         # Random offset from closest source point.
         jump = int(randn() * rate * jumpdev)
-        frame = int(perc[g.src] * sounds[g.src].len + sounds[g.src].start)
+        frame = int(percs[g.src] * sounds[g.src].len + sounds[g.src].start)
         g.srcpos = frame + jump
-        g.srcpos = min(g.srcpos, sounds[g.src].end - (g.dur / 1000.) * rate)
+        g.srcpos = min(g.srcpos, sounds[g.src].end - (g.dur) * rate)
         g.srcpos = max(g.srcpos, sounds[g.src].start)
         
         g.outpos = 0
