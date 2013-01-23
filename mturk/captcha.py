@@ -11,46 +11,63 @@ sounds, so the similarity to the test sound should be maximum in these cases.
 '''
 
 import argparse
+import prettytable as pt
 import numpy as np
 
 def verify(resultsfile):
     results = np.genfromtxt(resultsfile, delimiter='","', dtype=str)
-    ids = results[1:,0]
-    inputcols, soundids, answercols, desccols = [], [], [], []
+    for i in range(len(results[0])):
+        results[0,i] = results[0, i].strip('"')
     
-    for i, c in enumerate(results[0]):
-        tokens = c.replace('"', '').split('.')
-        
-        if len(tokens) == 2:
-            if len(tokens[1]) == 4 and tokens[1][0] == 'g' and tokens[1][2] == 's':
-                if tokens[0] == 'Input':
-                    soundids.append(tokens[1])
-                    inputcols.append(i)
-                elif tokens[0] == 'Answer':
-                    answercols.append(i)
-            elif len(tokens[1]) == 5 and tokens[1][0:2] == 'dg' and tokens[1][3] == 's':
-                if tokens[0] == 'Answer':
-                    desccols.append(i)
+    # Break up headers with .'s in them (Answer.*, Input.*)
+    tokens = np.array([r.strip('"').split('.') for r in results[0]])
     
-    inputcols = np.array(inputcols).reshape((-1, 4))
-    answercols = np.array(answercols).reshape((-1, 4))
-    desccols = np.array(desccols).reshape((-1, 4))
-    soundids = np.array(soundids).reshape((-1, 4))
+    # Columns that correspond to input filenames, slider answers (1-9), and descriptions,
+    # respectively.
+    cinputs = np.where([len(h) > 1 and h[1][0] == 'g' and h[0] == 'Input' for h in tokens])[0]
+    canswers = np.where([len(h) > 1 and h[1][0] == 'g' and h[0] == 'Answer' for h in tokens])[0]
+    cdesc = np.where([len(h) > 1 and h[1][0:2] == 'dg' and h[0] == 'Answer' for h in tokens])[0]
     
+    # Individual column numbers for HIT ID, Worker ID, and Requester Feedback.
+    chitid = np.where(results[0] == 'HITId')[0][0]
+    cworkerid = np.where(results[0] == 'WorkerId')[0][0]
+    cfeedback = np.where(results[0] == 'RequesterFeedback')[0][0]
+    
+    # List of all test/source sound ids in gXsY format.
+    soundids = np.array([h[1] for h in tokens[cinputs]])
+    
+    # Reshape column IDs into groups for iteration over test groups.
+    cinputs = cinputs.reshape((-1, 4))
+    canswers = canswers.reshape((-1, 4))
+    cdesc = cdesc.reshape((-1, 4))
+    soundids = soundids.reshape((-1, 4))
+    
+    outarr = []
+    
+    # Iterate through each group per each row.
     for i, row in enumerate(results[1:]):
-        for ginput, ganswer, gdesc, gid in zip(inputcols, answercols, desccols, soundids):
-            inputs = row[ginput]
-            answers = row[ganswer]
-            desc = row[gdesc]
-            
-            duplicates = inputs == inputs[0]
-            
-            if np.sum(duplicates) > 1:
-                dupanswers = answers[duplicates]
-                print ids[i].strip('"'), \
-                    gid[duplicates], \
-                    np.array([a.strip('"') for a in dupanswers], dtype=int), \
-                    desc[duplicates]
+        
+        # Only bother providing output for HITs that have not been rejected.
+        if not len(row[cfeedback]):
+            for ginputs, ganswers, gdesc, gids in zip(cinputs, canswers, cdesc, soundids):
+                inputs = row[ginputs]
+                answers = row[ganswers]
+                desc = row[gdesc]
+                
+                duplicates = inputs == inputs[0]
+                
+                # Find the CAPTCHA group.
+                if np.sum(duplicates) > 1:
+                    dupanswers = answers[duplicates]
+                    
+                    outarr.append([
+                        row[chitid].strip('"'),
+                        row[cworkerid]] + \
+                        [a.strip('"') for a in dupanswers] + \
+                        [d.strip('\n') for d in desc[duplicates]]
+                    )
+    
+    print '\n'.join(['#'.join([c for c in r]) for r in outarr])
     
 if __name__=='__main__':
     parser = argparse.ArgumentParser(
