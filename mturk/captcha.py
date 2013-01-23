@@ -42,8 +42,6 @@ def verify(resultsfile):
     cdesc = cdesc.reshape((-1, 4))
     soundids = soundids.reshape((-1, 4))
     
-    outarr = []
-    
     # Iterate through each group per each row.
     for i, row in enumerate(results[1:]):
         
@@ -60,15 +58,13 @@ def verify(resultsfile):
                 if np.sum(duplicates) > 1:
                     dupanswers = answers[duplicates]
                     
-                    outarr.append([
+                    print '#'.join([
                         row[chitid].strip('"'),
                         row[cworkerid]] + \
                         [a.strip('"') for a in dupanswers] + \
                         [d.strip('\n') for d in desc[duplicates]]
                     )
-    
-    print '\n'.join(['#'.join([c for c in r]) for r in outarr])
-    
+
 if __name__=='__main__':
     parser = argparse.ArgumentParser(
         description='Verify that Mechanical Turk workers have passed the captcha test.')
