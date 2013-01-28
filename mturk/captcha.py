@@ -8,14 +8,23 @@ Arizona State University
 Look through a Mechanical Turk results CSV file to verify that users passed the captcha. Every HIT
 should have one or more test groups where the test sound is the same file as one of the source
 sounds, so the similarity to the test sound should be maximum in these cases.
+
+This script will print details for the captcha trials for each non-rejected HIT, separated by the #
+character. Data is formatted as such:
+
+[HITId]#[Worker ID]#[Test sound realism]#[Source sound similarity]#[Test desc]#[Source desc]
+
+Best usage: python captcha.py results.csv | column -s "#" -t
 '''
 
 import argparse
 import prettytable as pt
 import numpy as np
 
-def verify(resultsfile):
-    results = np.genfromtxt(resultsfile, delimiter='","', dtype=str)
+def verify(fn):
+    results = np.genfromtxt(fn, delimiter='","', skip_header=1, dtype=str)
+    results = np.genfromtxt(fn, delimiter='","', usecols=range(results.shape[1]), dtype=str)
+        
     for i in range(len(results[0])):
         results[0,i] = results[0, i].strip('"')
     
@@ -35,6 +44,8 @@ def verify(resultsfile):
     
     # List of all test/source sound ids in gXsY format.
     soundids = np.array([h[1] for h in tokens[cinputs]])
+    
+    print cinputs.shape, canswers.shape, cdesc.shape, soundids.shape
     
     # Reshape column IDs into groups for iteration over test groups.
     cinputs = cinputs.reshape((-1, 4))
@@ -67,7 +78,8 @@ def verify(resultsfile):
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(
-        description='Verify that Mechanical Turk workers have passed the captcha test.')
+        description='Verify that Mechanical Turk workers have passed the captcha test. Best used \
+        piped into column, e.g. python captcha.py results.csv | column -s "#" -t')
     parser.add_argument('results', metavar='csv', type=str, help='mturk results .csv file')
     args = parser.parse_args()
     
