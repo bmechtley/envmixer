@@ -5,9 +5,10 @@ natural-mixer
 2012 Brandon Mechtley
 Arizona State University
 
-Uses information embedded in Sonic Visualizer export file to remove segments on a layer called 
-"cut", crossfading the adjacent sections with an equal-power logarithmic crossfade with length
-specified by the second command-line argument, in millesconds.
+Uses information embedded in Sonic Visualizer export file to remove segments on
+a layer called "cut", crossfading the adjacent sections with an equal-power
+logarithmic crossfade with length specified by the second command-line
+argument, in millesconds.
 
 usage: python cut.py input.wav length output.wav
 '''
@@ -16,11 +17,19 @@ from sys import argv
 from scipy.io import wavfile
 from soundwalks import *
 
-sw = Soundwalk(argv[1])
+sw = Soundwalk(argv[1], useseg=False)
+
+# Mixdown.
+if len(sw.frames.shape) > 1:
+    dt = sw.frames.dtype
+    sw.frames = np.mean(np.array(sw.frames, dtype=float), axis=1)
+    sw.frames = np.array(sw.frames, dtype=dt)
+
 env = int(argv[2]) * sw.rate / 1000
 of = argv[3]
 
-# Make a list of [begin, end] frames for "cut" segments over which to crossfade.
+# Make a list of [begin, end] frames for "cut" segments over which to
+# crossfade.
 cut = array(sw.cut)
 cut = cut[argsort(cut[:,0]),:]
 cut[:,1] += cut[:,0]
