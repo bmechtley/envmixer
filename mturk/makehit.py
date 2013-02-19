@@ -5,8 +5,8 @@ natural-mixer
 2012 Brandon Mechtley
 Arizona State University
 
-This is a really messy script for generating Mechanical Turk HIT templates. Should probably use
-an actual .html template.
+This is a really messy script for generating Mechanical Turk HIT templates.
+Should probably use an actual .html template.
 
 usage: makehit.py [-h] [-g int] [-p url] [-o file]
 
@@ -24,10 +24,11 @@ from xml.dom.minidom import parseString
 
 def audioelem(group, num, prefix):
     return '\
-        <audio controls="controls" style="display: inline-block; vertical-align: middle">\
+        <audio controls="controls" style="display: inline-block;\
+        vertical-align: middle">\
             <source src="%s/${g%ds%d}"></source>\
-            Your browser does not support the audio element. Please download a browser that\
-            supports HTML5 to complete this HIT.\
+            Your browser does not support the audio element. Please download a\
+            browser that supports HTML5 to complete this HIT.\
         </audio>' % (prefix, group, num)
 
 def slider(prompt, group, num):
@@ -64,20 +65,24 @@ def makehit(groups, prefix):
         <script type="text/javascript">\
             function showValue(sid) {\
                 document.getElementById("s" + sid).innerHTML = \
-                    "(You have selected: " + document.getElementById(sid).value + ")";\
+                    "(You have selected: " +\
+                        document.getElementById(sid).value +\
+                        ")";\
             }\
         </script>\
         <h2>Compare Sound Clips</h2>\
         <h3>Instructions</h3>\
         <p>\
-            In the following %d tasks, you will first be given a 15-second <b>test</b> sound and\
-            then three 15-second <b>source</b> sounds. The source sounds are real recordings, each\
-            of a different location. The test sound is either a real recording or a synthetic\
+            In the following %d tasks, you will first be given a 15-second\
+            <b>test</b> sound and then three 15-second <b>source</b> sounds.\
+            The source sounds are <b>real recordings</b>, each of a different\
+            location. The test sound is either a real recording or a synthetic\
             mixture of recordings.\
         </p>\
         <p>\
-            For each test sound, you will first be asked to rate how <b>perceptually\
-            convincing</b> the sound is on a scale from 1 to 9. Here is a guide for your rating:\
+            For each test sound, you will first be asked to rate how\
+            <b>perceptually convincing</b> the sound is on a scale from 1 to\
+            9. Here is a guide for your rating:\
         </p>\
         <ul>\
             <li>1: Completely unrealistic.</li>\
@@ -87,9 +92,10 @@ def makehit(groups, prefix):
             <li>9: This is a real recording.</li>\
         </ul>\
         <p>\
-            You will then be given the three source recordings. For each source recording,\
-            corresponding to three different recording locations, please rate how similar it is to\
-            the test sound on a scale from 1 to 9. Here is a guide for how to rate similarity:\
+            You will then be given the three source recordings. For each\
+            source recording, corresponding to three different recording\
+            locations, please rate how similar it is to the test sound on a\
+            scale from 1 to 9. Here is a guide for how to rate similarity:\
         </p>\
         <ul>\
             <li>1: Completely different from the test sound.</li>\
@@ -99,8 +105,8 @@ def makehit(groups, prefix):
             <li>9: Exactly the same as the test sound.</li>\
         </ul>\
         <p>\
-            For every sound, you will also be asked to provide a short description of what you\
-            hear.\
+            For every sound, you will also be asked to provide a short\
+            description of what you hear.\
         </p>' % groups
     
     for i in range(groups):
@@ -112,14 +118,18 @@ def makehit(groups, prefix):
                     <h4>Test sound.</h4>\
                     <ol type="a">\
                         <li>\
-                            <p>Please listen to the following sound as many times as you like.</p>\
+                            <p>\
+                                Please listen to the following sound as many\
+                                times as you like.\
+                            </p>\
                             <p>' % (i + 1) + \
                                 audioelem(i, 0, prefix) + '\
                             </p>\
                         </li>\
                         <li>' + \
                             slider(
-                                'Please rate how <b>perceptually convincing</b> the test sound is:',
+                                'Please rate how <b>perceptually\
+                                convincing</b> the test sound is:',
                                 i, 0
                             ) + '\
                         </li>\
@@ -137,14 +147,18 @@ def makehit(groups, prefix):
                         <li>Source %d' % j + '\
                             <ol type="i">\
                                 <li>\
-                                    <p>Please listen to the following sound as many times as you like.</p>\
+                                    <p>\
+                                        Please listen to the following sound\
+                                        as many times as you like.\
+                                    </p>\
                                     <p>' + \
                                         audioelem(i, j, prefix) + '\
                                     </p>\
                                 </li>\
                                 <li>' + \
                                     slider(
-                                        'Please rate how <b>similar</b> the sound is to the test sound:',
+                                        'Please rate how <b>similar</b> the\
+                                        sound is to the test sound:',
                                         i, j
                                     ) + '\
                                 </li>\
@@ -162,17 +176,21 @@ def makehit(groups, prefix):
     return parseString('<body>' + html + '</body>').toprettyxml()
 
 if __name__=='__main__':
-    parser = argparse.ArgumentParser(description='Create a Mechanical Turk HIT template.')
+    parser = argparse.ArgumentParser(
+        description='Create a Mechanical Turk HIT template.'
+    )
+
     parser.add_argument('-g', '--groups', metavar='int', default=5, type=int,
         help='number of trial groups per HIT.')
     parser.add_argument('-p', '--prefix', metavar='url', 
         default='https://s3.amazonaws.com/naturalmixer',
         help='url prefix for wav files.')
-    parser.add_argument('-o', '--output', metavar='file', default='hit.html', type=str,
-        help='output HTML file.')
+    parser.add_argument('-o', '--output', metavar='file', default='hit.html', 
+        type=str, help='output HTML file.')
     args = parser.parse_args()
     
-    text = makehit(args.groups, args.prefix).replace('<body>', '').replace('</body>', '')
+    text = makehit(args.groups, args.prefix)
+    text = re.sub('<[/]*body>', '', text)
     text = text.replace('<?xml version="1.0" ?>', '')
     
     f = open(args.output, 'w')

@@ -5,12 +5,13 @@ natural-mixer
 2012 Brandon Mechtley
 Arizona State University
 
-Defines a class to describe a Soundwalk, annotated with Sonic Visualizer, along with a number of
-helpful mathematical functions.
+Defines a class to describe a Soundwalk, annotated with Sonic Visualizer, along
+with a number of helpful mathematical functions.
 
-Two layers are interpreted at the moment, one titled "cut," which will specify segments to cut from
-the recording in resynthesis, such as speech. Another layer, "jasa-el" specifies portions of the
-recordings to use for resynthesis in an upcoming JASA-EL letter.
+Two layers are interpreted at the moment, one titled "cut," which will specify
+segments to cut from the recording in resynthesis, such as speech. Another
+layer, "jasa-el" specifies portions of the recordings to use for resynthesis in
+an upcoming JASA-EL letter.
 '''
 
 from xml.dom.minidom import parse, parseString
@@ -20,7 +21,8 @@ import wave
 import bz2
 
 def percline(p0, p1, p2):
-    '''Calculate the percentage of distance of point p0 along line segment p1->p2.'''
+    '''Calculate the percentage of distance of point p0 along line segment
+    p1->p2.'''
     
     return norm(p0 - p1) / norm(p2 - p1)
 
@@ -31,15 +33,18 @@ def closepoint(p0, p1, p2):
     x2, y2 = p1
     x3, y3 = p2
     
-    u = ((x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1)) / ((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    u = ((x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1)) /\
+        ((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
     x = x1 + u * (x2 - x1)
     y = y1 + u * (y2 - y1)
     
     return (x, y)
 
 def choice(a, size=1, replace=True, p=None):
-    '''Copy of NumPy's choice implementation. Choose an element of a at random. If a is a number,
-    treat as arange(a). p defines a discrete probably distribution over the element indices.'''
+    '''Copy of NumPy's choice implementation. Choose an element of a at random.
+    If a is a number, treat as arange(a). p defines a discrete probably
+    distribution over the element indices.'''
     
     # Format and Verify input
     if isinstance(a, int):
@@ -106,14 +111,18 @@ def choice(a, size=1, replace=True, p=None):
         return a.take(idx)
 
 def first_element(n, tag, attr, value):
-    '''Helper function that returns the first DOM child node with a specific tag type, tag, and an 
-    attribute, attr, that matches a specified value.'''
+    '''Helper function that returns the first DOM child node with a specific
+    tag type, tag, and an attribute, attr, that matches a specified value.'''
     
-    return [c for c in n.getElementsByTagName(tag) if c.getAttribute(attr) == value][0]
+    return [
+        c 
+        for c in n.getElementsByTagName(tag) 
+        if c.getAttribute(attr) == value
+    ][0]
 
 def dataset_from_layer(d, name):
-    '''Helper function that returns the associated dataset for a given layer name in a 
-    SonicVisualiser XML file.'''
+    '''Helper function that returns the associated dataset for a given layer
+    name in a SonicVisualiser XML file.'''
     
     l = first_element(d, 'layer', 'presentationName', name)
     m = first_element(d, 'model', 'id', l.getAttribute('model'))
@@ -123,13 +132,15 @@ def dataset_from_layer(d, name):
 class Soundwalk:
     '''Class that represents a SonicVisualiser analysis file for a soundwalk.
     These have specific layers:
-        cut: Regions layer that defines regions to avoid--speech, coughs, clicks, etc.
-        jasa-el: Region layer containing one region to use for JASA-EL user  study.'''
+        cut: Regions layer that defines regions to avoid--speech, coughs,
+        clicks, etc.
+        jasa-el: Region layer containing one region to use for JASA-EL user 
+        study.'''
     
-    def __init__(self, s, useseg = True):
-        '''Constructor. s is the path to the Sonic Visualiser .sv file, and useseg determines
-        whether or not only the portion of the sound annotated in the jasa-el layer should be
-        used.'''
+    def __init__(self, s, useseg=True):
+        '''Constructor. s is the path to the Sonic Visualiser .sv file, and
+        useseg determines whether or not only the portion of the sound
+        annotated in the jasa-el layer should be used.'''
         
         if (splitext(s)[1]) == '.wav':
             self.wavStart = self.start = 0
@@ -144,7 +155,11 @@ class Soundwalk:
             
             # Deinterlace.
             if self.nchannels > 1:
-                self.frames = array([self.frames[0::2], self.frames[1::2]]).transpose()
+                self.frames = array([
+                    self.frames[0::2], 
+                    self.frames[1::2]
+                ]).transpose()
+
         elif splitext(s)[1] == '.sv':
             doc = parseString(bz2.decompress(open(s).read()))
             
@@ -156,30 +171,39 @@ class Soundwalk:
             self.wavfile = w.getAttribute('file')
             
             # Region used for synthesis.
-            seg_data = dataset_from_layer(doc, 'jasa-el')
-            p = seg_data.getElementsByTagName('point')[0]
-            
             if useseg:
-                self.start = int(p.getAttribute('frame')) if useseg else 0
-                self.len = int(p.getAttribute('duration')) if useseg else self.wavEnd
-                self.end = self.start + self.len if useseg else self.wavEnd
+                seg_data = dataset_from_layer(doc, 'jasa-el')
+                p = seg_data.getElementsByTagName('point')[0]
             
+                self.start = int(p.getAttribute('frame'))
+                self.len = int(p.getAttribute('duration'))
+                self.end = self.start + self.len
+            else:
+                self.start = 0
+                self.len = self.wavEnd
+                self.end = self.wavEnd
+
             # Open only the requested segment of wave file.
             wav = wave.open(self.wavfile)
             self.nchannels, sw, fr, nf, ct, cn = wav.getparams()
             
             dts = {1: np.int8, 2: np.int16, 4: np.int32}
             wav.setpos(self.start * self.nchannels)
-            #print 'reading', self.len * self.nchannels, self.len, self.nchannels
-            self.frames = fromstring(wav.readframes(self.len * self.nchannels), dtype=dts[sw])
+            
+            self.frames = fromstring(
+                wav.readframes(self.len * self.nchannels), 
+                dtype=dts[sw]
+            )
             
             # Deinterlace.
             if self.nchannels > 1:
-                self.frames = array([self.frames[0::2], self.frames[1::2]]).transpose()
+                self.frames = array([
+                    self.frames[0::2], self.frames[1::2]
+                ]).transpose()
             
             # Regions to cut from synthesis.
             cut_data = dataset_from_layer(doc, 'cut')
-            self.cut = [
-                [int(p.getAttribute('frame')) - self.start, int(p.getAttribute('duration'))]
-                for p in cut_data.getElementsByTagName('point')
-            ]
+            self.cut = [[
+                int(p.getAttribute('frame')) - self.start, 
+                int(p.getAttribute('duration'))
+            ] for p in cut_data.getElementsByTagName('point')]

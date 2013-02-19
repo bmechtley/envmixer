@@ -5,7 +5,8 @@ natural-mixer
 2013 Brandon Mechtley
 Arizona State University
 
-This script moves files based on mapping.txt. See makemapping.sh for more information.
+This script moves files based on mapping.txt. See makemapping.sh for more
+information.
 
 Usage: python mapping.py {do,undo}
     do: move original wavfiles to [md5].wav files.

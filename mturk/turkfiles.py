@@ -5,8 +5,8 @@ natural-mixer
 2013 Brandon Mechtley
 Arizona State University
 
-Create CSV files for Mechanical Turk batches, given the number of groups and the frequency of
-fake CAPTCHA trials.
+Create CSV files for Mechanical Turk batches, given the number of groups and
+the frequency of fake CAPTCHA trials.
 
 Usage: python makehit.py ngroups
     ngroups (int): number of test/source trials per HIT.
@@ -82,17 +82,24 @@ def grouptrials(realtests, faketests, groups):
     
         hit.append(realtests.pop())
 
+    return hits
+
 def printhits(hits, groups):
     # Print CSV header.
-    print ','.join([','.join(['g%ds%d' % (i, j) for j in range(4)]) for i in range(groups)])
+    print ','.join([
+        ','.join(['g%ds%d' % (i, j) for j in range(4)])
+        for i in range(groups)
+    ])
 
     # Print rows.
     print '\n'.join([','.join(hit) for hit in hits])
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Create a CSV file for a Mechanical Turk batch.')
-    parser.add_argument('mapping', metavar='file', type=str, default='mapping.txt',
-        help='mapping CSV file. See makemapping.sh for more information.')
+    parser = argparse.ArgumentParser(description='Create a CSV file for a\
+        Mechanical Turk batch.')
+    parser.add_argument('mapping', metavar='file', default='mapping.txt',
+        type=str, help='mapping CSV file. See makemapping.sh for more\
+        information.')
     parser.add_argument('-g', '--groups', metavar='int', default=5, type=int, 
         help='Number of test/source trials per HIT, including CAPTCHAs.')
     args = parser.parse_args()
