@@ -22,7 +22,7 @@ import argparse
 import prettytable as pt
 import numpy as np
 
-def verify(fn):
+def verify(fn, showall=False):
     results = np.genfromtxt(fn, delimiter='","', skip_header=1, dtype=str)
     results = np.genfromtxt(fn, delimiter='","', dtype=str,
         usecols=range(results.shape[1]))
@@ -67,7 +67,7 @@ def verify(fn):
     # Iterate through each group per each row.
     for i, row in enumerate(results[1:]):
         # Only bother providing output for HITs that have not been rejected.
-        if not len(row[cfeedback]):
+        if not len(row[cfeedback]) or showall:
             for ginputs, ganswers, gdesc, gids in zipped:
                 inputs = row[ginputs]
                 answers = row[ganswers]
@@ -93,6 +93,8 @@ if __name__=='__main__':
         results.csv | column -s "#" -t')
     parser.add_argument('results', metavar='csv', type=str, 
         help='mturk results .csv file')
+    parser.add_argument('-a', '--showall', action='store_true', 
+        help='show all HITs, regardless of rejection status.')
     args = parser.parse_args()
     
-    verify(args.results)
+    verify(args.results, args.showall)
