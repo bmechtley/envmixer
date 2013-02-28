@@ -23,9 +23,9 @@ import prettytable as pt
 import numpy as np
 
 def verify(fn, showall=False):
-    results = np.genfromtxt(fn, delimiter='","', skip_header=1, dtype=str)
+    results = np.genfromtxt(fn, delimiter='","', skip_header=1, dtype=str, invalid_raise=False)
     results = np.genfromtxt(fn, delimiter='","', dtype=str,
-        usecols=range(results.shape[1]))
+        usecols=range(results.shape[1]), invalid_raise=False)
         
     for i in range(len(results[0])):
         results[0,i] = results[0, i].strip('"')
@@ -48,14 +48,14 @@ def verify(fn, showall=False):
     ])[0]
     
     # Individual column numbers for HIT ID, Worker ID, and Requester Feedback.
-    chitid = np.where(results[0] == 'HITId')[0][0]
+    chitid = np.where(results[0] == 'AssignmentId')[0][0]
     cworkerid = np.where(results[0] == 'WorkerId')[0][0]
     cfeedback = np.where(results[0] == 'RequesterFeedback')[0][0]
     
     # List of all test/source sound ids in gXsY format.
     soundids = np.array([h[1] for h in tokens[cinputs]])
     
-    print cinputs.shape, canswers.shape, cdesc.shape, soundids.shape
+    #print cinputs.shape, canswers.shape, cdesc.shape, soundids.shape
     
     # Reshape column IDs into groups for iteration over test groups.
     cinputs = cinputs.reshape((-1, 4))
@@ -69,22 +69,24 @@ def verify(fn, showall=False):
         # Only bother providing output for HITs that have not been rejected.
         if not len(row[cfeedback]) or showall:
             for ginputs, ganswers, gdesc, gids in zipped:
+                
                 inputs = row[ginputs]
                 answers = row[ganswers]
                 desc = row[gdesc]
                 
                 duplicates = inputs == inputs[0]
-                
+                 
                 # Find the CAPTCHA group.
                 if np.sum(duplicates) > 1:
                     dupanswers = answers[duplicates]
                     
-                    print '#'.join([
+                    print '"' + '","'.join([
                         row[chitid].strip('"'),
                         row[cworkerid]] + \
                         [a.strip('"') for a in dupanswers] + \
+                        list(results[0][ginputs[duplicates]]) + 
                         [d.strip('\n') for d in desc[duplicates]]
-                    )
+                    ) + '"'
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(
