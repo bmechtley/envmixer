@@ -80,14 +80,14 @@ def circumcircle(a, b, c):
     d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
     
     ux = (
-        (ax2 + ay2) * (by - cy) + \
-        (bx2 + by2) * (cy - ay) + \
+        (ax2 + ay2) * (by - cy) +
+        (bx2 + by2) * (cy - ay) +
         (cx2 + cy2) * (ay - by)
     ) / d
     
     uy = (
-        (ax2 + ay2) * (cx - bx) + \
-        (bx2 + by2) * (ax - cx) + \
+        (ax2 + ay2) * (cx - bx) +
+        (bx2 + by2) * (ax - cx) +
         (cx2 + cy2) * (bx - ax)
     ) / d
     
@@ -110,7 +110,9 @@ def voronoi(x, y):
     n = t.shape[0]
     
     # Get circle for each triangle, center will be a voronoi cell point
-    cells = [list() for i in range(x.size)]
+    cells = []
+    for i in range(x.size):
+        cells.append([])
     
     for i in range(n):
         v = [p[t[i,j]] for j in range(3)]
@@ -142,9 +144,7 @@ def unique_rows(a):
     
     return np.array([np.array(x) for x in set(tuple(x) for x in a)])
 
-def baryplot(values, points=[], 
-    labels='abc', cmap=mpl.cm.RdYlGn, clabel=''
-):
+def baryplot(values, points=None, labels='abc', cmap=mpl.cm.RdYlGn, clabel=''):
     """
     Create a triangular voronoi cell pseudocolor plot. Create a voronoi diagram for each coordinate (points) within the
     triangle and color each cell according to its value (values).
@@ -160,6 +160,8 @@ def baryplot(values, points=[],
     :param clabel: colorbar label for values
     """
     
+    if not points: points = []
+
     p = bary2cart(points) if len(points) else bary2cart(lattice(3))
     values = (values - np.amin(values)) / (np.amax(values) - np.amin(values))
     cells, triangles = voronoi(p[:,0], p[:,1])
@@ -363,11 +365,7 @@ if __name__ == '__main__':
     pp.title('Naive model: perceptual convincingness')
     
     baryplot(
-        [
-            np.mean(agg[','.join([
-                '%.2f' % a for a in p])
-            ])
-        ],
+        [np.mean(agg[','.join(['%.2f' % a for a in p])]) for p in points],
         points=points,
         labels=labels,
         clabel='convincingness'
@@ -379,12 +377,7 @@ if __name__ == '__main__':
     pp.figure(figsize=(4, 2.5))
     
     baryplot(
-        [
-            np.var(agg[','.join([
-                '%.2f' % a for a in p
-            ])])
-            for p in points
-        ], 
+        [np.var(agg[','.join(['%.2f' % a for a in p])]) for p in points], 
         points=points, 
         labels=labels, 
         clabel='variance'
