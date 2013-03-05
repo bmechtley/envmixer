@@ -1,4 +1,4 @@
-'''
+"""
 soundwalks.py
 envmixer
 
@@ -8,26 +8,39 @@ Arizona State University
 Defines a class to describe a Soundwalk, annotated with Sonic Visualizer, along
 with a number of helpful mathematical functions.
 
-Two layers are interpreted at the moment, one titled "cut," which will specify
+Two layers are interpreted at the moment, one titled \"cut,\" which will specify
 segments to cut from the recording in resynthesis, such as speech. Another
-layer, "jasa-el" specifies portions of the recordings to use for resynthesis in
+layer, \"jasa-el\" specifies portions of the recordings to use for resynthesis in
 an upcoming JASA-EL letter.
-'''
+"""
 
-from xml.dom.minidom import parse, parseString
+from xml.dom.minidom import parseString
 from pylab import *
 from os.path import splitext
 import wave
 import bz2
 
 def percline(p0, p1, p2):
-    '''Calculate the percentage of distance of point p0 along line segment
-    p1->p2.'''
+    """
+    Calculate the percentage of distance of point p0 along line segment p1->p2
+    
+    :param p0: 
+    :param p1: 
+    :param p2:
+    :rtype: number
+    """
     
     return norm(p0 - p1) / norm(p2 - p1)
 
 def closepoint(p0, p1, p2):
-    '''Return the closest point on the line segment p0->p1 to point p2.'''
+    """
+    Return the closest point on the line segment p0->p1 to point p2.
+    
+    :param p0:
+    :param p1:
+    :param p2:
+    :rtype: (number, number)
+    """
     
     x1, y1 = p0
     x2, y2 = p1
@@ -39,12 +52,22 @@ def closepoint(p0, p1, p2):
     x = x1 + u * (x2 - x1)
     y = y1 + u * (y2 - y1)
     
-    return (x, y)
+    return x, y
 
 def choice(a, size=1, replace=True, p=None):
-    '''Copy of NumPy's choice implementation. Choose an element of a at random.
-    If a is a number, treat as arange(a). p defines a discrete probably
-    distribution over the element indices.'''
+    """Copy of NumPy's choice implementation. Choose an element of a at random. If a is a number, treat as arange(a).
+    
+    :type a: np.ndarray
+    :param a: array of elements from which to choose
+    :type size: int
+    :param size: number of elements to choose.
+    :type replace: bool
+    :param replace: whether or not to choose with replacement.
+    :type p: np.ndarray
+    :param p: discrete probability distribution over the element indices.
+    :rtype: number
+    :return: an element of a, chosen at random.
+    """
     
     # Format and Verify input
     if isinstance(a, int):
@@ -78,11 +101,10 @@ def choice(a, size=1, replace=True, p=None):
             uniform_samples = np.random.random(size)
             idx = cdf.searchsorted(uniform_samples, side='right')
         else:
-            idx = self.randint(0, pop_size, size=size)
+            idx = np.random.randint(0, pop_size, size=size)
     else:
         if size > pop_size:
-            raise ValueError(''.join(["Cannot take a larger sample than ",
-                                      "population when 'replace=False'"]))
+            raise ValueError("Cannot take a larger sample than population when 'replace=False'")
         
         if None != p:
             if np.sum(p>0) < size:
@@ -91,9 +113,11 @@ def choice(a, size=1, replace=True, p=None):
             p = p.copy()
             found = np.zeros(size, dtype=np.int)
             while n_uniq < size:
-                x = self.rand(size-n_uniq)
+                x = np.random.rand(size-n_uniq)
+                
                 if n_uniq > 0:
                     p[found[0:n_uniq]] = 0
+                
                 p = p/p.sum()
                 cdf = np.cumsum(p)
                 new = cdf.searchsorted(x, side='right')
@@ -102,7 +126,7 @@ def choice(a, size=1, replace=True, p=None):
                 n_uniq += new.size
             idx = found
         else:
-            idx = self.permutation(pop_size)[:size]
+            idx = np.random.permutation(pop_size)[:size]
     
     #Use samples as indices for a if a is array-like
     if isinstance(a, int):
@@ -111,8 +135,21 @@ def choice(a, size=1, replace=True, p=None):
         return a.take(idx)
 
 def first_element(n, tag, attr, value):
-    '''Helper function that returns the first DOM child node with a specific
-    tag type, tag, and an attribute, attr, that matches a specified value.'''
+    """
+    Helper function that returns the first DOM child node with a specific tag type, tag, and an attribute, attr, that 
+    matches a specified value.
+    
+    :type n: xml.dom.minidom.Element
+    :param n: parent node.
+    :type tag: str
+    :param tag: tag name to match.
+    :type attr: str
+    :param attr: tag attribute to match.
+    :type value: str
+    :param value: value of the attribute to match.
+    :rtype: xml.dom.minidom.Element
+    :return: first child node with the specified tag type, tag, and attribute that matches the value.
+    """
     
     return [
         c 
@@ -121,8 +158,16 @@ def first_element(n, tag, attr, value):
     ][0]
 
 def dataset_from_layer(d, name):
-    '''Helper function that returns the associated dataset for a given layer
-    name in a SonicVisualiser XML file.'''
+    """
+    Helper function that returns the associated dataset for a given layer name in a SonicVisualiser XML file.
+    
+    :type d: xml.dom.minidom.Element
+    :param d: SonicVisualiser XML document.
+    :type name: str
+    :param name: layer name.
+    :rtype: xml.dom.minidom.Element
+    :return: dataset for the layer.
+    """
     
     l = first_element(d, 'layer', 'presentationName', name)
     m = first_element(d, 'model', 'id', l.getAttribute('model'))
@@ -130,17 +175,23 @@ def dataset_from_layer(d, name):
     return first_element(d, 'dataset', 'id', m.getAttribute('dataset'))
 
 class Soundwalk:
-    '''Class that represents a SonicVisualiser analysis file for a soundwalk.
+    """
+    Class that represents a SonicVisualiser analysis file for a soundwalk.
     These have specific layers:
         cut: Regions layer that defines regions to avoid--speech, coughs,
         clicks, etc.
         jasa-el: Region layer containing one region to use for JASA-EL user 
-        study.'''
+        study."""
     
     def __init__(self, s, useseg=True):
-        '''Constructor. s is the path to the Sonic Visualiser .sv file, and
-        useseg determines whether or not only the portion of the sound
-        annotated in the jasa-el layer should be used.'''
+        """
+        Set up the Soundwalk.
+        
+        :type s: str
+        :param s: SonicVisualiser .sv file path.
+        :type useseg: bool
+        :param useseg: Whether or not only the portion of the sound annotated in the jasa-el layer should be use.
+        """
         
         if (splitext(s)[1]) == '.wav':
             self.wavStart = self.start = 0
