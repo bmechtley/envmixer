@@ -100,10 +100,13 @@ def voronoi(x, y):
     return cells, d.triangles
 
 def unique_rows(a):
-    '''Return only unique rows from an array.
-        a: np.array
-            input array'''
-
+    """
+    Return an array containing unique rows from a.
+    :type a: np.ndarray
+    :param a: input array.
+    :return: smaller array containing unique rows from a.
+    """
+    
     return np.array([np.array(x) for x in set(tuple(x) for x in a)])
 
 def baryplot(values, points=[], 
