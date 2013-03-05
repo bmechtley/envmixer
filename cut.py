@@ -1,6 +1,6 @@
 '''
 cut.py
-natural-mixer
+envmixer
 
 2012 Brandon Mechtley
 Arizona State University

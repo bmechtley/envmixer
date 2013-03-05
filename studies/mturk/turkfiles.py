@@ -1,6 +1,6 @@
 '''
 mturk/turkfiles.py
-natural-mixer
+envmixer
 
 2013 Brandon Mechtley
 Arizona State University

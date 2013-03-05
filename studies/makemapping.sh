@@ -1,6 +1,6 @@
 #
 # mturk/makemapping.sh
-# natural-mixer
+# envmixer
 #
 # 2013 Brandon Mechtley
 # Arizona State University

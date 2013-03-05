@@ -1,6 +1,6 @@
-'''
+"""
 mixer.py
-natural-mixer
+envmixer
 
 2012 Brandon Mechtley
 Arizona State University
@@ -27,19 +27,38 @@ output should be most similar to the region of each soundwalk that is closest
 to the cursor.
 
 Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
-'''
+"""
 
 import os, bz2, argparse
 from scipy.io import wavfile
 from soundwalks import *
 from barycentric import *
-import matplotlib.pyplot as pp
 
 class Grain:
+    def __init__(self):
+        """
+        Initialize properties.
+        """
+        
+        self.outpos, self.srcpos, self.dur, self.src = -1, -1, -1, -1
+
     def __str__(self):
+        """
+        Convert to string.
+        
+        :return: string representation of grain.
+        """
+        
         return '%d %d %d %d' % (self.outpos, self.srcpos, self.dur, self.src)
 
 def output_grain_annotations(grains, rate, wavname, filename):
+    """
+    
+    :param grains: 
+    :param rate: 
+    :param wavname: 
+    :param filename: 
+    """
     outstr = open('template.xml', 'r').read() % (
         wavname,
         rate,
@@ -59,19 +78,21 @@ def output_grain_annotations(grains, rate, wavname, filename):
     f.write(bz2.compress(outstr))
     f.close()
 
-def simple_grain_train(
-    coords, sounds, length=10, graindur=[500, 2000], jumpdev=60
-):
-    '''Simplest synthesis algorithm. Creates a sequence of overlapping grains, 
-    each selected from a different source recording. The source recording is
-    randomly selected, weighted according to which recording is closest to the
-    input coordinates.
+def simple_grain_train(coords, sounds, length=10, graindur=(500, 2000), jumpdev=60):
+    """
+    Simplest synthesis algorithm. Creates a sequence of overlapping grains, each selected from a different source
+    recording. The source recording is randomly selected, weighted according to which recording is closest to the input
+    coordinates. Each grain has a random duration, sampled from a beta distribution (a = 2, b = 5) on the interval 
+    [100, 2000] milliseconds. Each grain is copied from that point in the selected source recording that is closest to 
+    the input coordinates with a random offset, selected from a normal distribution with mean = 0, variance = 60 
+    seconds.
     
-    Each grain has a random duration, sampled from a beta distribution (a = 2, 
-    b = 5) on the interval [100, 2000] milliseconds. Each grain is copied from
-    that point in the selected source recording that is closest to the input
-    coordinates with a random offset, selected from a normal distribution with
-    mean = 0, variance = 60 seconds.'''
+    :param coords: 
+    :param sounds: 
+    :param length: 
+    :param graindur: 
+    :param jumpdev: 
+    """
     
     coords = np.array(coords)
     
@@ -84,7 +105,7 @@ def simple_grain_train(
     cart = bary2cart(coords)
     
     prob = np.array([np.linalg.norm(sc - cart) for sc in sidecart])
-    prob = log(prob + np.finfo(float).eps)
+    prob = np.log(prob + np.finfo(float).eps)
     prob /= np.sum(prob)
     
     # Create list of sound grains. Eeach grain is a tuple of frame numbers:
@@ -93,20 +114,20 @@ def simple_grain_train(
     
     grains = []
     rate = min([s.rate for s in sounds])
-    pos = ol = 0
+    pos = 0
     
     while pos < rate * length:
         g = Grain()
         
         # Random source.
         g.src = choice(range(3), p = prob)[0]
-        g.dur = randint(graindur[0] / 1000. * rate, graindur[1] / 1000. * rate)
+        g.dur = np.random.randint(graindur[0] / 1000. * rate, graindur[1] / 1000. * rate)
         
         # Random offset from closest source point.
-        jump = int(randn() * rate * jumpdev)
+        jump = int(np.random.randn() * rate * jumpdev)
         frame = int(percs[g.src] * sounds[g.src].len + sounds[g.src].start)
         g.srcpos = frame + jump
-        g.srcpos = min(g.srcpos, sounds[g.src].end - (g.dur) * rate)
+        g.srcpos = min(g.srcpos, sounds[g.src].end - g.dur * rate)
         g.srcpos = max(g.srcpos, sounds[g.src].start)
         
         g.outpos = 0
@@ -124,8 +145,13 @@ def simple_grain_train(
     return grains
 
 def output_grain_train(sounds, grains, filename):
-    '''Write a synthesized version from a sequence of grains from different
-    sources, with optional overlap.'''
+    """
+    Write a synthesized version from a sequence of grains from different sources, with optional overlap.
+    
+    :param sounds: 
+    :param grains: 
+    :param filename: 
+    """
     
     rate = min([s.rate for s in sounds])
     length = max([g.outpos + g.dur for g in grains])

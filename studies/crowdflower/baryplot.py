@@ -1,6 +1,6 @@
 """
 studies/crowdflower/baryplot.py
-natural-mixer
+envmixer
 
 2013 Brandon Mechtley
 Arizona State University
@@ -29,7 +29,7 @@ from barycentric import *
 def makedict(fn):
     """
     Create a dictionary that maps sound type->position->iteration to its filehash, given an input mapping CSV file.
-    See natural-mixer/studies/makemapping.sh for more information on how this CSV file is formatted.
+    See envmixer/studies/makemapping.sh for more information on how this CSV file is formatted.
     
     :type fn: str
     :param fn: filename of the mapping CSV file.

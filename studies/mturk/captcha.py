@@ -1,6 +1,6 @@
-'''
+"""
 mturk/captcha.py
-natural-mixer
+envmixer
 
 2013 Brandon Mechtley
 Arizona State University
@@ -15,17 +15,24 @@ HIT, separated by the # character. Data is formatted as such:
 
 [HITId]#[Worker ID]#[Test realism]#[Source similarity]#[Test desc]#[Source desc]
 
-Best usage: python captcha.py results.csv | column -s "#" -t
-'''
+Best usage: python captcha.py results.csv | column -s \"#\" -t
+"""
 
 import argparse
-import prettytable as pt
 import numpy as np
 
 def verify(fn, showall=False):
-    results = np.genfromtxt(fn, delimiter='","', skip_header=1, dtype=str, invalid_raise=False)
-    results = np.genfromtxt(fn, delimiter='","', dtype=str,
-        usecols=range(results.shape[1]), invalid_raise=False)
+    """
+    :type fn: str
+    :param fn: Amazon Mechanical Turk results CSV file.  
+    :type showall: bool
+    :
+    :param showall: Whether or not to show all HITs, regardless of whether or not they have been accepted. Default
+        behavior is to only show HITs in with "submitted" status.
+    """
+    
+    results = np.genfromtxt(fn, delimiter='","', skip_header=1, dtype=np.dtype(str), invalid_raise=False)
+    results = np.genfromtxt(fn, delimiter='","', dtype=np.dtype(str), usecols=range(results.shape[1]), invalid_raise=False)
         
     for i in range(len(results[0])):
         results[0,i] = results[0, i].strip('"')
@@ -90,13 +97,13 @@ def verify(fn, showall=False):
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(
-        description='Verify that Mechanical Turk workers have passed the\
-        captcha test. Best used piped into column, e.g. python captcha.py\
-        results.csv | column -s "#" -t')
-    parser.add_argument('results', metavar='csv', type=str, 
-        help='mturk results .csv file')
-    parser.add_argument('-a', '--showall', action='store_true', 
-        help='show all HITs, regardless of rejection status.')
+        description='Verify that Mechanical Turk workers have passed the captcha test. Best used piped into column,\
+        e.g. python captcha.py results.csv | column -s "#" -t'
+    )
+    
+    parser.add_argument('-a', '--showall', action='store_true', help='show all HITs, regardless of rejection status.')
+    parser.add_argument('results', metavar='csv', type=str, help='mturk results .csv file')
+    
     args = parser.parse_args()
     
     verify(args.results, args.showall)
