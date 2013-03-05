@@ -1,4 +1,4 @@
-'''
+"""
 cut.py
 envmixer
 
@@ -6,12 +6,12 @@ envmixer
 Arizona State University
 
 Uses information embedded in Sonic Visualizer export file to remove segments on
-a layer called "cut", crossfading the adjacent sections with an equal-power
+a layer called \"cut\", crossfading the adjacent sections with an equal-power
 logarithmic crossfade with length specified by the second command-line
 argument, in millesconds.
 
 usage: python cut.py input.wav length output.wav
-'''
+"""
 
 from sys import argv
 from scipy.io import wavfile
