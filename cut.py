@@ -5,10 +5,9 @@ envmixer
 2012 Brandon Mechtley
 Arizona State University
 
-Uses information embedded in Sonic Visualizer export file to remove segments on
-a layer called 'cut,' crossfading the adjacent sections with an equal-power
-logarithmic crossfade with length specified by the second command-line
-argument, in millesconds.
+Uses information embedded in Sonic Visualizer export file to remove segments on a layer called 'cut,' crossfading the
+adjacent sections with an equal-power logarithmic crossfade with length specified by the second command-line argument,
+in millesconds.
 
 usage: python cut.py input.wav length output.wav
 """
