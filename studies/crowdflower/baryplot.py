@@ -27,6 +27,16 @@ from pybatchdict import *
 from barycentric import *
 
 def makedict(fn):
+    """
+    Create a dictionary that maps sound type->position->iteration to its filehash, given an input mapping CSV file.
+    See natural-mixer/studies/makemapping.sh for more information on how this CSV file is formatted.
+    
+    :type fn: str
+    :param fn: filename of the mapping CSV file.
+    :rtype: dict
+    :return: nested dictionary of format {'soundtype': {'pos': {'iteration': filehash}}} 
+    """
+    
     mapping = open(fn, 'r')
     
     sounds = {}
@@ -49,6 +59,19 @@ def makedict(fn):
     return sounds
 
 def circumcircle(a, b, c):
+    """
+    Return the center coordinates of a circle that circumscribes an input triangle defined by 2D vertices a, b, and c.
+     
+    :type a: (number, number) or np.ndarray
+    :param a: first vertex of the input triangle.
+    :type b: (number, number) or np.ndarray
+    :param b: second vertex of the input triangle.
+    :type c: (number, number) or np.ndarray
+    :param c: third vertex of the input triangle.
+    :rtype: (number, number)
+    :return: center coordinates of circumscribing circle.
+    """
+    
     ax, ay = a
     bx, by = b
     cx, cy = c
@@ -71,6 +94,16 @@ def circumcircle(a, b, c):
     return ux, uy
 
 def voronoi(x, y):
+    """
+    :type x: list or np.ndarray
+    :param x: list of coordinates' x components.
+    :type y: list or np.ndarray
+    :param y: list of coordinates' y components.
+    :rtype: (list, list)
+    :return: (cells, triangles), where cells is a list of voronoi cells, each once containing a list of two-dimensional
+        points; and triangles is a list of the triangles from a Delaunay triangulation.
+    """
+    
     p = np.array(zip(x, y))
     d = mpl.tri.Triangulation(x, y)
     t = d.triangles
