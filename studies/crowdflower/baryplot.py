@@ -37,13 +37,13 @@ def makedict(fn):
         stype = tokens[1]
         pos = '-'.join(tokens[2:5])
         iteration = tokens[0] if stype == 'source' else tokens[5]
-     
+        
         if stype not in sounds:
             sounds[stype] = {}
-    
+        
         if pos not in sounds[stype]:
             sounds[stype][pos] = {}
-
+        
         sounds[stype][pos][iteration] = filehash
     
     return sounds
@@ -53,21 +53,21 @@ def circumcircle(a, b, c):
     bx, by = b
     cx, cy = c
     ax2, ay2, bx2, by2, cx2, cy2 = [d ** 2 for d in [ax, ay, bx, by, cx, cy]]
-
+    
     d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
-
+    
     ux = (
         (ax2 + ay2) * (by - cy) + \
         (bx2 + by2) * (cy - ay) + \
         (cx2 + cy2) * (ay - by)
     ) / d
-
+    
     uy = (
         (ax2 + ay2) * (cx - bx) + \
         (bx2 + by2) * (ax - cx) + \
         (cx2 + cy2) * (bx - ax)
     ) / d
-
+    
     return ux, uy
 
 def voronoi(x, y):
@@ -75,10 +75,10 @@ def voronoi(x, y):
     d = mpl.tri.Triangulation(x, y)
     t = d.triangles
     n = t.shape[0]
-
+    
     # Get circle for each triangle, center will be a voronoi cell point
     cells = [list() for i in range(x.size)]
-
+    
     for i in range(n):
         v = [p[t[i,j]] for j in range(3)]
         pt = circumcircle(v[0], v[1], v[2])
@@ -86,17 +86,17 @@ def voronoi(x, y):
         cells[t[i,0]].append(pt)
         cells[t[i,1]].append(pt)
         cells[t[i,2]].append(pt)
-
+    
     # Reordering cell p in trigonometric way
     for i, cell in enumerate(cells):
         xy = np.array(cell)
         order = np.argsort(np.arctan2(xy[:,1] - y[i], xy[:,0] - x[i]))
-
+        
         cell = xy[order].tolist()
         cell.append(cell[0])
-
+        
         cells[i] = cell
-
+    
     return cells, d.triangles
 
 def unique_rows(a):
@@ -112,19 +112,34 @@ def unique_rows(a):
 def baryplot(values, points=[], 
     labels='abc', cmap=mpl.cm.RdYlGn, clabel=''
 ):
+    """
+    Create a triangular voronoi cell pseudocolor plot. Create a voronoi diagram for each coordinate (points) within the
+    triangle and color each cell according to its value (values).
+    :type values: list or np.ndarray
+    :param values: list of scalar values for each barycentric point.
+    :type points: list or np.ndarray
+    :param points: list of three-parameter barycentric points.
+    :type labels: list
+    :param labels: list of three label strings, one for each side of the triangle.
+    :type cmap: matplotlib.colors.Colormap
+    :param cmap: colormap for pseudocolor plot.
+    :type clabel: str
+    :param clabel: colorbar label for values
+    """
+    
     p = bary2cart(points) if len(points) else bary2cart(lattice(3))
     values = (values - np.amin(values)) / (np.amax(values) - np.amin(values))
     cells, triangles = voronoi(p[:,0], p[:,1])
-
+    
     xmin, xmax, xavg = np.amin(p[:,0]), np.amax(p[:,0]), np.mean(p[:,0])
     ymin, ymax, yavg = np.amin(p[:,1]), np.amax(p[:,1]), np.mean(p[:,1])
-
+    
     s60, c60 = np.sin(np.pi / 3.), np.cos(np.pi / 3.)
     s30, c30 = np.sin(np.pi / 6.), np.cos(np.pi / 6.)
     
     # Start drawing.
     ax = pp.gca()
-
+    
     # Clipping triangle for the voronoi patches.
     clip = mpl.patches.Polygon([
         (xmin, ymin), (xmax, ymin), (xavg, ymax),
@@ -136,7 +151,6 @@ def baryplot(values, points=[],
             + [mpl.path.Path.LINETO] * (len(cell) - 2) \
             + [mpl.path.Path.CLOSEPOLY]
         
-        print cell
         pth = mpl.path.Path(cell, codes)
         
         patch = mpl.patches.PathPatch(
@@ -146,7 +160,7 @@ def baryplot(values, points=[],
             clip_path=clip,
             edgecolor='none'
         )
-
+        
         ax.add_patch(patch)
     
     # Add barycentric labels for vertices.
@@ -169,16 +183,16 @@ def baryplot(values, points=[],
         xavg - c30 * .325, yavg + s30 * .325, 
         labels[0], ha='center', va='center', rotation=60
     )
-
+    
     arrowopts = dict(
         width=.00125,
         frac=.0125,
         headwidth=.01,
         transform=ax.transData
     )
-
+    
     fig = pp.gcf()
-
+    
     # Arrows along edges.
     ax.add_patch(mpl.patches.YAArrow(
         fig,
@@ -208,7 +222,7 @@ def baryplot(values, points=[],
         ymin - s60 * .2, ymax + s60 * .2
     ])
     pp.axis('off')
-
+    
     norm = mpl.colors.Normalize(vmin=np.amin(values), vmax=np.amax(values))
     cax, kw = mpl.colorbar.make_axes(ax, orientation='vertical', shrink=0.7)
     cb = mpl.colorbar.ColorbarBase(
@@ -222,28 +236,42 @@ def baryplot(values, points=[],
     cb.set_label(clabel)
 
 def aggregate_result(json, coordmapping, resultpath):
-    keyname = resultpath.split('/')[-1]
+    """
+    Convert a JSON CrowdFlower results dictionary to a dictionary that pairs barycentric coordinates with a list of
+    values for a given key in the results dictionary.
+    
+    :type json: list
+    :param json: CrowdFlower-formatted results JSON list.
+    :type coordmapping: dict
+    :param coordmapping: dictionary that maps sound file hashes to coordinates.
+    :param resultpath: keypath for the desired property to aggregate. For more information on keypaths, see the
+        pybatchdict package.
+    :return:  dict of format {'u,v,w': [values]}, where 'u,v,w' is a
+        string of serialized barycentric coordinates and [values] is a list of values for the resultpath nested dictionary
+        key aggregated for the given position.
+    """
+    
     aggdict = {}
-
+    
     for result in json:
         jsondict = coordmapping[result['data']['s0']]
-
+        
         if jsondict['type'] != 'source':
             posstr = '%.2f,%.2f,%.2f' % jsondict['pos']
             aggdict.setdefault(posstr, [])
-
+            
             for judgment in result['results']['judgments']:
                 if not judgment['rejected']:
                     value = float(getkeypath(judgment, resultpath))
                     aggdict[posstr].append(value)
-
+    
     return aggdict
 
 if __name__ == '__main__':
     # 
     # 1. Command-line arguments.
     # 
-
+    
     parser = argparse.ArgumentParser(
         description='Make plots for a CrowdFlower results batch.'
     )
@@ -257,20 +285,20 @@ if __name__ == '__main__':
         'json', metavar='json', default='results.json', 
         type=str, help='JSON results file from CrowdFlower.'
     )
-
+    
     args = parser.parse_args()
     
     #
     # 2. Load/manipulate JSON.    
     #
-
+    
     jsonfile = open(args.json)
     jsondata = json.loads('[' + ','.join([line for line in jsonfile]) + ']')
     jsonfile.close()
-
+    
     # Map coords to file hashes.
     mapping = makedict(args.mapping)
-
+    
     # Convert to {filehash: {'pos': (a, b, c), 'type': t}}
     # where type is 'source' or 'naive'
     coordmapping = {}
@@ -283,7 +311,7 @@ if __name__ == '__main__':
                     'pos': (a, b, c),
                     'type': stype
                 }
-
+    
     # Aggregate data.
     agg = aggregate_result(
         jsondata, coordmapping, 
@@ -293,7 +321,7 @@ if __name__ == '__main__':
     #
     # 3. Plots.
     #
-
+    
     points = lattice(3)
     labels = [r'$S_{DB}$', r'$S_{SG}$', r'$S_{DC}$']
     
@@ -311,12 +339,12 @@ if __name__ == '__main__':
         labels=labels,
         clabel='convincingness'
     )
-
+    
     pp.savefig('realism.eps')
-
+    
     # Plot perceptual convincingness variance.
     pp.figure(figsize=(4, 2.5))
-
+    
     baryplot(
         [
             np.var(agg[','.join([
@@ -328,7 +356,5 @@ if __name__ == '__main__':
         labels=labels, 
         clabel='variance'
     )
-
-    pp.savefig('variance.eps')
-
     
+    pp.savefig('variance.eps')
