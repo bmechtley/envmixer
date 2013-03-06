@@ -5,10 +5,9 @@ envmixer
 2012 Brandon Mechtley
 Arizona State University
 
-This utility takes in a list of source sounds and a list of barycentric
-coordinates and outputs the \"closest\" portion of each source sound of a
-specified length, where each source sound is the side of the regular convex
-polygon in which the coordinates sit. . . . see mixer.py for more information.
+This utility takes in a list of source sounds and a list of barycentric coordinates and outputs the \"closest\" portion
+of each source sound of a specified length, where each source sound is the side of the regular convex polygon in which
+the coordinates sit. . . . see mixer.py for more information.
 """
 
 import argparse
@@ -17,7 +16,6 @@ from scipy.io import wavfile
 from itertools import izip
 from barycentric import *
 from soundwalks import *
-
 
 parser = argparse.ArgumentParser(description='Output closest sound texture segments in three source sound textures to\
     a given set of coordinates in a triangle.')
@@ -43,9 +41,7 @@ fs = zip(frames, sounds)
 
 # Get start frames and end frames. If we are too close to the start point,
 # clip it to the beginning of the sound and adjust the end point.
-# noinspection PyTypeChecker,PyTypeChecker
 starts = np.array([max(0, int(f - (args.length * s.rate) / 2)) for f, s in izip(frames, sounds)])
-# noinspection PyTypeChecker
 ends = np.array([min(s.len, int(f + (args.length * s.rate) / 2)) for f, s in izip(frames, sounds)])
 
 # If we are too close to the end point, clip it to the end of the sound and
@@ -62,5 +58,3 @@ starts, ends = np.array(starts), np.array(ends)
 for s, e, sw in izip(starts, ends, sounds):
     name = '%s-%s.wav' % (splitext(basename(sw.wavfile))[0], args.suffix)
     wavfile.write(join(args.output, name), sw.rate, sw.frames[s:e])
-
-
