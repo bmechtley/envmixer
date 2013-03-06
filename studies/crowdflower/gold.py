@@ -1,25 +1,26 @@
-'''
+"""
 studies/crowdflower/gold.py
 natural-mixer
 
 2013 Brandon Mechtley
 Arizona State University
 
-Modify a gold report from CrowdFlower to have the expected user input/reasons
-for gold marking.
+Modify a gold report from CrowdFlower to have the expected user input/reasons for gold marking.
 
 Usage: python gold.py report.csv
-'''
+"""
 
 import csv
 import argparse
 import numpy as np
 
 def altergolden(report):
-    '''Alter a downloaded golden report from CrowdFlower, setting the expected
-    gold answers.
-        csv: np.array
-            array of CSV data from CrowdFlower report.'''
+    """
+    Alter a downloaded golden report from CrowdFlower, setting the expected gold answers.
+    
+    :type report: numpy.ndarray
+    :param report: array of CSV data from CrowdFlower report.
+    """
 
     teststr = 'test_clip_perceptual_convincingness_gold'
     simstr = "source_%d_similarity_to_test_clip_gold"
