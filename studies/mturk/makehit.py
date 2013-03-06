@@ -1,12 +1,12 @@
-'''
+"""
 mturk/makehit.py
 envmixer
 
 2012 Brandon Mechtley
 Arizona State University
 
-This is a really messy script for generating Mechanical Turk HIT templates.
-Should probably use an actual .html template.
+This is a really messy script for generating Mechanical Turk HIT templates. Should probably use an actual .html
+template.
 
 usage: makehit.py [-h] [-g int] [-p url] [-o file]
 
@@ -17,9 +17,9 @@ optional arguments:
   -g int, --groups int   number of trial groups per HIT.
   -p url, --prefix url   url prefix for wav files.
   -o file, --output file output HTML file.
-'''
+"""
 
-import argparse
+import argparse, re
 from xml.dom.minidom import parseString
 
 def audioelem(group, num, prefix):
