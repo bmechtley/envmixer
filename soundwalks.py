@@ -5,12 +5,11 @@ envmixer
 2012 Brandon Mechtley
 Arizona State University
 
-Defines a class to describe a Soundwalk, annotated with Sonic Visualizer, along
-with a number of helpful mathematical functions.
+Defines a class to describe a Soundwalk, annotated with Sonic Visualizer, along with a number of helpful mathematical
+functions.
 
-Two layers are interpreted at the moment, one titled \"cut,\" which will specify
-segments to cut from the recording in resynthesis, such as speech. Another
-layer, \"jasa-el\" specifies portions of the recordings to use for resynthesis in
+Two layers are interpreted at the moment, one titled \"cut,\" which will specify segments to cut from the recording in
+resynthesis, such as speech. Another layer, \"jasa-el\" specifies portions of the recordings to use for resynthesis in
 an upcoming JASA-EL letter.
 """
 
@@ -24,10 +23,14 @@ def percline(p0, p1, p2):
     """
     Calculate the percentage of distance of point p0 along line segment p1->p2
     
-    :param p0: 
-    :param p1: 
-    :param p2:
+    :type p0: numpy.ndarray
+    :param p0: two-dimensional point along line segment
+    :type p1: numpy.ndarray
+    :param p1: two-dimensional first end of line segment
+    :type p2: numpy.ndarray
+    :param p2: two-dimensional second end of line segment
     :rtype: number
+    :return percentage of distance of point p0 along line segment p1->p2
     """
     
     return norm(p0 - p1) / norm(p2 - p1)
@@ -36,18 +39,21 @@ def closepoint(p0, p1, p2):
     """
     Return the closest point on the line segment p0->p1 to point p2.
     
-    :param p0:
-    :param p1:
-    :param p2:
+    :type p0: numpy.ndarray
+    :param p0: two-dimensional first end of line segment
+    :type p1: numpy.ndarray
+    :param p1: two-dimensional second end of line segment
+    :type p2: numpy.ndarray
+    :param p2: two-dimensional test point.
     :rtype: (number, number)
+    :return: closest point along line segment p0->p1 to p2.
     """
     
     x1, y1 = p0
     x2, y2 = p1
     x3, y3 = p2
     
-    u = ((x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1)) /\
-        ((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    u = ((x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1)) / ((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
     x = x1 + u * (x2 - x1)
     y = y1 + u * (y2 - y1)
@@ -57,13 +63,13 @@ def closepoint(p0, p1, p2):
 def choice(a, size=1, replace=True, p=None):
     """Copy of NumPy's choice implementation. Choose an element of a at random. If a is a number, treat as arange(a).
     
-    :type a: np.ndarray
+    :type a: numpy.ndarray
     :param a: array of elements from which to choose
     :type size: int
     :param size: number of elements to choose.
     :type replace: bool
     :param replace: whether or not to choose with replacement.
-    :type p: np.ndarray
+    :type p: numpy.ndarray
     :param p: discrete probability distribution over the element indices.
     :rtype: number
     :return: an element of a, chosen at random.
