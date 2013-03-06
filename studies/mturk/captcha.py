@@ -5,13 +5,12 @@ envmixer
 2013 Brandon Mechtley
 Arizona State University
 
-Look through a Mechanical Turk results CSV file to verify that users passed the
-captcha. Every HIT should have one or more test groups where the test sound is
-the same file as one of the source sounds, so the similarity to the test sound
+Look through a Mechanical Turk results CSV file to verify that users passed the captcha. Every HIT should have one or
+more test groups where the test sound is the same file as one of the source sounds, so the similarity to the test sound
 should be maximum in these cases.
 
-This script will print details for the captcha trials for each non-rejected
-HIT, separated by the # character. Data is formatted as such:
+This script will print details for the captcha trials for each non-rejected HIT, separated by the # character. Data is
+formatted as such:
 
 [HITId]#[Worker ID]#[Test realism]#[Source similarity]#[Test desc]#[Source desc]
 
@@ -23,16 +22,18 @@ import numpy as np
 
 def verify(fn, showall=False):
     """
+    Print out CSV data to verify answers of trick questions.
+    
     :type fn: str
     :param fn: Amazon Mechanical Turk results CSV file.  
     :type showall: bool
-    :
     :param showall: Whether or not to show all HITs, regardless of whether or not they have been accepted. Default
         behavior is to only show HITs in with "submitted" status.
     """
     
     results = np.genfromtxt(fn, delimiter='","', skip_header=1, dtype=np.dtype(str), invalid_raise=False)
-    results = np.genfromtxt(fn, delimiter='","', dtype=np.dtype(str), usecols=range(results.shape[1]), invalid_raise=False)
+    results = np.genfromtxt(fn, delimiter='","', dtype=np.dtype(str), usecols=range(results.shape[1]), 
+        invalid_raise=False)
         
     for i in range(len(results[0])):
         results[0,i] = results[0, i].strip('"')
