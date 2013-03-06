@@ -70,9 +70,9 @@ def maketrials(sounds):
     :rtype: (list, list)
     :return: real and gold units, where each unit is a list of filehashes.
     """
-
+    
     realunits, goldunits = [], []
-
+    
     for stype in sounds:
         if stype != 'source':
             for pos in sounds[stype]:
@@ -91,12 +91,12 @@ def maketrials(sounds):
                     goldunits.append([f for f in [fakehash] + sourcehashes])
                     goldunits.append([f for f in [fakehash] + list(np.roll(sourcehashes, 1))])
                     goldunits.append([f for f in [fakehash] + list(np.roll(sourcehashes, 2))])
-
+    
     random.shuffle(realunits)
     random.shuffle(goldunits)
     
     goldunits = unique_rows(goldunits)
-
+    
     return realunits, goldunits
 
 def printdata(realunits, goldunits):
@@ -108,27 +108,21 @@ def printdata(realunits, goldunits):
     :type goldunits: list
     :param goldunits: list of gold unit sets from maketrials.
     """
-
+    
     realunits, goldunits = np.array(realunits), np.array(goldunits)
     nreal, ngold = len(realunits), len(goldunits)
     nunits = nreal + ngold
-
+    
     # np.string_ indexing is weird, so we'll just use np.object_.
     csv = np.array([[""] * 5] * (nunits + 1), dtype=np.object_)
     
     # Header.
-    csv[0,0:5] = [
-        "s0",
-        "s1",
-        "s2",
-        "s3",
-        "_Golden"
-    ]
-
+    csv[0,0:5] = ["s0", "s1", "s2", "s3", "_Golden"]
+    
     # Fill in the units.
     csv[1:nreal+1,0:4] = [['"%s"' % r for r in unit] for unit in realunits]
     csv[nreal+1:,0:4] = [['"%s"' % r for r in unit] for unit in goldunits]
-
+    
     # All gold units need _Golden=True.
     csv[nreal+1:,4] = '"True"'
     
