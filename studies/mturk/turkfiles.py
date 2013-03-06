@@ -1,25 +1,31 @@
-'''
+"""
 mturk/turkfiles.py
 envmixer
 
 2013 Brandon Mechtley
 Arizona State University
 
-Create CSV files for Mechanical Turk batches, given the number of groups and
-the frequency of fake CAPTCHA trials.
+Create CSV files for Mechanical Turk batches, given the number of groups and the frequency of fake CAPTCHA trials.
 
 Usage: python makehit.py ngroups
     ngroups (int): number of test/source trials per HIT.
-'''
+"""
 
-import sys
 import argparse
 import random
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-# Create a hash of all test/source sounds.
 def makedict(fn):
+    """
+    Create a hash of all test/source sounds.
+    
+    :type fn: str
+    :param fn: filename of the mapping file that maps source filenames with coordinates to their hashes. 
+    :rtype: dict
+    :return: dictionary that maps filenames with coordinates to their hashes. 
+    """
+    
     mapping = open(fn, 'r')
     
     sounds = {}
@@ -42,7 +48,17 @@ def makedict(fn):
     return sounds
 
 def maketrials(sounds):
-    # Create array of random permutations for each test sound.
+    """
+    Create array of random permutations for each test sound.
+    
+    :type sounds: dict
+    :param sounds: dictionary formatted as in makedict. {stype: {pos: {iteration: []}}}
+    :rtype: (list, list)
+    :return: list of "real tests" and list of "fake tests" (i.e. trick questions). Each test is a list of four sounds,
+        where the first is the test sound (usually synthesized) and the other three are the source sounds nearest to
+        where it was synthesized. Fake tests are formed by randomly using one of the source sounds as the test sound.
+    """
+    
     realtests, faketests = [], []
 
     for stype in sounds:
@@ -68,7 +84,18 @@ def maketrials(sounds):
     return realtests, faketests
 
 def grouptrials(realtests, faketests, groups):
-    # Group them into ngroups per row.
+    """
+    Group trials from maketrials into groups, ngroups per HIT.
+    
+    :type realtests: list
+    :param realtests: list of real tests.
+    :type faketests: list
+    :param faketests: list of fake tests (trick questions where the test sound is the same as one of the sources.)
+    :type groups: int
+    :param groups: number of tests per HIT.
+    :rtype: list
+    :return: a list of lists of tests, ngroup per row.
+    """
     hits, hit = [], []
 
     while len(realtests):
@@ -85,6 +112,17 @@ def grouptrials(realtests, faketests, groups):
     return hits
 
 def printhits(hits, groups):
+    """
+    Print out a CSV of the HITs for uploading to Amazon Mechanical Turk.
+    
+    :type hits: list
+    :param hits: list of lists of tests, as returned by grouptrials.
+    :type groups: int
+    :param groups: number of tests per HIT. 
+    """
+    
+    # TODO: Grab groups from the size of hits, rather than having the user specify.
+    
     # Print CSV header.
     print ','.join([
         ','.join(['g%ds%d' % (i, j) for j in range(4)])
