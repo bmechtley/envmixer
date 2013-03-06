@@ -89,7 +89,7 @@ def simple_grain_train(coords, sounds, length=10, graindur=(500, 2000), jumpdev=
     the input coordinates with a random offset, selected from a normal distribution with mean = 0, variance = 60 
     seconds.
     
-    :type coords: list or np.ndarray
+    :type coords: list or numpy.ndarray
     :param coords: barycentric coordinates to sample synthesis.
     :type sounds: list
     :param sounds: list of instances of soundwalk, one per source edge.
