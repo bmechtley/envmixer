@@ -1,4 +1,4 @@
-'''
+"""
 studies/crowdflower/data.py
 natural-mixer
 
@@ -9,55 +9,67 @@ Create CSV files for CrowdFlower studies, including gold tests.
 Use gold.py to modify Gold Reports.
 
 Usage: python data.py mapping.txt
-'''
+"""
 
-import sys
 import argparse
 import random
 import pprint
-import csv
 import numpy as np
 pp = pprint.PrettyPrinter(indent=4)
 
 def unique_rows(a):
-    '''Return only unique rows from an array.
-        a: np.array
-            input array'''
-
+    """
+    Return only unique rows from an array.
+    
+    :type a: numpy.ndarray
+    :param a: input array
+    :rtype: numpy.ndarray
+    :return: array with one row per unique row of a.
+    """
+    
     return np.array([np.array(x) for x in set(tuple(x) for x in a)])
 
 def makedict(fn):
-    '''Create a nested dictionary of type:position:filename for every file
-    in a given mapping file. See studies/makemapping.sh for more information.
-        fn: str
-            mapping filename'''
-
+    """
+    Create a nested dictionary of type:position:filename for every file in a given mapping file. See
+    studies/makemapping.sh for more information.
+    
+    :type fn: str
+    :param fn: mapping filename
+    :rtype: dict
+    :return: dictionary of format {type: {position: {iteration: filehash}}}}
+    """
+    
     mapping = open(fn, 'r')
     
     sounds = {}
-
+    
     for line in mapping:
         (filename, filehash) = line.rstrip('\n').split(', ')
         tokens = filename.split('.wav')[0].split('-')
         stype = tokens[1]
         pos = '-'.join(tokens[2:5])
         iteration = tokens[0] if stype == 'source' else tokens[5]
-     
+        
         if stype not in sounds:
             sounds[stype] = {}
     
         if pos not in sounds[stype]:
             sounds[stype][pos] = {}
-
+        
         sounds[stype][pos][iteration] = filehash
     
     return sounds
 
 def maketrials(sounds):
-    '''Create an array of random permutations for each test sound and every
-    possible gold (i.e. trick) question.
-        sound: dict
-            hash output from makedict.'''
+    """
+    Create an array of random permutations for each test sound and every possible gold (i.e. trick) question.
+     
+    :type sounds: dict
+    :param sounds: hash output from makedict.
+    :rtype: (list, list)
+    :return: real and gold units, where each unit is a list of filehashes.
+    """
 
     realunits, goldunits = [], []
 
@@ -88,12 +100,14 @@ def maketrials(sounds):
     return realunits, goldunits
 
 def printdata(realunits, goldunits):
-    '''Print CSV output for all real and golden units for initial data upload
-    to CrowdFlower.
-        realunits: list
-            list of real unit sets from maketrials.
-        goldunits: list
-            list of gold unit sets from maketrials.'''
+    """
+    Print CSV output for all real and golden units for initial data upload to CrowdFlower.
+    
+    :type realunits: list
+    :param realunits: list of real unit sets from maketrials.
+    :type goldunits: list
+    :param goldunits: list of gold unit sets from maketrials.
+    """
 
     realunits, goldunits = np.array(realunits), np.array(goldunits)
     nreal, ngold = len(realunits), len(goldunits)
