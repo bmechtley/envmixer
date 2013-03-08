@@ -283,9 +283,11 @@ def aggregate_result(json, coordmapping, resultpath):
     :param json: CrowdFlower-formatted results JSON list.
     :type coordmapping: dict
     :param coordmapping: dictionary that maps sound file hashes to coordinates.
+    :type resultpath: str
     :param resultpath: keypath for the desired property to aggregate. For more information on keypaths, see the
         pybatchdict package.
-    :return:  dict of format {'u,v,w': [values]}, where 'u,v,w' is a
+    :rtype: dict
+    :return: dict of format {'u,v,w': [values]}, where 'u,v,w' is a
         string of serialized barycentric coordinates and [values] is a list of values for the resultpath nested dictionary
         key aggregated for the given position.
     """
