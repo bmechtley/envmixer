@@ -156,6 +156,10 @@ def baryplot(values, points=None, labels='abc', cmap=mpl.cm.BrBG, clabel='', vmi
     :param cmap: colormap for pseudocolor plot.
     :type clabel: str
     :param clabel: colorbar label for values
+    :type vmin: number
+    :param vmin: minimum value for coloring. If None, use minimum of the input values.
+    :type vmax: number
+    :param vmax: maximum value for coloring. If None, use maximum of the input values.
     """
     
     if points is None: points = []
