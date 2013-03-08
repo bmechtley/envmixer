@@ -16,7 +16,7 @@ import json
 import numpy as np
 import matplotlib as mpl
 
-mpl.use('ps')
+mpl.use('pdf')
 mpl.rc('text',usetex=True)
 mpl.rc('text.latex', preamble='\usepackage[usenames,dvipsnames]{xcolor}')
 mpl.rc('font', family='Times serif', style='normal', weight='medium')
@@ -109,10 +109,8 @@ def voronoi(x, y):
     t = d.triangles
     n = t.shape[0]
     
-    # Get circle for each triangle, center will be a voronoi cell point
-    cells = []
-    for i in range(x.size):
-        cells.append([])
+    # Get circle for each triangle, center will be a voronoi cell point. 
+    cells = [[] for i in range(x.size)]                     # [[]] * x.size will have the same object at each index.
     
     for i in range(n):
         v = [p[t[i,j]] for j in range(3)]
@@ -132,7 +130,7 @@ def voronoi(x, y):
         
         cells[i] = cell
     
-    return cells, d.triangles
+    return cells
 
 def unique_rows(a):
     """
@@ -144,7 +142,7 @@ def unique_rows(a):
     
     return np.array([np.array(x) for x in set(tuple(x) for x in a)])
 
-def baryplot(values, points=None, labels='abc', cmap=mpl.cm.RdYlGn, clabel=''):
+def baryplot(values, points=None, labels='abc', cmap=mpl.cm.BrBG, clabel='', vmin=None, vmax=None):
     """
     Create a triangular voronoi cell pseudocolor plot. Create a voronoi diagram for each coordinate (points) within the
     triangle and color each cell according to its value (values).
@@ -160,11 +158,18 @@ def baryplot(values, points=None, labels='abc', cmap=mpl.cm.RdYlGn, clabel=''):
     :param clabel: colorbar label for values
     """
     
-    if not points: points = []
-
+    if points is None: points = []
+    
+    vmin = vmin if vmin is not None else np.amin(values)
+    vmax = vmax if vmax is not None else np.amax(values)
+    
     p = bary2cart(points) if len(points) else bary2cart(lattice(3))
-    values = (values - np.amin(values)) / (np.amax(values) - np.amin(values))
-    cells, triangles = voronoi(p[:,0], p[:,1])
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    mappable = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
+    colors = mappable.to_rgba(values)
+    
+    #values = (values - np.amin(values)) / (np.amax(values) - np.amin(values))
+    cells = voronoi(p[:,0], p[:,1])
     
     xmin, xmax, xavg = np.amin(p[:,0]), np.amax(p[:,0]), np.mean(p[:,0])
     ymin, ymax, yavg = np.amin(p[:,1]), np.amax(p[:,1]), np.mean(p[:,1])
@@ -191,7 +196,7 @@ def baryplot(values, points=None, labels='abc', cmap=mpl.cm.RdYlGn, clabel=''):
         patch = mpl.patches.PathPatch(
             pth, 
             zorder=-1, 
-            facecolor=cmap(values[i]),
+            facecolor=colors[i],
             clip_path=clip,
             edgecolor='none'
         )
@@ -258,14 +263,13 @@ def baryplot(values, points=None, labels='abc', cmap=mpl.cm.RdYlGn, clabel=''):
     ])
     pp.axis('off')
     
-    norm = mpl.colors.Normalize(vmin=np.amin(values), vmax=np.amax(values))
     cax, kw = mpl.colorbar.make_axes(ax, orientation='vertical', shrink=0.7)
     cb = mpl.colorbar.ColorbarBase(
         cax, 
-        cmap=cmap, 
-        norm=norm, 
+        cmap=cmap,
+        norm=norm,
         orientation='vertical',
-        ticks=[0.0, 0.5, 1.0]
+        ticks=np.linspace(vmin, vmax, 5)
     )
     
     cb.set_label(clabel)
@@ -331,11 +335,10 @@ if __name__ == '__main__':
     jsondata = json.loads('[' + ','.join([line for line in jsonfile]) + ']')
     jsonfile.close()
     
-    # Map coords to file hashes.
+    # 2a. Map coords to file hashes.
     mapping = makedict(args.mapping)
     
-    # Convert to {filehash: {'pos': (a, b, c), 'type': t}}
-    # where type is 'source' or 'naive'
+    # 2b. Convert to {filehash: {'pos': (a, b, c), 'type': t}} where type is 'source' or 'naive'
     coordmapping = {}
     for stype in mapping:
         for sloc in mapping[stype]:
@@ -347,7 +350,7 @@ if __name__ == '__main__':
                     'type': stype
                 }
     
-    # Aggregate data.
+    # 2c. Aggregate data.
     agg = aggregate_result(
         jsondata, coordmapping, 
         '/data/test_clip_perceptual_convincingness'
@@ -359,28 +362,39 @@ if __name__ == '__main__':
     
     points = lattice(3)
     labels = [r'$S_{DB}$', r'$S_{SG}$', r'$S_{DC}$']
+    pp.figure(figsize=(4, 5))
     
-    # Plot mean perceptual convincingness.
-    pp.figure(figsize=(4, 2.5))
-    pp.title('Naive model: perceptual convincingness')
+    # 3a. Plot mean perceptual convincingness.
+    pp.subplot(211)
     
     baryplot(
         [np.mean(agg[','.join(['%.2f' % a for a in p])]) for p in points],
-        points=points,
-        labels=labels,
-        clabel='convincingness'
+        points=points, labels=labels, clabel='convincingness'
     )
     
-    pp.savefig('realism.eps')
-    
-    # Plot perceptual convincingness variance.
-    pp.figure(figsize=(4, 2.5))
+    # 3b. Plot perceptual convincingness variance.
+    pp.subplot(212)
     
     baryplot(
         [np.var(agg[','.join(['%.2f' % a for a in p])]) for p in points], 
-        points=points, 
-        labels=labels, 
-        clabel='variance'
+        points=points, labels=labels, clabel='variance'
     )
     
-    pp.savefig('variance.eps')
+    # 3c. Save figure.
+    pp.savefig('convincingness.pdf')
+    
+    pp.figure(figsize=(6, 14))
+    pp.subplots_adjust(hspace=.8,top=.95,bottom=.05)
+    
+    for i, p in enumerate(points):
+        key = ','.join(['%.2f' % a for a in p])
+        pp.subplot(len(points), 1, i + 1)
+        pp.hist(agg[key],bins=5, range=(1, 5))
+        pp.xlabel('$(%s)$' % key)
+        pp.xlim((1, 5))
+        pp.yticks([0, 15, 30, 45, 60])
+        
+        if i == 0:
+            pp.title('Distribution of convincingness ratings, $n=100$')
+    
+    pp.savefig('distributions.pdf')

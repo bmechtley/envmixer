@@ -8,6 +8,8 @@ Arizona State University
 Creates a mixed environmental sound recording from 3 source recordings. Source recordings are assumed to be of equal
 duration. The paths that define along which they were recorded are fake, organized along on equilateral triangle:
 
+::
+
              p1 (.5, sin(pi / 3))
            /    \
     p0 (0,0) -- p2 (1, 0)
@@ -40,17 +42,15 @@ class Grain:
 
     def __str__(self):
         """
-        Convert to string.
-        
         :return: string representation of grain.
+        
+        Convert to string.
         """
         
         return '%d %d %d %d' % (self.outpos, self.srcpos, self.dur, self.src)
 
 def output_grain_annotations(grains, rate, wavname, filename):
     """
-    Save a SonicVisualiser/Annotator annotations file, treating each grain as a segment.
-    
     :type grains: list
     :param grains: list of grain objects to output
     :type rate: int
@@ -59,6 +59,8 @@ def output_grain_annotations(grains, rate, wavname, filename):
     :param wavname: original filename of wav from which grains are sourced.
     :type filename: str
     :param filename: filename for the SonicVisualiser annotations.
+    
+    Save a SonicVisualiser/Annotator annotations file, treating each grain as a segment.
     """
     
     outstr = open('template.xml', 'r').read() % (
@@ -70,8 +72,9 @@ def output_grain_annotations(grains, rate, wavname, filename):
         grains[0].outpos,
         grains[-1].outpos + grains[-1].dur,
         len(grains),
-        '\n'.join(['<point frame="%d" value="%d" duration="%d" label=""/>' % \
-            (g.outpos, i, g.dur) for i, g in enumerate(grains)
+        '\n'.join([
+            '<point frame="%d" value="%d" duration="%d" label=""/>' % (g.outpos, i, g.dur) 
+            for i, g in enumerate(grains)
         ]),
         (grains[-1].outpos + grains[-1].dur) / 2
     )
@@ -82,13 +85,6 @@ def output_grain_annotations(grains, rate, wavname, filename):
 
 def simple_grain_train(coords, sounds, length=10, graindur=(500, 2000), jumpdev=60):
     """
-    Simplest synthesis algorithm. Creates a sequence of overlapping grains, each selected from a different source
-    recording. The source recording is randomly selected, weighted according to which recording is closest to the input
-    coordinates. Each grain has a random duration, sampled from a beta distribution (a = 2, b = 5) on the interval 
-    [100, 2000] milliseconds. Each grain is copied from that point in the selected source recording that is closest to 
-    the input coordinates with a random offset, selected from a normal distribution with mean = 0, variance = 60 
-    seconds.
-    
     :type coords: list or numpy.ndarray
     :param coords: barycentric coordinates to sample synthesis.
     :type sounds: list
@@ -101,6 +97,13 @@ def simple_grain_train(coords, sounds, length=10, graindur=(500, 2000), jumpdev=
     :param jumpdev: standard deviation of grain-to-grain start time differences in seconds. 
     :rtype: list
     :return: list of grains
+    
+    Simplest synthesis algorithm. Creates a sequence of overlapping grains, each selected from a different source
+    recording. The source recording is randomly selected, weighted according to which recording is closest to the input
+    coordinates. Each grain has a random duration, sampled from a beta distribution (a = 2, b = 5) on the interval 
+    [100, 2000] milliseconds. Each grain is copied from that point in the selected source recording that is closest to 
+    the input coordinates with a random offset, selected from a normal distribution with mean = 0, variance = 60 
+    seconds.
     """
     
     coords = np.array(coords)
@@ -119,7 +122,6 @@ def simple_grain_train(coords, sounds, length=10, graindur=(500, 2000), jumpdev=
     
     # Create list of sound grains. Eeach grain is a tuple of frame numbers: (output frame offset, duration in frames,
     # source recording frame offset, source # (0-2))
-    
     grains = []
     rate = min([s.rate for s in sounds])
     pos = 0
@@ -154,14 +156,14 @@ def simple_grain_train(coords, sounds, length=10, graindur=(500, 2000), jumpdev=
 
 def output_grain_train(sounds, grains, filename):
     """
-    Write a synthesized version from a sequence of grains from different sources, with optional overlap.
-    
     :type sounds: list
     :param sounds: list of soundwalks corresponding to edges.
     :type grains: list
     :param grains: list of grain objects
     :type filename: str
     :param filename: output filename for the synthesized wav file.
+    
+    Write a synthesized version from a sequence of grains from different sources, with optional overlap.
     """
     
     rate = min([s.rate for s in sounds])
@@ -189,7 +191,7 @@ def output_grain_train(sounds, grains, filename):
             sound[g.outpos:g.outpos + g.dur] += g.data
     
     wavfile.write(filename, rate, sound)
-
+    
     output_grain_annotations(grains, sounds[0].rate, args.output, args.svl)
 
 if __name__ == '__main__':
@@ -213,10 +215,10 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--svl', metavar='file', default='output.svl',
                         type=str, help='sonic visualiser layer output')
     args = parser.parse_args()
-
+    
     # Load commandline arguments.
     sounds = [Soundwalk(w) for w in args.inputs]
-
+    
     grains = simple_grain_train(
         args.coords,
         sounds,
@@ -224,6 +226,6 @@ if __name__ == '__main__':
         args.graindur,
         args.jumpdev
     )
-
+    
     output_grain_train(sounds, grains, args.output)
 
