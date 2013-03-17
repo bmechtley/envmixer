@@ -7,7 +7,7 @@
 #
 # Create a CSV file where each row has two filenames per .wav file in the
 # directory. The first filename is the original filename. The second filename
-# is a unique MD5 hash of the file's contents and its filename.
+# is an MD5 hash of the original filename.
 #
 
 for f in *.wav
