@@ -15,13 +15,57 @@ Usage: python mapping.py {do,undo}
 import sys
 import subprocess
 
-f = open('mapping.txt', 'rb')
+def makedict(fn):
+    """
+    Create a nested dictionary of type/position/iteration: filename for every file in a given mapping file. See
+    studies/makemapping.sh for more information.
+    
+    :type fn: str
+    :param fn: mapping filename
+    :rtype: (dict, dict)
+    :return: 
+        sounds: dictionary of format {type: {position: {iteration: filehash}}}}
+        mapdict: dictionary of format {filehash: original filename}
+    """
+    
+    mapping = open(fn, 'r')
 
-def undomapping():
+    sounds = {}
+    mapdict = {}
+
+    for line in mapping:
+        filename, filehash = line.rstrip('\n').split(', ')
+        mapdict[filehash] = filename
+        tokens = filename.split('.wav')[0].split('-')
+
+        if tokens[0] not in ['tone', 'numstr']:
+            stype = tokens[1]
+            pos = '-'.join(tokens[2:5])
+            iteration = tokens[0] if stype == 'source' else tokens[5]
+
+            if stype not in sounds:
+                sounds[stype] = {}
+
+            if pos not in sounds[stype]:
+                sounds[stype][pos] = {}
+
+            sounds[stype][pos][iteration] = filehash
+        else:
+            if tokens[0] not in sounds:
+                sounds[tokens[0]] = {}
+
+            sounds[tokens[0]][tokens[1]] = filehash
+    
+    return mapdict, sounds
+
+def undomapping(fn):
     """
     Move file hashes back to their original filenames.
     """
-    
+
+
+    f = open(fn, 'rb')
+
     for line in f:
         s = line.rstrip('\n').split(', ')
         print 'mv', s[1], s[0]
@@ -29,11 +73,13 @@ def undomapping():
     
     exit()
 
-def domapping():
+def domapping(fn):
     """
     Move all mapped files to their hash.
     """
-    
+
+    f = open(fn, 'rb')
+
     for line in f:
         s = line.rstrip('\n').split(', ')
         print 'mv', s[0], s[1]
@@ -44,7 +90,8 @@ def domapping():
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == 'do':
-            domapping()
+            domapping(sys.argv[2])
         elif sys.argv[1] == 'undo':
-            undomapping()
-    print 'usage: python mapping.py {do,undo}'
+            undomapping(sys.argv[2])
+    
+    print 'usage: python mapping.py {do,undo} mapping.txt'
