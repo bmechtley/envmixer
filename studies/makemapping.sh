@@ -12,5 +12,5 @@
 
 for f in *.wav
 do 
-    echo $f, $(echo $f $(cat $f) | md5 -q).wav
+    echo $f, $(echo $f | md5 -q).wav
 done > mapping.txt

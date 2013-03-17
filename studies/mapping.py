@@ -41,10 +41,10 @@ def domapping():
     
     exit()
 
-if len(sys.argv) > 1:
-    if sys.argv[1] == 'do':
-        domapping()
-    elif sys.argv[1] == 'undo':
-        undomapping()
-
-print 'usage: python mapping.py {do,undo}'
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'do':
+            domapping()
+        elif sys.argv[1] == 'undo':
+            undomapping()
+    print 'usage: python mapping.py {do,undo}'

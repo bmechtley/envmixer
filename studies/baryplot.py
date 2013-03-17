@@ -15,7 +15,7 @@ import json
 
 import numpy as np
 import matplotlib as mpl
-
+import scipy.stats as stats
 mpl.use('pdf')
 mpl.rc('text',usetex=True)
 mpl.rc('text.latex', preamble='\usepackage[usenames,dvipsnames]{xcolor}')
@@ -214,7 +214,7 @@ def baryplot(values, points=None, labels='abc', cmap=mpl.cm.BrBG, clabel='', vmi
     
     # Labels.
     ax.text(
-        xavg + c30 * .325, yavg + s30 * .325, 
+        xavg + c30 * .35, yavg + s30 * .35, 
         labels[2], ha='center', va='center', rotation=-60
     )
     
@@ -224,7 +224,7 @@ def baryplot(values, points=None, labels='abc', cmap=mpl.cm.BrBG, clabel='', vmi
     )
     
     ax.text(
-        xavg - c30 * .325, yavg + s30 * .325, 
+        xavg - c30 * .35, yavg + s30 * .35, 
         labels[0], ha='center', va='center', rotation=60
     )
     
@@ -317,9 +317,7 @@ if __name__ == '__main__':
     # 1. Command-line arguments.
     # 
     
-    parser = argparse.ArgumentParser(
-        description='Make plots for a CrowdFlower results batch.'
-    )
+    parser = argparse.ArgumentParser(description='Make plots for a CrowdFlower results batch.')
     
     parser.add_argument(
         'mapping', metavar='mapping', default='mapping.txt', type=str, 
@@ -368,23 +366,17 @@ if __name__ == '__main__':
     
     points = lattice(3)
     labels = [r'$S_{DB}$', r'$S_{SG}$', r'$S_{DC}$']
-    pp.figure(figsize=(4, 5))
+    pp.figure(figsize=(5, 9))
+     
+    valuefunc = lambda func: [func(agg[','.join(['%.2f' % a for a in p])]) for p in points]
+    data = [valuefunc(f) for f in [np.mean, lambda v: stats.scoreatpercentile(v, 25), np.median, lambda v: stats.scoreatpercentile(v, 75)]]
+    names = ['$\overline{c}$', '$Q1(c)$', '$Q2(c)$', '$Q3(c)$']
+    vmin = np.amin(data)
+    vmax = np.amax(data)
     
-    # 3a. Plot mean perceptual convincingness.
-    pp.subplot(211)
-    
-    baryplot(
-        [np.mean(agg[','.join(['%.2f' % a for a in p])]) for p in points],
-        points=points, labels=labels, clabel='convincingness'
-    )
-    
-    # 3b. Plot perceptual convincingness variance.
-    pp.subplot(212)
-    
-    baryplot(
-        [np.var(agg[','.join(['%.2f' % a for a in p])]) for p in points], 
-        points=points, labels=labels, clabel='variance'
-    )
+    for i, plotset in enumerate(zip(data, names)):
+        pp.subplot(4, 1, i)
+        baryplot(plotset[0], points=points, labels=labels, clabel=plotset[1], vmin=vmin, vmax=vmax)
     
     # 3c. Save figure.
     pp.savefig('convincingness.pdf')
@@ -395,12 +387,13 @@ if __name__ == '__main__':
     for i, p in enumerate(points):
         key = ','.join(['%.2f' % a for a in p])
         pp.subplot(len(points), 1, i + 1)
-        pp.hist(agg[key],bins=5, range=(1, 5))
+        print agg[key]
+        pp.hist(agg[key], bins=5, range=(1, 5))
         pp.xlabel('$(%s)$' % key)
         pp.xlim((1, 5))
-        pp.yticks([0, 15, 30, 45, 60])
+        pp.yticks([0, 40, 80, 120])
         
         if i == 0:
-            pp.title('Distribution of convincingness ratings, $n=100$')
+            pp.title('Distribution of convincingness ratings, $n=%d$' % len(agg['1.00,0.00,0.00']))
     
     pp.savefig('distributions.pdf')
