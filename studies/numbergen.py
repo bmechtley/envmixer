@@ -5,44 +5,45 @@ envmixer
 2013 Brandon Mechtley
 Arizona State University
 
-1. Generate 100 4-digit numbers read aloud, sourced from files with paths
-numbers/[1-9].wav, saved as numstrs/numstr-[1111-9999].wav. Used for audio
-captchas.
+1. Generate 100 4-digit numbers read aloud, sourced from files with paths numbers/[1-9].wav, saved as
+numstrs/numstr-[1111-9999].wav. Used for audio captchas.
 
-2. Also generate 100 15s clips with chained 15 1s sinusoids with random frequencies
-in the range 100-1100Hz. Used as trick questions (similarity to any source clip
-should be 1/5.)
+2. Also generate 100 15s clips with chained 15 1s sinusoids with random frequencies in the range 100-1100Hz. Used as
+trick questions (similarity to any source clip should be 1/5.)
 """
 
 import scikits.audiolab as al
 import numpy as np
+import argparse
 
-numbers = np.array([np.random.randint(low=1, high=10, size=100) for i in range(4)]).transpose()
-format = al.Format('wav')
+def append_numbers(fn, nums):
+    numbers = np.random.randint(low=1, high=10, size=nums)
+    wavfile = al.Sndfile(fn, mode='r')
+    
+    format = wavfile.format
+    channels = wavfile.channels
+    samplerate = wavfile.samplerate
+    nframes = wavfile.nframes
 
-# 1. Generate number strings.
-for i, numstr in enumerate(numbers):
-    print i, numstr
+    wavfile = al.Sndfile(fn, mode='rw', format=format, channels=channels, samplerate=samplerate)
     
-    f = al.Sndfile('numstrs/numstr-%s.wav' % ''.join(str(num) for num in numstr), 'w', format, 2, 44100)
+    for num in numbers:
+        numfile = al.Sndfile('numbers/%d.wav' % num, 'r')
+        numdata = numfile.read_frames(numfile.nframes)
+        
+        if numfile.channels > wavfile.channels:
+            numdata = np.mean(numdata, 1)
+        
+        wavfile.write_frames(numdata)
+        numfile.close()
+        
     
-    for num in numstr:
-        sd, fs, enc = al.wavread('numbers/%d.wav' % num)
-        f.write_frames(sd)
-    
-    f.close()
+    wavfile.close()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Append random numbers to the end of wav files.')
+    parser.add_argument('inputs', metavar='wav', nargs='+', type=str, help='wav files to modify.')
+    parser.add_argument('-n', '--numbers', metavar='int', type=int, help='number of numbers to append.')
+    args = parser.parse_args()
 
-# 2. Generate random tones.
-for i in range(100):
-    print i
-    
-    f = al.Sndfile('tones/tone-%d.wav' % i, 'w', format, 1, 44100)
-    
-    for j in range(15):
-        freq = np.random.ranf() * 1000 + 100
-        data = np.sin(np.linspace(0, 1, 44100) * 2 * np.pi * freq) 
-        f.write_frames(data)
-    
-    f.close()
-
-print numbers
+    for fn in args.inputs:
+        append_numbers(fn, args.numbers)

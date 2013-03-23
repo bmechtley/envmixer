@@ -17,8 +17,10 @@ from itertools import izip
 from barycentric import *
 from soundwalks import *
 
-parser = argparse.ArgumentParser(description='Output closest sound texture segments in three source sound textures to\
-    a given set of coordinates in a triangle.')
+parser = argparse.ArgumentParser(description=''.join([
+	'Output closest sound texture segments in three source',
+	'sound textures to a given set of coordinates in a triangle.'
+]))
 parser.add_argument('inputs', metavar='wav', nargs=3, type=str, help='wav or sv files to mix.')
 parser.add_argument('-c', '--coords', nargs=3, metavar='float', type=float, default=[1, 0, 0],
     help='cartesian coordinates within the triangle.')
@@ -39,13 +41,12 @@ percs = baryedges(coords, sidecoords=True)[:,1]
 frames = [int(p * sw.len) for p, sw in izip(percs, sounds)]
 fs = zip(frames, sounds)
 
-# Get start frames and end frames. If we are too close to the start point,
-# clip it to the beginning of the sound and adjust the end point.
+# Get start frames and end frames. If we are too close to the start point, clip it to the beginning of the sound and
+# adjust the end point.
 starts = np.array([max(0, int(f - (args.length * s.rate) / 2)) for f, s in izip(frames, sounds)])
 ends = np.array([min(s.len, int(f + (args.length * s.rate) / 2)) for f, s in izip(frames, sounds)])
 
-# If we are too close to the end point, clip it to the end of the sound and
-# adjust the start point.
+# If we are too close to the end point, clip it to the end of the sound and adjust the start point.
 for s, e, sw in izip(starts, ends, sounds):
     seglen = int(sw.rate * args.length)
     

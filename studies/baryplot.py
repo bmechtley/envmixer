@@ -28,13 +28,14 @@ from barycentric import *
 
 def makedict(fn):
     """
-    Create a dictionary that maps sound type->position->iteration to its filehash, given an input mapping CSV file.
-    See envmixer/studies/makemapping.sh for more information on how this CSV file is formatted.
+    Create a dictionary that maps sound type->position->iteration to its filehash, given an input mapping CSV file. See
+    envmixer/studies/makemapping.sh for more information on how this CSV file is formatted.
     
-    :type fn: str
-    :param fn: filename of the mapping CSV file.
-    :rtype: dict
-    :return: nested dictionary of format {'soundtype': {'pos': {'iteration': filehash}}} 
+    Args:
+        fn (str): filename of the mapping CSV file.
+
+    Returns:
+        Nested dictionary of format {'soundtype': {'pos': {'iteration': filehash}}} 
     """
     
     mapping = open(fn, 'r')
@@ -61,15 +62,14 @@ def makedict(fn):
 def circumcircle(a, b, c):
     """
     Return the center coordinates of a circle that circumscribes an input triangle defined by 2D vertices a, b, and c.
-     
-    :type a: (number, number) or np.ndarray
-    :param a: first vertex of the input triangle.
-    :type b: (number, number) or np.ndarray
-    :param b: second vertex of the input triangle.
-    :type c: (number, number) or np.ndarray
-    :param c: third vertex of the input triangle.
-    :rtype: (number, number)
-    :return: center coordinates of circumscribing circle.
+    
+    Args:
+        a ((number, number) or np.ndarray): first vertex of the input triangle.
+        b ((number, number) or np.ndarray): second vertex of the input triangle.
+        c ((number, number) or np.ndarray): third vertex of the input triangle.
+        
+    Returns:
+        Center coordinates of circumscribing circle in form (x, y).
     """
     
     ax, ay = a
@@ -95,12 +95,14 @@ def circumcircle(a, b, c):
 
 def voronoi(x, y):
     """
-    :type x: list or np.ndarray
-    :param x: list of coordinates' x components.
-    :type y: list or np.ndarray
-    :param y: list of coordinates' y components.
-    :rtype: (list, list)
-    :return: (cells, triangles), where cells is a list of voronoi cells, each once containing a list of two-dimensional
+    Return a list of voronoi cells for a collection of points.
+
+    Args:
+        x (list or np.ndarray): list of coordinates' x components.
+        y (list or np.ndarray): list of coordinates' y components.
+    
+    Returns:
+        (cells, triangles), where cells is a list of voronoi cells, each once containing a list of two-dimensional
         points; and triangles is a list of the triangles from a Delaunay triangulation.
     """
     
@@ -133,33 +135,21 @@ def voronoi(x, y):
     return cells
 
 def unique_rows(a):
-    """
-    Return an array containing unique rows from a.
-    :type a: np.ndarray
-    :param a: input array.
-    :return: smaller array containing unique rows from a.
-    """
-    
     return np.array([np.array(x) for x in set(tuple(x) for x in a)])
 
 def baryplot(values, points=None, labels='abc', cmap=mpl.cm.BrBG, clabel='', vmin=None, vmax=None):
     """
     Create a triangular voronoi cell pseudocolor plot. Create a voronoi diagram for each coordinate (points) within the
     triangle and color each cell according to its value (values).
-    :type values: list or np.ndarray
-    :param values: list of scalar values for each barycentric point.
-    :type points: list or np.ndarray
-    :param points: list of three-parameter barycentric points.
-    :type labels: list
-    :param labels: list of three label strings, one for each side of the triangle.
-    :type cmap: matplotlib.colors.Colormap
-    :param cmap: colormap for pseudocolor plot.
-    :type clabel: str
-    :param clabel: colorbar label for values
-    :type vmin: number
-    :param vmin: minimum value for coloring. If None, use minimum of the input values.
-    :type vmax: number
-    :param vmax: maximum value for coloring. If None, use maximum of the input values.
+    
+    Args:
+        values (list or np.ndarray): list of scalar values for each barycentric point.
+        points (list or np.ndarray): list of three-parameter barycentric points.
+        labels (list): list of three label strings, one for each side of the triangle.
+        cmap (matplotlib.colors.Colormap): colormap for pseudocolor plot.
+        clabel (str): colorbar label for values
+        vmin (number): minimum value for coloring. If None, use minimum of the input values.
+        vmax (number): maximum value for coloring. If None, use maximum of the input values.
     """
     
     if points is None: points = []
@@ -283,17 +273,15 @@ def aggregate_result(json, coordmapping, resultpath):
     Convert a JSON CrowdFlower results dictionary to a dictionary that pairs barycentric coordinates with a list of
     values for a given key in the results dictionary.
     
-    :type json: list
-    :param json: CrowdFlower-formatted results JSON list.
-    :type coordmapping: dict
-    :param coordmapping: dictionary that maps sound file hashes to coordinates.
-    :type resultpath: str
-    :param resultpath: keypath for the desired property to aggregate. For more information on keypaths, see the
-        pybatchdict package.
-    :rtype: dict
-    :return: dict of format {'u,v,w': [values]}, where 'u,v,w' is a
-        string of serialized barycentric coordinates and [values] is a list of values for the resultpath nested dictionary
-        key aggregated for the given position.
+    Args:
+        json (list): CrowdFlower-formatted results JSON list.
+        coordmapping (dict): dictionary that maps sound file hashes to coordinates.
+        resultpath (str): keypath for the desired property to aggregate. For more information on keypaths, see the
+            pybatchdict package.
+
+    Returns:
+        Dictionary of format {'u,v,w': [values]}, where 'u,v,w' is a string of serialized barycentric coordinates and
+        [values] is a list of values for the resultpath nested dictionary key aggregated for the given position.
     """
     
     aggdict = {}
@@ -369,7 +357,9 @@ if __name__ == '__main__':
     pp.figure(figsize=(5, 9))
      
     valuefunc = lambda func: [func(agg[','.join(['%.2f' % a for a in p])]) for p in points]
-    data = [valuefunc(f) for f in [np.mean, lambda v: stats.scoreatpercentile(v, 25), np.median, lambda v: stats.scoreatpercentile(v, 75)]]
+    data = [valuefunc(f) for f in [
+        np.mean, lambda v: stats.scoreatpercentile(v, 25), np.median, lambda v: stats.scoreatpercentile(v, 75)
+    ]]
     names = ['$\overline{c}$', '$Q1(c)$', '$Q2(c)$', '$Q3(c)$']
     vmin = np.amin(data)
     vmax = np.amax(data)

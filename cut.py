@@ -27,8 +27,7 @@ if len(sw.frames.shape) > 1:
 env = int(argv[2]) * sw.rate / 1000
 of = argv[3]
 
-# Make a list of [begin, end] frames for "cut" segments over which to
-# crossfade.
+# Make a list of [begin, end] frames for "cut" segments over which to crossfade.
 cut = array(sw.cut)
 cut = cut[argsort(cut[:,0]),:]
 cut[:,1] += cut[:,0]

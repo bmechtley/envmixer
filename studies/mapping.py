@@ -20,12 +20,12 @@ def makedict(fn):
     Create a nested dictionary of type/position/iteration: filename for every file in a given mapping file. See
     studies/makemapping.sh for more information.
     
-    :type fn: str
-    :param fn: mapping filename
-    :rtype: (dict, dict)
-    :return: 
-        sounds: dictionary of format {type: {position: {iteration: filehash}}}}
-        mapdict: dictionary of format {filehash: original filename}
+    Args:
+        fn (str): mapping filename
+
+    Returns:
+        (sounds, mapdict) where sounds is a dictionary of format {type: {position: {iteration: filehash}}}} and mapdict
+        is a dictionary of format {filehash: original filename}
     """
     
     mapping = open(fn, 'r')
@@ -63,7 +63,6 @@ def undomapping(fn):
     Move file hashes back to their original filenames.
     """
 
-
     f = open(fn, 'rb')
 
     for line in f:
@@ -77,7 +76,7 @@ def domapping(fn):
     """
     Move all mapped files to their hash.
     """
-
+    
     f = open(fn, 'rb')
 
     for line in f:

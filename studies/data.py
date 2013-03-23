@@ -5,8 +5,7 @@ natural-mixer
 2013 Brandon Mechtley
 Arizona State University
 
-Create CSV files for CrowdFlower studies, including gold tests.
-Use gold.py to modify Gold Reports.
+Create CSV files for CrowdFlower studies, including gold tests. Use gold.py to modify Gold Reports.
 
 Usage: python data.py mapping.txt
 """
@@ -19,15 +18,6 @@ import numpy as np
 from mapping import makedict
 
 def unique_rows(a):
-    """
-    Return only unique rows from an array.
-    
-    :type a: numpy.ndarray
-    :param a: input array
-    :rtype: numpy.ndarray
-    :return: array with one row per unique row of a.
-    """
-    
     return np.array([np.array(x) for x in set(tuple(x) for x in a)])
 
 def maketrials(sounds, indices):
@@ -43,12 +33,12 @@ def maketrials(sounds, indices):
     
     No need to randomize this list, as users will be provided with a random grouping of units per page anyway.
     
-    :type sounds: dict
-    :param sounds: hash output from makedict.
-    :type indices: list
-    :param indices: list of indices of synthesized versions to use. If None, use all versions.
-    :rtype: dict
-    :return: dictionary of form {'real': realunits, 'gold': goldunits}
+    Args:
+        sounds (dict): hash output from makedict.
+        indices (list): list of indices of synthesized versions to use. If None, use all versions.
+
+    Returns:
+        Dictionary of form {'real': realunits, 'gold': goldunits}
     """
     
     realunits = []  # Real.
@@ -95,10 +85,9 @@ def printdata(units, mapdict, numstrs, filename):
     """
     Print CSV output for all real and golden units for initial data upload to CrowdFlower.
     
-    :type realunits: list
-    :param realunits: list of real unit sets from maketrials.
-    :type goldunits: list
-    :param goldunits: list of gold unit sets from maketrials.
+    Args:
+        realunits (list): list of real unit sets from maketrials.
+        goldunits (list): list of gold unit sets from maketrials.
     """
     
     realunits, goldunits = np.array(units['real']), np.array(units['gold'])
@@ -146,7 +135,7 @@ def printdata(units, mapdict, numstrs, filename):
                 row[cols['pc_reason']] = '"This is a real recording."'
                 
                 ncopies += 1
-        
+    
     # 5. Write CSV output to file.
     f = open(filename, 'w')
     f.write('\n'.join([','.join(row) for row in csv]))

@@ -8,29 +8,29 @@ Arizona State University
 Defines a class to describe a Soundwalk, annotated with Sonic Visualizer, along with a number of helpful mathematical
 functions.
 
-Two layers are interpreted at the moment, one titled \"cut,\" which will specify segments to cut from the recording in
-resynthesis, such as speech. Another layer, \"jasa-el\" specifies portions of the recordings to use for resynthesis in
+Two layers are interpreted at the moment, one titled "cut," which will specify segments to cut from the recording in
+resynthesis, such as speech. Another layer, "jasa-el" specifies portions of the recordings to use for resynthesis in
 an upcoming JASA-EL letter.
 """
 
 from xml.dom.minidom import parseString
-from pylab import *
 from os.path import splitext
 import wave
 import bz2
+
+from pylab import *
 
 def percline(p0, p1, p2):
     """
     Calculate the percentage of distance of point p0 along line segment p1->p2
     
-    :type p0: numpy.ndarray
-    :param p0: two-dimensional point along line segment
-    :type p1: numpy.ndarray
-    :param p1: two-dimensional first end of line segment
-    :type p2: numpy.ndarray
-    :param p2: two-dimensional second end of line segment
-    :rtype: number
-    :return percentage of distance of point p0 along line segment p1->p2
+    Args:
+        p0 (numpy.ndarray): two-dimensional point along line segment
+        p1 (numpy.ndarray): two-dimensional first end of line segment
+        p2 (numpy.ndarray): two-dimensional second end of line segment
+
+    Returns:
+        Percentage of distance of point p0 along line segment p1->p2
     """
     
     return norm(p0 - p1) / norm(p2 - p1)
@@ -39,14 +39,13 @@ def closepoint(p0, p1, p2):
     """
     Return the closest point on the line segment p0->p1 to point p2.
     
-    :type p0: numpy.ndarray
-    :param p0: two-dimensional first end of line segment
-    :type p1: numpy.ndarray
-    :param p1: two-dimensional second end of line segment
-    :type p2: numpy.ndarray
-    :param p2: two-dimensional test point.
-    :rtype: (number, number)
-    :return: closest point along line segment p0->p1 to p2.
+    Args:
+        p0 (numpy.ndarray): two-dimensional first end of line segment
+        p1 (numpy.ndarray): two-dimensional second end of line segment
+        p2 (numpy.ndarray): two-dimensional test point.
+
+    Returns:
+        Closest point tuple along line segment p0->p1 to p2.
     """
     
     x1, y1 = p0
@@ -54,25 +53,22 @@ def closepoint(p0, p1, p2):
     x3, y3 = p2
     
     u = ((x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1)) / ((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-    x = x1 + u * (x2 - x1)
-    y = y1 + u * (y2 - y1)
     
-    return x, y
+    return x1 + u * (x2 - x1), y1 + u * (y2 - y1)
 
 def choice(a, size=1, replace=True, p=None):
-    """Copy of NumPy's choice implementation. Choose an element of a at random. If a is a number, treat as arange(a).
+    """
+    Copy of NumPy's choice implementation (>= 1.7). Choose an element of a at random. If a is a number, treat as
+    arange(a).
     
-    :type a: numpy.ndarray
-    :param a: array of elements from which to choose
-    :type size: int
-    :param size: number of elements to choose.
-    :type replace: bool
-    :param replace: whether or not to choose with replacement.
-    :type p: numpy.ndarray
-    :param p: discrete probability distribution over the element indices.
-    :rtype: number
-    :return: an element of a, chosen at random.
+    Args:
+        a (numpy.ndarray): array of elements from which to choose
+        size (int): number of elements to choose.
+        replace (bool): whether or not to choose with replacement.
+        p (numpy.ndarray): discrete probability distribution over the element indices.
+
+    Returns:
+        An element of a, chosen at random.
     """
     
     # Format and Verify input
@@ -124,7 +120,7 @@ def choice(a, size=1, replace=True, p=None):
                 if n_uniq > 0:
                     p[found[0:n_uniq]] = 0
                 
-                p = p/p.sum()
+                p = p / p.sum()
                 cdf = np.cumsum(p)
                 new = cdf.searchsorted(x, side='right')
                 new = np.unique(new)
@@ -145,34 +141,28 @@ def first_element(n, tag, attr, value):
     Helper function that returns the first DOM child node with a specific tag type, tag, and an attribute, attr, that 
     matches a specified value.
     
-    :type n: xml.dom.minidom.Element
-    :param n: parent node.
-    :type tag: str
-    :param tag: tag name to match.
-    :type attr: str
-    :param attr: tag attribute to match.
-    :type value: str
-    :param value: value of the attribute to match.
-    :rtype: xml.dom.minidom.Element
-    :return: first child node with the specified tag type, tag, and attribute that matches the value.
+    Args:
+        n (xml.dom.minidom.Element): parent node.
+        tag (str): tag name to match.
+        attr (attr): tag attribute to match.
+        value (str): value of the attribute to match.
+
+    Returns:
+        first child node with the specified tag type, tag, and attribute that matches the value.
     """
     
-    return [
-        c 
-        for c in n.getElementsByTagName(tag) 
-        if c.getAttribute(attr) == value
-    ][0]
+    return [c for c in n.getElementsByTagName(tag) if c.getAttribute(attr) == value][0]
 
 def dataset_from_layer(d, name):
     """
     Helper function that returns the associated dataset for a given layer name in a SonicVisualiser XML file.
     
-    :type d: xml.dom.minidom.Element
-    :param d: SonicVisualiser XML document.
-    :type name: str
-    :param name: layer name.
-    :rtype: xml.dom.minidom.Element
-    :return: dataset for the layer.
+    Args:
+        d (xml.dom.minidom.Element): SonicVisualiser XML document.
+        name (str): layer name.
+    
+    Returns:
+        Dataset for the layer.
     """
     
     l = first_element(d, 'layer', 'presentationName', name)
@@ -184,19 +174,16 @@ class Soundwalk:
     """
     Class that represents a SonicVisualiser analysis file for a soundwalk.
     These have specific layers:
-        cut: Regions layer that defines regions to avoid--speech, coughs,
-        clicks, etc.
-        jasa-el: Region layer containing one region to use for JASA-EL user 
-        study."""
+        cut: Regions layer that defines regions to avoid--speech, coughs, clicks, etc.
+        jasa-el: Region layer containing one region to use for JASA-EL user study."""
     
     def __init__(self, s, useseg=True):
         """
         Set up the Soundwalk.
         
-        :type s: str
-        :param s: SonicVisualiser .sv file path.
-        :type useseg: bool
-        :param useseg: Whether or not only the portion of the sound annotated in the jasa-el layer should be use.
+        Args:
+            s (str): SonicVisualiser .sv file path.
+            useseg (bool): Whether or not only the portion of the sound annotated in the jasa-el layer should be use.
         """
         
         if (splitext(s)[1]) == '.wav':
@@ -212,11 +199,7 @@ class Soundwalk:
             
             # Deinterlace.
             if self.nchannels > 1:
-                self.frames = array([
-                    self.frames[0::2], 
-                    self.frames[1::2]
-                ]).transpose()
-
+                self.frames = array([self.frames[0::2], self.frames[1::2]]).transpose()
         elif splitext(s)[1] == '.sv':
             doc = parseString(bz2.decompress(open(s).read()))
             
@@ -239,7 +222,7 @@ class Soundwalk:
                 self.start = 0
                 self.len = self.wavEnd
                 self.end = self.wavEnd
-
+            
             # Open only the requested segment of wave file.
             wav = wave.open(self.wavfile)
             self.nchannels, sw, fr, nf, ct, cn = wav.getparams()
@@ -247,16 +230,11 @@ class Soundwalk:
             dts = {1: np.int8, 2: np.int16, 4: np.int32}
             wav.setpos(self.start * self.nchannels)
             
-            self.frames = fromstring(
-                wav.readframes(self.len * self.nchannels), 
-                dtype=dts[sw]
-            )
+            self.frames = fromstring(wav.readframes(self.len * self.nchannels), dtype=dts[sw])
             
             # Deinterlace.
             if self.nchannels > 1:
-                self.frames = array([
-                    self.frames[0::2], self.frames[1::2]
-                ]).transpose()
+                self.frames = array([self.frames[0::2], self.frames[1::2]]).transpose()
             
             # Regions to cut from synthesis.
             cut_data = dataset_from_layer(doc, 'cut')
