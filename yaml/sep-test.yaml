@@ -1,0 +1,21 @@
+similarity:
+    bands: 1
+    minsim: eps
+    hardness: .5
+    threshold: 0.5
+    windowlen: {'@': [25, 50, 100, 200]}
+stft:
+    nfft: {'@fft': [1024, 2048, 4096, 8192]}
+    nhop: {'@fft': [512, 1024, 2048, 4096]}
+separate:
+    minlag: 1.0
+    maxlag: 0.0
+    minsim: eps
+    maxframes: 80
+    threshold: 0.5
+    hardness: 0.5
+save:
+    ground: True
+    figure: True
+    composite: False
+plot: False
