@@ -86,8 +86,8 @@ def main():
 
                 # 4. Compute everything.
                 r.compute_stft(progress=progress['STFT'], **combo['stft'])
-                r.compare(progress=progress['Comparing'], **combo['similarity'])
-                r.separate(progress=progress['Separating'], **combo['separate'])
+                r.comparedict(progress=progress['Comparing'], **combo['similarity'])
+                r.separatedict(progress=progress['Separating'], **combo['separate'])
 
                 # 5. Print result details.
                 if args.verbosity > 1:

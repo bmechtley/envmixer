@@ -20,12 +20,14 @@ def plot_waveform(
         wf, 
         framesize=1024, 
         hopsize=512, 
-        shades=3, 
+        npoints=5, 
         xmin=0, 
         xmax=1, 
         ymin=0, 
         ymax=1,
-        clip_ends=False, 
+        clip_ends=False,
+        pmin=0,
+        pmax=100,
         **kwargs
 ):
     """
@@ -35,17 +37,19 @@ def plot_waveform(
         wf (np.array): input waveform
         framesize (int): number of samples per frame (default 1024).
         hopsize (int): number of samples between frame (generally 1/2 framesize) (default 512).
-        shades (int): number of regions to draw (tip: to see them, use alpha) (default 3).
+        npoints (int): number of percentiles to draw  between (default 5).
         xmin (float): minimum x coordinate to start the waveform (default 0).
         xmax (float): maximum x coordinate to stretch the waveform (default 1).
         ymin (float): minimum y coordinate to start the waveform (default 0).
         ymax (float): maximum y coordinate to stretch the waveform (default 1).
+        pmin (float): minimum percentile for linearly interpolating colors (default 0).
+        pmax (float): maximum percentile for linearly interpolating colors (default 50).
         clip_ends (bool): whether or not to force every region to begin/end with the beginning/ending sample of the
             orgiginal waveform. Use this to force enveloped waveforms to start/end drawing at 0 (default False).
         **kwargs: Keyword arguments to send to matplotlib.pyplot.fill_between.
     """
 
-    perc = np.linspace(0., 100., shades * 2)
+    perc = np.linspace(0., 100., npoints)
     
     percentiles = np.array([
         [
@@ -57,7 +61,7 @@ def plot_waveform(
     
     absmax = np.amax(np.abs(percentiles))
     smin, smax = np.amin(percentiles), np.amax(percentiles)
-    percentiles = np.interp(percentiles, [-absmax, absmax], [ymin, ymax])
+    #percentiles = np.interp(percentiles, [-absmax, absmax], [ymin, ymax])
     
     # Simple way to ensure enveloped waveforms begin/end at 0.
     if clip_ends:
@@ -65,10 +69,12 @@ def plot_waveform(
         percentiles[:,-1] = np.interp(wf[-1], [-absmax, absmax], [ymin, ymax])
     
     #cmap = matplotlib.cm.get_cmap()
-    norm = matplotlib.colors.Normalize(vmin=0, vmax=100, clip=True)
-    mappable = matplotlib.cm.ScalarMappable(norm=norm)
-    
-    for i in range(len(percentiles) / 2):
+    norm = matplotlib.colors.Normalize(vmin=pmin, vmax=pmax, clip=True)
+    mappable = matplotlib.cm.ScalarMappable(norm=norm, cmap=kwargs['cmap'] if 'cmap' in kwargs else None)
+    mappable.set_array(perc[perc <= 50])
+    tick_labels = [''] * np.ceil(npoints / 2.)
+        
+    for i in range(len(tick_labels)):    
         pp.fill_between(
             np.linspace(xmin, xmax, len(percentiles[i])),
             percentiles[i],
@@ -76,8 +82,11 @@ def plot_waveform(
             color=mappable.to_rgba(perc[i]),
             **kwargs
         )
+        
+        tick_labels[i] = '%d-%d' % (perc[i], perc[len(perc) - 1 - i]) if perc[i] != 50 else '50'
     
-    return mappable
+    pp.ylim((ymin, ymax))
+    return mappable, perc[:len(tick_labels)], tick_labels
     
 class Recording(object):
     """

@@ -428,10 +428,21 @@ class REPET(FigureGround):
             l, r = self.bandindices[band]
             lhz = float(l) / self.specsize * self.rate / 2
             rhz = float(r) / self.specsize * self.rate / 2
+            
+            pp.title('Band %d (%d-%d Hz)' % (band + 1, lhz, rhz))
+            
+            if type(self.bandsim[band]) != dict:
+                pp.imshow(self.bandsim[band], aspect='equal', origin='lower')
+            else:
+                bandmat = np.zeros((len(self.bandsim[band]), len(self.bandsim[band])))
+                winlen = len(self.bandsim[band][0])
+                                
+                for f1 in self.bandsim[band]:
+                    for f2 in self.bandsim[band][f1]:
+                        bandmat[f1, f2] = self.bandsim[band][f1][f2]
+                        bandmat[f2, f1] = self.bandsim[band][f1][f2]
 
-            pp.title('Band %d (%d-%d Hz)' % (band + 1, lhz, rhz))            
-            pp.imshow(self.bandsim[band], aspect='equal', origin='lower')
-
+                pp.imshow(bandmat, aspect='equal', origin='lower')
             if progress:
                 progress.update(band + 1)
 
@@ -485,30 +496,54 @@ class REPET(FigureGround):
                 pp.subplot(nplots, 1, plotnum)
                 plotnum += 1
                 
-                plot_waveform(
+                wf, ticks, labels = plot_waveform(
                     wavs[i], 
-                    framesize=self.nfft, 
-                    hopsize=self.nhop, 
-                    shades=3, 
+                    framesize=len(self.wav) / 512, 
+                    hopsize=len(self.wav) / 1024, 
+                    npoints=9, 
                     xmin=0,
                     xmax=len(self.wav) / float(self.rate), 
                     ymin=np.amin(self.wav),
                     ymax=np.amax(self.wav), 
-                    clip_ends=False
+                    clip_ends=False,
+                    cmap=matplotlib.cm.Blues,
+                    pmin=-25,
+                    pmax=50
                 )
 
                 pp.title(wavnames[i], fontsize=10)
                 pp.xlim(0, len(self.wav) / float(self.rate))              
                 pp.ylabel('Amplitude', fontsize=10)
-                mappable = matplotlib.cm.ScalarMappable(norm=None, cmap=matplotlib.cm.jet)
-                mappable.set_array([0, .25, .75, 1.0])
-                pp.colorbar(mappable)
-                #bbox = pp.gca().get_position()
-                #left, bottom, width, height
-                #print bbox
-                #print dir(bbox)
-                #pp.gca().set_position([bbox.x0, bbox.y0, .672, bbox.height])
-                #cb = class matplotlib.colorbar.ColorbarBase(.78, cmap=None, norm=None, alpha=1.0, values=None, boundaries=None, orientation='vertical', extend='neither', spacing='uniform', ticks=None, format=None, drawedges=False, filled=True)
+                pp.gca().yaxis.set_label_coords(-.04, 0.5)
+
+                boundaries=sum([
+                    [ticks[0]],
+                    [
+                        (ticks[a - 1] + ticks[a]) / 2
+                        for a in range(1, len(ticks))
+                    ],
+                    [ticks[-1]]
+                ], [])
+                
+                tickpositions = [
+                    (boundaries[a - 1] + boundaries[a]) / 2
+                    for a in range(1, len(boundaries))
+                ]
+                
+                cb = pp.colorbar(
+                    mappable=wf, 
+                    ticks=tickpositions, 
+                    pad=0.01, 
+                    aspect=10, 
+                    boundaries=boundaries,
+                    values=ticks
+                )
+                
+                cb.set_ticklabels(labels)
+                cl = pp.getp(cb.ax, 'ymajorticklabels')
+                pp.setp(cl, fontsize=10)
+                cb.ax.set_ylabel('Percentile Range', fontsize=10)
+                axis_fontsize(10, ax=cb.ax)
                 
                 axis_fontsize(10)
 
@@ -531,6 +566,7 @@ class REPET(FigureGround):
             pp.ylim((0, self.rate / 2))
             pp.gca().set_yticklabels(np.array(pp.gca().get_yticks() / 1000, dtype=np.int))
             pp.ylabel('Frequency (KHz)', fontsize=10)
+            pp.gca().yaxis.set_label_coords(-.04, 0.5)
             
             ticks = np.floor(np.linspace(vmin, vmax, 5)) if vmax > 1.0 else np.linspace(vmin, vmax, 5)
             fmt = '%d' if vmax > 1 else '%.2f'
@@ -539,9 +575,6 @@ class REPET(FigureGround):
             cl = pp.getp(cb.ax, 'ymajorticklabels')
             pp.setp(cl, fontsize=10)
             cb.ax.set_ylabel(scale, fontsize=10)
-            
-            axp = pp.gca().get_position()
-            axc = cb.ax.get_position()
             
             axis_fontsize(10, ax=cb.ax)
             axis_fontsize(10)
