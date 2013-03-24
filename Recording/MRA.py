@@ -1,6 +1,6 @@
 """
 Recording/MRA.py
-envground
+envmixer
 
 2012 Brandon Mechtley
 Arizona State University
@@ -19,20 +19,16 @@ class MRA(Recording):
     """
     
     def __init__(self, filename):
-        """
-        Initialization. 
-        """
-        
         super(Recording, self).__init__(filename)
         
     def calculate_mra(self, wavelet='db10', mode='per'):
         """
-        :type wavelet: string
-        :param wavelet: wavelet to use. Any string supported by PyWavelets works.
-        :type mode: string
-        :param mode: method for handling overrun. Default "per," start over at the beginning of the wavform (periodic).
-        
         Creates an MRA wavelet tree on the recording.
+        
+        Args:
+            wavelet (str): wavelet to use. Any string supported by PyWavelets will work.
+            mode (str): method for handling overrun. Default "per," start over at the beginning of the waveform
+                (periodic).
         """
         
         self.wavelet, self.mode = wavelet, mode
