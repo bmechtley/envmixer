@@ -1,6 +1,6 @@
 """
 Recording/Recording.py
-envground
+envmixer
 
 2012 Brandon Mechtley
 Arizona State University
@@ -11,8 +11,74 @@ from itertools import izip, count
 from os.path import exists
 
 import numpy as np
-import scikits.audiolab as audiolab
+import scikits.audiolab as al
+import matplotlib
+import matplotlib.pyplot as pp
+from scipy.stats import scoreatpercentile
 
+def plot_waveform(
+        wf, 
+        framesize=1024, 
+        hopsize=512, 
+        shades=3, 
+        xmin=0, 
+        xmax=1, 
+        ymin=0, 
+        ymax=1,
+        clip_ends=False, 
+        **kwargs
+):
+    """
+    Plot a waveform in several regions, based on windowed percentiles.
+
+    Args:
+        wf (np.array): input waveform
+        framesize (int): number of samples per frame (default 1024).
+        hopsize (int): number of samples between frame (generally 1/2 framesize) (default 512).
+        shades (int): number of regions to draw (tip: to see them, use alpha) (default 3).
+        xmin (float): minimum x coordinate to start the waveform (default 0).
+        xmax (float): maximum x coordinate to stretch the waveform (default 1).
+        ymin (float): minimum y coordinate to start the waveform (default 0).
+        ymax (float): maximum y coordinate to stretch the waveform (default 1).
+        clip_ends (bool): whether or not to force every region to begin/end with the beginning/ending sample of the
+            orgiginal waveform. Use this to force enveloped waveforms to start/end drawing at 0 (default False).
+        **kwargs: Keyword arguments to send to matplotlib.pyplot.fill_between.
+    """
+
+    perc = np.linspace(0., 100., shades * 2)
+    
+    percentiles = np.array([
+        [
+            scoreatpercentile(wf[i:i+framesize], p) 
+            for i in range(0, len(wf), hopsize)
+        ] 
+        for p in perc
+    ])
+    
+    absmax = np.amax(np.abs(percentiles))
+    smin, smax = np.amin(percentiles), np.amax(percentiles)
+    percentiles = np.interp(percentiles, [-absmax, absmax], [ymin, ymax])
+    
+    # Simple way to ensure enveloped waveforms begin/end at 0.
+    if clip_ends:
+        percentiles[:,0] = np.interp(wf[0], [-absmax, absmax], [ymin, ymax])
+        percentiles[:,-1] = np.interp(wf[-1], [-absmax, absmax], [ymin, ymax])
+    
+    #cmap = matplotlib.cm.get_cmap()
+    norm = matplotlib.colors.Normalize(vmin=0, vmax=100, clip=True)
+    mappable = matplotlib.cm.ScalarMappable(norm=norm)
+    
+    for i in range(len(percentiles) / 2):
+        pp.fill_between(
+            np.linspace(xmin, xmax, len(percentiles[i])),
+            percentiles[i],
+            percentiles[len(percentiles) - 1 - i],
+            color=mappable.to_rgba(perc[i]),
+            **kwargs
+        )
+    
+    return mappable
+    
 class Recording(object):
     """
     Base recording class that holds a waveform and its various statistics/properties. Inherited 
@@ -22,7 +88,7 @@ class Recording(object):
     def __init__(self, filename=None):
         if filename:
             self.filename = filename
-            self.snd = audiolab.Sndfile(self.filename)
+            self.snd = al.Sndfile(self.filename)
             
             self.init_after_load()
         else:
@@ -49,7 +115,7 @@ class Recording(object):
         
         if newrate != self.rate:
             if self.snd:
-                self.snd = audiolab.Sndfile(self.filename, samplerate=newrate)
+                self.snd = al.Sndfile(self.filename, samplerate=newrate)
                 self.init_after_load()
             else:
                 self.rate = newrate
@@ -71,16 +137,16 @@ class Recording(object):
         assert self.rate != 0, 'Recording must have valid samplerate (.rate != 0).'
         
         if not self.snd:
-            self.snd = audiolab.Sndfile(
+            self.snd = al.Sndfile(
                 self.filename, 
                 mode='rw', 
-                format=audiolab.Format(), 
+                format=al.Format(), 
                 channels=1, 
                 samplerate=self.rate
             )
         
         self.snd.write_frames(self.wav)
-        self.snd = audiolab.Sndfile(
+        self.snd = al.Sndfile(
             self.filename,
             mode='r'
         )
