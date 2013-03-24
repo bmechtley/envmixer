@@ -1,6 +1,6 @@
 """
 Recording/REPET.py
-envground
+envmixer
 
 2012 Brandon Mechtley
 Arizona State University
@@ -14,19 +14,49 @@ http://music.cs.northwestern.edu/
 import numpy as np
 import scipy.spatial.distance as dist
 
+from .Recording import plot_waveform
 from .FigureGround import FigureGround
 from .STFT import STFT, ISTFT
 
+from os import makedirs
+from itertools import izip, count
+from os.path import join, splitext, basename, exists
+
+import numpy as np
+import matplotlib
+import matplotlib.mlab as ml
+import matplotlib.pyplot as pp
+
+def axis_fontsize(fs, ax=None):
+    """
+    :type fs: int
+    :param fs: desired font size in points.
+    :type ax: matplotlib.Axes
+    :param ax: axes for which to change font size. Current axes by default.
+    
+    Change the font size for axis labels. I prefer this to setting rc parameters, as that could  affect future plots.
+    """
+
+    if not ax:
+        ax = pp.gca()
+
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label.set_fontsize(10)
+
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label.set_fontsize(10)
+
 def sigmoid(x, t, h):
     """
-    :type x: numpy.ndarray
-    :param x: input array to be thresholded with values in [0, 1]
-    :type t: number
-    :param t: threshold in location [0, 1].
-    :type h: number
-    :param h: hardness in [0, 1], such that h=0 corresponds to no change and h=1 corresponds to a binary step.
-    
     Sigmoid function as in REPET-SIM.
+    
+    Args:
+        x (numpy.ndarray): input array to be thresholded with values in [0, 1]
+        t (number): threshold in location [0, 1].
+        h (number): hardness in [0, 1], such that h=0 corresponds to no change and h=1 corresponds to a binary step.
+        
+    Returns:
+        sigmoid-adjusted input array with shape x.shape.
     """
     
     y = np.array(x)
@@ -60,16 +90,13 @@ class REPET(FigureGround):
         
     def compute_stft(self, nfft=4096, nhop=2048, window=np.hanning, progress=None):
         """
-        :type nfft: int
-        :param nfft: optional size of the STFT analysis window in samples (default 4096).
-        :type nhop: int
-        :param nfft: optional number of samples between consecutive frames (default 2048).
-        :type window: function
-        :param window: optional windowing function, e.g. from numpy (default numpy.hanning).
-        :type progress: progress.ProgressBar
-        :param progress: optional progress bar for debug output (default None).
-        
         Compute the Short-Time Fourier Transform of the waveform.
+        
+        Args:
+            nfft (int): optional size of the STFT analysis window in samples (default 4096).
+            nhop (int): optional number of samples between consecutive frames (default 2048).
+            window (function): optional windowing function, e.g. from numpy (default numpy.hanning).
+            progress (progress.ProgressBar): optional progress bar for debug output (default None).
         """
         
         self.nfft = nfft
@@ -83,22 +110,18 @@ class REPET(FigureGround):
 
     def comparedict(self, bands=1, threshold=0, hardness=0, minsim=0, maxframes=0, windowlen=None, progress=None):
         """
-        :type bands: int
-        :param bands: optional number of evenly distributed frequency bands over which to separate the similarity /
-            separation process (default 1).
-        :type threshold: number
-        :param threshold: optional center threshold in [0, 1] for sigmoid applied to similarity matrices (default 0).
-        :type hardness: number
-        :param hardness: optional hardness of sigmoid applied to the similarity matrices. hardness=0 will make no
-            change; hardness=1 will binarize (default 0).
-        :type minsim: number or "eps"
-        :param minsim: if nonzero, similarity values will be linearly interpolated to make this value the minimum. If
-            "eps," the smallest possible value for the similarity matrix datatype will be used.
-        :type progress: progress.ProgressBar
-        :param progress: optional progress bar for debug output (default None).
+        Compute frame-by-frame similarity matrix according to the cosine similarity between normalized spectrogram
+        frames. Similarity is scaled from 0 to 1.
         
-        Compute frame-by-frame similarity matrix according to the cosine similarity between 
-        normalized spectrogram frames. Similarity is scaled from 0 to 1.
+        Args:
+            bands (int): optional number of evenly distributed frequency bands over which to separate the similarity /
+                separation process (default 1).
+            threshold (number): optional center threshold in [0, 1] for sigmoid applied to similarity matrices (default 0).
+            hardness (number): optional hardness of sigmoid applied to the similarity matrices. hardness=0 will make no
+                change; hardness=1 will binarize (default 0).
+            minsim (number or "eps"): if nonzero, similarity values will be linearly interpolated to make this value the
+                minimum. If "eps," the smallest possible value for the similarity matrix datatype will be used.
+            progress (progress.ProgressBar): optional progress bar for debug output (default None).
         """
 
         self.nbands = bands
@@ -138,22 +161,19 @@ class REPET(FigureGround):
         
     def compare(self, bands=1, threshold=0, hardness=0, minsim=0, maxframes=0, windowlen=None, progress=None):
         """
-        :type bands: int
-        :param bands: optional number of evenly distributed frequency bands over which to separate the similarity /
-            separation process (default 1).
-        :type threshold: number
-        :param threshold: optional center threshold in [0, 1] for sigmoid applied to similarity matrices (default 0).
-        :type hardness: number
-        :param hardness: optional hardness of sigmoid applied to the similarity matrices. hardness=0 will make no
-            change; hardness=1 will binarize (default 0).
-        :type minsim: number or "eps"
-        :param minsim: if nonzero, similarity values will be linearly interpolated to make this value the minimum. If
-            "eps," the smallest possible value for the similarity matrix datatype will be used.
-        :type progress: progress.ProgressBar
-        :param progress: optional progress bar for debug output (default None).
-        
         Compute frame-by-frame similarity matrix according to the cosine similarity between 
         normalized spectrogram frames. Similarity is scaled from 0 to 1.
+        
+        Args:
+            bands (int): optional number of evenly distributed frequency bands over which to separate the similarity /
+                separation process (default 1).
+            threshold (number): optional center threshold in [0, 1] for sigmoid applied to similarity matrices
+                (default 0).
+            hardness (number): optional hardness of sigmoid applied to the similarity matrices. hardness=0 will make no
+                change; hardness=1 will binarize (default 0).
+            minsim (number or "eps"): if nonzero, similarity values will be linearly interpolated to make this value
+                the minimum. If "eps," the smallest possible value for the similarity matrix datatype will be used.
+            progress (progress.ProgressBar): optional progress bar for debug output (default None).
         """
         
         self.nbands = bands
@@ -192,24 +212,20 @@ class REPET(FigureGround):
     
     def separatedict(self, minlag=0, maxlag=0, maxframes=0, minsim=0, threshold=0, hardness=0, progress=None):
         """
-        :type minlag: int
-        :param minlag: optional minimum distance between consecutive frames to consider as similar (default 0).
-        :type maxlag: int
-        :param maxlag: optional maximum distance between consecutive frames to consider as similar (default ).
-        :type maxframes: int
-        :param maxframes: optional maximum number of frames to use in median and/or weighted mean (default 0).
-        :type minsim: number
-        :param minsim: optional minimum similarity to consider. Higher values can make sorting faster (default 0).
-        :type threshold: number
-        :param threshold: optional center threshold in [0, 1] for sigmoid function applied to TF mask (default 0).
-        :type hardness: number
-        :param hardness: optional hardness of sigmoid function applied to TF mask. hardness=0 will make no change,
-            hardess=1 will create a binary mask (default 0).
-        :type progress: progressbar.ProgressBar
-        :param progress: optional progress bar for debug output (default None).
-        
         Separate figure from ground using precomputed band similarity matrices by either taking a weighted mean of
         similar frames or the median of similar frames.
+        
+        Args:
+            minlag (int): optional minimum distance between consecutive frames to consider as similar (default 0).
+            maxlag (int): optional maximum distance between consecutive frames to consider as similar (default 0).
+            maxframes (int): optional maximum number of frames to use in median and/or weighted mean (default 0).
+            minsim (number): optional minimum similarity to consider. Higher values can make sorting faster
+                (default 0).
+            threshold (number): optional center threshold in [0, 1] for sigmoid function applied to TF mask
+                (default 0).
+            hardness (number): optional hardness of sigmoid function applied to TF mask. hardness=0 will make no
+                change, hardess=1 will create a binary mask (default 0).
+            progress (progressbar.ProgressBar): optional progress bar for debug output (default None).
         """
         
         self.repeating = np.zeros(self.pstft.shape)
@@ -287,24 +303,20 @@ class REPET(FigureGround):
     
     def separate(self, minlag=0, maxlag=0, maxframes=0, minsim=0, threshold=0, hardness=0, progress=None):
         """
-        :type minlag: int
-        :param minlag: optional minimum distance between consecutive frames to consider as similar (default 0).
-        :type maxlag: int
-        :param maxlag: optional maximum distance between consecutive frames to consider as similar (default ).
-        :type maxframes: int
-        :param maxframes: optional maximum number of frames to use in median and/or weighted mean (default 0).
-        :type minsim: number
-        :param minsim: optional minimum similarity to consider. Higher values can make sorting faster (default 0).
-        :type threshold: number
-        :param threshold: optional center threshold in [0, 1] for sigmoid function applied to TF mask (default 0).
-        :type hardness: number
-        :param hardness: optional hardness of sigmoid function applied to TF mask. hardness=0 will make no change,
-            hardess=1 will create a binary mask (default 0).
-        :type progress: progressbar.ProgressBar
-        :param progress: optional progress bar for debug output (default None).
-        
         Separate figure from ground using precomputed band similarity matrices by either taking a weighted mean of
         similar frames or the median of similar frames.
+        
+        Args:
+            minlag (int): optional minimum distance between consecutive frames to consider as similar (default 0).
+            maxlag (int): optional maximum distance between consecutive frames to consider as similar (default 0).
+            maxframes (int): optional maximum number of frames to use in median and/or weighted mean (default 0).
+            minsim (number): optional minimum similarity to consider. Higher values can make sorting faster
+                (default 0).
+            threshold (number): optional center threshold in [0, 1] for sigmoid function applied to TF mask
+                (default 0).
+            hardness (number): optional hardness of sigmoid function applied to TF mask. hardness=0 will make no
+                change, hardess=1 will create a binary mask (default 0).
+            progress (progressbar.ProgressBar): optional progress bar for debug output (default None).
         """
         
         self.repeating = np.zeros(self.pstft.shape)
@@ -379,3 +391,168 @@ class REPET(FigureGround):
 
         self.gndwav = ISTFT(gndstft, self.nhop, len(self.wav))
         self.figwav = self.wav - self.gndwav
+    
+    def plot(self, prefix='', suffix='', progress=None):
+        """
+        Create a plot of similarity matrices and spectrograms and save it as an image. One image will be saved showing
+        the similarity matrices for each band, and one image will be produced showing spectrograms for the figure,
+        ground, and composite waveforms and the repeating background mask. Filenames will be of the form
+        [input]-similarities.pdf and [input]-spectrograms.pdf, where [input] is the name of the original input file
+        without its extension.
+            prefix (str): optional path prefix for output image. If the empty string, files will be saved in the
+            current working directory (default '').
+            suffix (str): optional path suffix for output image.
+            progress (progressbar.ProgressBar or None): optional progress bar for debug output.
+        """
+        
+        if not exists(prefix):
+            makedirs(prefix)
+        
+        if len(suffix):
+            suffix = '-' + suffix
+        
+        simname = prefix + splitext(basename(self.filename))[0] + suffix + '-similarities.pdf'
+        specname = prefix + splitext(basename(self.filename))[0] + suffix + '-spectrograms.pdf'
+
+        # 1. Plot each band's similarity matrix.
+        cols = np.ceil(np.sqrt(self.nbands))
+        rows = cols if self.nbands - cols ** 2 <= 0 else cols + 1
+
+        pp.figure(figsize=(4 * cols, 4 * rows))
+        if progress:
+            progress.maxval = self.nbands + 5
+            progress.start()
+        
+        for band in range(self.nbands):
+            pp.subplot(rows, cols, band + 1)
+            l, r = self.bandindices[band]
+            lhz = float(l) / self.specsize * self.rate / 2
+            rhz = float(r) / self.specsize * self.rate / 2
+
+            pp.title('Band %d (%d-%d Hz)' % (band + 1, lhz, rhz))            
+            pp.imshow(self.bandsim[band], aspect='equal', origin='lower')
+
+            if progress:
+                progress.update(band + 1)
+
+        pp.savefig(simname)
+
+        # 2. Plot each spectrogram, including the time-frequency mask.
+        pp.figure(figsize=(20, 25))
+        pp.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1, hspace=0.3, wspace=0)
+
+        names = [
+            'Figure Spectrogram',
+            'Ground Spectrogram',
+            'Composite Spectrogram',
+            'Repeating Spectrogram',
+            'Time-Frequency Mask'
+        ]
+    
+        wavnames = [
+            'Figure Waveform',
+            'Ground Waveform',
+            'Composite Waveform',
+            'Repeating Waveform'
+        ]
+        
+        nplots = len(names) + len(wavnames)
+        
+        scales = ['dBFS'] * 4 + ['Ground/Composite']
+
+        repeating = 10 * np.log10(self.repeating.T)
+        wavs = [self.figwav, self.gndwav, self.figwav + self.gndwav]
+    
+        specs = [10 * np.log10(
+            ml.specgram(
+                wav,
+                NFFT=self.nfft,
+                noverlap=self.nhop)[0])
+        for wav in wavs]
+        
+        vmin = min(np.amin(repeating), np.amin(np.array(specs)))
+        vmax = max(np.amax(repeating), np.amax(np.array(specs)))
+        vmins = [vmin] * 4 + [0]
+        vmaxs = [vmax] * 4 + [1]
+        specs += [repeating, self.mask[:,:self.specsize].T]
+        
+        plotnum = 1
+        
+        # 3. Plot all the spectrograms/the mask.
+        for i, (name, scale, spec, vmin, vmax) in enumerate(izip(names, scales, specs, vmins, vmaxs)):
+            # Plot waveform.
+            if i < len(wavs):
+                pp.subplot(nplots, 1, plotnum)
+                plotnum += 1
+                
+                plot_waveform(
+                    wavs[i], 
+                    framesize=self.nfft, 
+                    hopsize=self.nhop, 
+                    shades=3, 
+                    xmin=0,
+                    xmax=len(self.wav) / float(self.rate), 
+                    ymin=np.amin(self.wav),
+                    ymax=np.amax(self.wav), 
+                    clip_ends=False
+                )
+
+                pp.title(wavnames[i], fontsize=10)
+                pp.xlim(0, len(self.wav) / float(self.rate))              
+                pp.ylabel('Amplitude', fontsize=10)
+                mappable = matplotlib.cm.ScalarMappable(norm=None, cmap=matplotlib.cm.jet)
+                mappable.set_array([0, .25, .75, 1.0])
+                pp.colorbar(mappable)
+                #bbox = pp.gca().get_position()
+                #left, bottom, width, height
+                #print bbox
+                #print dir(bbox)
+                #pp.gca().set_position([bbox.x0, bbox.y0, .672, bbox.height])
+                #cb = class matplotlib.colorbar.ColorbarBase(.78, cmap=None, norm=None, alpha=1.0, values=None, boundaries=None, orientation='vertical', extend='neither', spacing='uniform', ticks=None, format=None, drawedges=False, filled=True)
+                
+                axis_fontsize(10)
+
+            # Plot spectrogram.
+            pp.subplot(nplots, 1, plotnum)
+            plotnum += 1
+            
+            pp.imshow(
+                spec,
+                origin='lower',
+                extent=[0, len(self.wav) / self.rate, 0, self.rate / 2],
+                vmin=vmin,
+                vmax=vmax
+            )
+            
+            pp.title(name, fontsize=10)
+            pp.axis('auto')
+            
+            pp.xlim((0, len(self.wav) / self.rate))
+            pp.ylim((0, self.rate / 2))
+            pp.gca().set_yticklabels(np.array(pp.gca().get_yticks() / 1000, dtype=np.int))
+            pp.ylabel('Frequency (KHz)', fontsize=10)
+            
+            ticks = np.floor(np.linspace(vmin, vmax, 5)) if vmax > 1.0 else np.linspace(vmin, vmax, 5)
+            fmt = '%d' if vmax > 1 else '%.2f'
+            
+            cb = pp.colorbar(aspect=10, format=fmt, ticks=ticks, pad=0.01)
+            cl = pp.getp(cb.ax, 'ymajorticklabels')
+            pp.setp(cl, fontsize=10)
+            cb.ax.set_ylabel(scale, fontsize=10)
+            
+            axp = pp.gca().get_position()
+            axc = cb.ax.get_position()
+            
+            axis_fontsize(10, ax=cb.ax)
+            axis_fontsize(10)
+            
+            if progress:
+                progress.update(self.nbands + i + 1)
+        
+        pp.xlabel('Time (s)', fontsize=10)
+        pp.savefig(specname, bbox_inches='tight')
+        
+        if progress:
+            progress.finish()
+        
+        return simname, specname
