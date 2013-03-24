@@ -1,4 +1,19 @@
+"""
+Recording/FigureGround.py
+envmixer
+
+2013 Brandon Mechtley
+Arizona State University
+
+Base abstract class for Figure/Ground separation classes. Do not instatiate directly.
+"""
+
 from os.path import exists, basename, splitext
+from os import makedirs
+
+import numpy as np
+import scikits.audiolab as al
+
 from .Recording import Recording
 
 class FigureGround(Recording):
@@ -28,12 +43,13 @@ class FigureGround(Recording):
             List of filenames saved to disk.
         """
         
-        if dirs[-1] == '' and not exists(prefix):
+        if not exists(prefix):
             makedirs(prefix)
-        elif len(dirs) > 1 and not exists(prefix[0:len(prefix) - 1]):
-            makedirs(prefix[0:len(prefix) - 1])
         
         base = splitext(basename(self.filename))[0]
+        
+        if len(suffix):
+            suffix = '-' + suffix
         
         use = np.array([ground, figure, composite])
         names = np.array([prefix + base + suffix + '-' + nm + '.wav' for nm in ['ground', 'figure', 'composite']])[use]
@@ -43,14 +59,15 @@ class FigureGround(Recording):
             progress.maxval = 3
             progress.start()
         
-        for i, fn, wav in izip(count(), names, wavs):
-            snd = audiolab.Sndfile(fn, mode='w', format=audiolab.Format(), channels=1, samplerate=self.rate)
+        for i, (fn, wav) in enumerate(zip(names, wavs)):
+            snd = al.Sndfile(fn, mode='w', format=al.Format(), channels=1, samplerate=self.rate)
             snd.write_frames(wav)
-
+            snd.close()
+            
             if progress:
                 progress.update(i + 1)
 
         if progress:
             progress.finish()
         
-
+        return names
