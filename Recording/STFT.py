@@ -1,5 +1,6 @@
 """
-STFT.py
+Recording/STFT.py
+envmixer
 
 2012 Brandon Mechtley
 Arizona State University
@@ -13,16 +14,16 @@ from scipy import fftpack as fp
 
 def ISTFT(x, nhop=512, trunc=0, progress=None):
     """
-    :type x: numpy.ndarray
-    :param x: the STFT to convert back to a signal
-    :type nhop: int
-    :param nhop: distance between frames in samples (default 512)
-    :type trunc: int
-    :param trunc: number of samples to which to truncate the output if > 0 (default 0).
-    :type progress: progressbar.ProgressBar
-    :param progress: optional progress bar for debug output (default None).
-    
     Reconstruct a one-dimensional signal from an STFT matrix.
+    
+    Args:
+        x (numpy.ndarray): the STFT to convert back to a signal
+        nhop (int): distance between frames in samples (default 512)
+        trunc (int): number of samples to which to truncate the output if > 0 (default 0).
+        progress (progressbar.ProgressBar): optional progress bar for debug output (default None).
+    
+    Returns:
+        Reconstructed one-channel waveform as numpy.ndarray.
     """
     
     frames, nfft = x.shape
@@ -48,14 +49,15 @@ def ISTFT(x, nhop=512, trunc=0, progress=None):
 
 def STFT(signal, nfft=1024, nhop=512, winfun=np.hanning, progress=None):
     """
-    :type signal: numpy.ndarray
-    :param signal: the signal to transform
-    :type nfft: int
-    :param nfft: size of the analysis window in samples (default 1024).
-    :type nhop: int
-    :param nhop: distance between frames in samples (default 512)
-    
     Return an STFT matrix for a one-dimensional waveform.
+    
+    Args:
+        signal (numpy.ndarray): the signal to transform
+        nfft (int): size of the analysis window in samples (default 1024).
+        nhop (int): distance between frames in samples (default 512)
+    
+    Returns:
+        Two-dimensional numpy.ndarray where each row is a frame of FFT bins.
     """
     
     n = int(np.ceil(len(signal) / float(nhop)))
