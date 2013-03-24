@@ -41,7 +41,7 @@ def main():
     parser.add_argument('-v', '--verbosity', metavar='int', default=1, type=int,
         help='debug output verbosity. 0 for no output, 1 for progress, 2 for the rest of the details.')
     args = parser.parse_args()
-
+    
     # YAML configs. Enumerate over combinations of list values for studies.
     config = yaml.load(open(args.config))
     config.setdefault('type', 'repet')
@@ -50,10 +50,10 @@ def main():
     config.setdefault('separate', {})
     config.setdefault('save', {})
     config.setdefault('plot', False)
-
+    
     batchdict = pybatchdict.BatchDict(config)
     outnames = batchdict.hyphenate_changes()
-
+    
     # Process each file according to config YAML.
     for filename in args.input:
         for i, (combo, outname) in enumerate(zip(batchdict.combos, outnames)):
@@ -71,7 +71,7 @@ def main():
                         indent=4,
                         default_flow_style=False
                     )
-
+                
                 # 3. Creaprogressbars.
                 progress = dict(zip(
                     ['STFT', 'Comparing', 'Separating', 'Saving', 'Plotting'],
@@ -83,12 +83,12 @@ def main():
                         progress[k] = ProgressBar(
                             widgets=['    %s: ' % k, Percentage(), ' ', Bar(), ' ', ETA()]
                         )
-
+                
                 # 4. Compute everything.
                 r.compute_stft(progress=progress['STFT'], **combo['stft'])
                 r.comparedict(progress=progress['Comparing'], **combo['similarity'])
                 r.separatedict(progress=progress['Separating'], **combo['separate'])
-
+                
                 # 5. Print result details.
                 if args.verbosity > 1:
                     print '    STFT info:\n       ', '\n        '.join([
@@ -97,12 +97,12 @@ def main():
                         '%f ms/hop' % (1000 * r.nhop / r.rate),
                         '%d bins/frame\n' % r.specsize
                     ])
-
+                
                 # Save figure/ground/composite wavfiles.
                 wavs = r.save(progress=progress['Saving'], prefix=args.output, suffix=outname, **combo['save'])
                 if args.verbosity > 1:
                     print '    WAVs saved:\n       ', '\n        '.join(wavs), '\n'
-
+                
                 # Save plot PDFs.
                 if combo['plot']:
                     plots = r.plot(progress=progress['Plotting'], prefix=args.output, suffix=outname)
@@ -112,6 +112,6 @@ def main():
                 r = MRA(filename)
                 r.calculate_mra()
                 r.reconstruct_mra()
-    
+
 if __name__ == '__main__':
     main()
