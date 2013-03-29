@@ -28,6 +28,8 @@ def plot_waveform(
         clip_ends=False,
         pmin=0,
         pmax=100,
+        color=None,
+        alpha=1.0,
         **kwargs
 ):
     """
@@ -61,7 +63,7 @@ def plot_waveform(
     
     absmax = np.amax(np.abs(percentiles))
     smin, smax = np.amin(percentiles), np.amax(percentiles)
-    #percentiles = np.interp(percentiles, [-absmax, absmax], [ymin, ymax])
+    percentiles = np.interp(percentiles, [-absmax, absmax], [ymin, ymax])
     
     # Simple way to ensure enveloped waveforms begin/end at 0.
     if clip_ends:
@@ -79,7 +81,8 @@ def plot_waveform(
             np.linspace(xmin, xmax, len(percentiles[i])),
             percentiles[i],
             percentiles[len(percentiles) - 1 - i],
-            color=mappable.to_rgba(perc[i]),
+            color=mappable.to_rgba(perc[i]) if color == None else color,
+            alpha=alpha,
             **kwargs
         )
         
@@ -128,7 +131,10 @@ class Recording(object):
                 self.init_after_load()
             else:
                 self.rate = newrate
-      
+    
+    def append_frames(self, frames):
+        self.wav = np.concatenate((self.wav), frames)
+    
     def save(self):
         """
         Save the recording. If the recording filename does not yet exist, create it. Recording.rate, .filename, and
@@ -146,6 +152,11 @@ class Recording(object):
         assert self.rate != 0, 'Recording must have valid samplerate (.rate != 0).'
         
         if not self.snd:
+            dirs = self.filename.split('/')
+            if len(dirs[-1]): del dirs[-1]
+            if not exists('/'.join(dirs)):
+                makedirs('/'.join(dirs))
+            
             self.snd = al.Sndfile(
                 self.filename, 
                 mode='rw', 
