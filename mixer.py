@@ -34,6 +34,7 @@ import multiprocessing as mp
 
 # Pylab.
 import numpy as np
+import scikits.audiolab as al
 from scipy.stats import scoreatpercentile
 from scipy.io import wavfile
 
@@ -159,7 +160,7 @@ def simple_grain_train(coords, sounds, length=10, graindur=(500, 2000), jumpdev=
 
     return grains
 
-def mix_grain_train(grains, rate, envtype='cosine'):
+def mix_grain_train(grains, rate, sounds, envtype='cosine'):
     sound = Recording()
     sound.rate = rate
     
@@ -171,16 +172,16 @@ def mix_grain_train(grains, rate, envtype='cosine'):
         if i > 0:
             p = grains[i - 1]
             fadedur = p.outpos + p.dur - g.outpos
-
+            
             envelope = None
-
+            
             if envtype == 'cosine':
                 envelope = 1 - (np.cos(np.linspace(0, np.pi, fadedur)) + 1) / 2
             elif envtype == 'linear':
                 envelope = np.linspace(0, 1, fadedur)
-
-            assert envelope != None, 'Invalid mixing envelope: %s' % envtype
-
+            
+            assert envelope is not None, 'Invalid mixing envelope: %s' % envtype
+            
             if len(p.data[-fadedur:]):
                 p.env[-fadedur:] *= 1 - envelope
             
@@ -197,7 +198,7 @@ def mix_grain_train(grains, rate, envtype='cosine'):
     
     return sound
 
-def plot_grain_train(grains, rate, framesize=512, hopsize=256, cmap=cm.gist_rainbow, alpha=.5, shades=4):
+def plot_grain_train(grains, rate, framesize=512, hopsize=256, cmap=cm.gist_rainbow, npoints=3):
     """
     Plot three subplots:
         a) An illustration of placement of grain waveforms and their envelopes before mixing.
@@ -210,9 +211,7 @@ def plot_grain_train(grains, rate, framesize=512, hopsize=256, cmap=cm.gist_rain
         framesize (int): number of samples per frame in the waveform plots.
         hopsize (int): number of samples between frames in the waveform plots.
         cmap (matplotlib.colors.Colormap): color map to use for coloring waveforms.
-        alpha (float): alpha value for waveform regions. Use < 1.0 to be able to see multiple regions, as they are
-            overlayed.
-        shades (int): number of shaded regions to use for waveforms.
+        npoints (int): number of percentile points to use for waveforms.
     """
         
     sources = np.unique([g.src for g in grains])
@@ -244,20 +243,20 @@ def plot_grain_train(grains, rate, framesize=512, hopsize=256, cmap=cm.gist_rain
             envmax, 
             np.zeros(envx.shape) + ymin + .25, 
             color=cmap(g.src / maxsrc), 
-            alpha=alpha
+            alpha=.5
         )
         
         # Draw waveform under envelope.
         plot_waveform(
             g.data * g.env, 
             framesize, hopsize,
+            npoints=npoints,
             xmin=xmin, xmax=xmax,
             ymin=ymin, ymax=ymin+.25,
             color=cmap(g.src / maxsrc),
-            alpha=alpha,
-            shades=shades
+            alpha=.25
         )
-
+    
     # Tighten axes.
     tmin = np.amin([g.outpos for g in grains]) / rate
     tmax = np.amax([g.outpos + len(g.data) for g in grains]) / rate
@@ -284,7 +283,31 @@ def write_grain_train(config, sounds, outname, verbosity=0):
         config['jumpdev'],
     )
     
-    sound = mix_grain_train(grains, sounds[0].rate, config['envelope'])
+    sound = mix_grain_train(grains, sounds[0].rate, sounds, config['envelope'])
+
+    # 4. Save wavfile.
+    if config['save']['wav']:
+        sound.filename = outname + '.wav'
+        
+        if config['endnumbers'] > 0:
+            for i in range(confing['endnumbers']):
+                num = np.random.randint(9) + 1
+                
+                numsnd = al.Sndfile(
+                    os.path.join(confing['numpath'], '%d.wav' % num),
+                    mode='r',
+                    format=al.Format(),
+                    channels=1,
+                    samplerate=sound.rate
+                )
+                
+                sound.append_frames(numsnd.read_frames(numsnd.nframes))
+        
+        sound.save()
+
+    # 5. Save Sonic Visualiser annotation layer.
+    if config['save']['svl']:
+        annotate_grain_train(grains, sounds[0].rate, outname + '.wav', outname + '.svl')
     
     if config['save']['plot']:
         pp.figure(figsize=(16,8))
@@ -332,8 +355,7 @@ def write_grain_train(config, sounds, outname, verbosity=0):
             512, 256,
             xmin=0, xmax=sound.len / sound.rate,
             ymin=-1, ymax=1,
-            shades=4,
-            color='b', alpha=.25
+            npoints=5,
         )
         
         pp.xlim(0, sound.len / sounds[0].rate)
@@ -352,15 +374,6 @@ def write_grain_train(config, sounds, outname, verbosity=0):
         pp.gca().yaxis.set_label_coords(-.04, 0.5)
 
         pp.savefig(outname + '.pdf')
-    
-    # 4. Save wavfile.
-    if config['save']['wav']:
-        sound.filename = outname + '.wav'
-        sound.save()
-    
-    # 5. Save Sonic Visualiser annotation layer.
-    if config['save']['svl']:
-        annotate_grain_train(grains, sounds[0].rate, outname + '.wav', outname + '.svl')
 
 def write_source_sounds(config, sounds, outname):
     """
@@ -424,7 +437,7 @@ def process_group(intuple):
     for config, outname in izip(configs, outnames):
         if verbosity > 0:
             print mp.current_process().name, outname
-            
+        
         func(config, sounds, outname)
 
 def main():
@@ -444,6 +457,7 @@ def main():
     config.setdefault('grainlength', [500, 2000])
     config.setdefault('envelope', 'cosine')
     config.setdefault('jumpdev', 5.0)
+    config.setdefault('endnumbers', 2)
     config.setdefault('save', {})
     config['save'].setdefault('plot', False)
     config['save'].setdefault('wav', False)
@@ -464,16 +478,19 @@ def main():
     outnames = [outnames[i::cpus] for i in range(min(cpus, len(outnames)))]
     combos = [batchdict.combos[i::cpus] for i in range(min(cpus, len(batchdict.combos)))]
     
-    mp.Pool(processes=cpus).map(
-        process_group, [(c, sounds, on, 1, write_grain_train) for c, on in izip(combos, outnames)]
-    )
+    if cpus > 1:
+        mp.Pool(processes=cpus).map(
+            process_group, [(c, sounds, on, 1, write_grain_train) for c, on in izip(combos, outnames)]
+        )
+    else:
+        map(process_group, [(c, sounds, on, 1, write_grain_train) for c, on in izip(combos, outnames)])
     
     # 4. Create source sounds nearest to the mixing coordinates.
     del config['mix']
     del config['iteration']
     
     batchdict = pybatchdict.BatchDict(config)
-    outnames = hyphenate_changes(batchdict)
+    outnames = [os.path.join(args.output, outname) for outname in batchdict.hyphenate_changes()]
     
     outnames = [outnames[i::cpus] for i in range(min(cpus, len(outnames)))]
     combos = [batchdict.combos[i::cpus] for i in range(min(cpus, len(batchdict.combos)))]
