@@ -287,11 +287,11 @@ def write_grain_train(config, sounds, outname, verbosity=0):
 
     # 4. Save wavfile.
     if config['save']['wav']:
-        sound.filename = outname + '.wav'
-        
         if config['endnumbers'] > 0:
+            nums = []
             for i in range(confing['endnumbers']):
                 num = np.random.randint(9) + 1
+                nums.append(num)
                 
                 numsnd = al.Sndfile(
                     os.path.join(confing['numpath'], '%d.wav' % num),
@@ -302,6 +302,10 @@ def write_grain_train(config, sounds, outname, verbosity=0):
                 )
                 
                 sound.append_frames(numsnd.read_frames(numsnd.nframes))
+            
+            sound.filename = outname + '-nums-' + ''.join(nums) + '.wav'
+        else:
+            sound.filename = outname + '.wav'
         
         sound.save()
 
