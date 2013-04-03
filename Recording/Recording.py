@@ -97,43 +97,30 @@ class Recording(object):
     by a few classes that attempt to split figure and ground.
     """
     
-    def __init__(self, filename=None):
+    def __init__(self, filename=None, **kwargs):
         if filename:
             self.filename = filename
-            self.snd = al.Sndfile(self.filename)
+            self.snd = al.Sndfile(self.filename, **kwargs)
             
             self.init_after_load()
         else:
+            self.filename = ''
             self.snd = None
     
     def init_after_load(self):
         self.rate = float(self.snd.samplerate)
         self.wav = self.snd.read_frames(self.snd.nframes)
-        self.len = len(self.wav)
-        self.start = 0
-        self.end = self.len
         
-        # Mixdown to mono.
+        # Mixdown to mono for now.
         if len(self.wav.shape) > 1:
             self.wav = np.mean(self.wav, 1)
         
-    def resample(self, newrate):
-        """
-        Resample a loaded audio file at a new sampling rate.
-        
-        Args:
-            newrate (int): new sampling rate in Hz.
-        """
-        
-        if newrate != self.rate:
-            if self.snd:
-                self.snd = al.Sndfile(self.filename, samplerate=newrate)
-                self.init_after_load()
-            else:
-                self.rate = newrate
+        self.len = len(self.wav)
+        self.start = 0
+        self.end = self.len
     
-    def append_frames(self, frames):
-        self.wav = np.concatenate((self.wav), frames)
+    def append_frames(self, frames):        
+        self.wav = np.concatenate((self.wav, frames))
     
     def save(self):
         """
