@@ -27,366 +27,109 @@ Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
 """
 
 # Standard.
+import os, argparse
 from time import time
-import os, bz2, argparse
 from itertools import izip
 import multiprocessing as mp
 
 # Pylab.
 import numpy as np
-import scikits.audiolab as al
-from scipy.stats import scoreatpercentile
-from scipy.io import wavfile
-
-# External.
-import yaml
 import matplotlib
 matplotlib.use('pdf')
 
-import scikits.audiolab as audiolab
-import matplotlib.pyplot as pp
-import matplotlib.cm as cm
+# External.
+import yaml
 
-# Personal.
-from barycentric import lattice, baryedges, bary2cart
-from Recording import Recording, plot_waveform
+# Local.
 import pybatchdict
+import GrainTrain as gt
+from Recording import Recording
+from barycentric import lattice, baryedges, bary2cart
 
-class Grain:
-    def __init__(self):
-        self.outpos, self.srcpos, self.dur, self.src = -1, -1, -1, -1
-        self.data = None
-        self.env = None
 
-    def __str__(self):
-        return 'outpos: %d, srcpos: %d, dur: %d, src: %d' % (self.outpos, self.srcpos, self.dur, self.src)
 
-def annotate_grain_train(grains, rate, wavname, filename):
-    """
-    Save a SonicVisualiser/Annotator annotations file, treating each grain as a segment.
-    
-    Args:
-        grains (list): list of grain objects to output
-        rate (int): sampling rate of grains
-        wavname (str): original filename of wav from which grains are sourced.
-        filename (str): filename for the SonicVisualiser annotations.
-    """
-    
-    outstr = open('data/template.xml', 'r').read() % (
-        wavname,
-        rate,
-        grains[-1].outpos + grains[-1].dur,
-        os.path.join(os.getcwd(), wavname),
-        rate,
-        grains[0].outpos,
-        grains[-1].outpos + grains[-1].dur,
-        len(grains),
-        '\n'.join([
-            '<point frame="%d" value="%d" duration="%d" label=""/>' % (g.outpos, i, g.dur) 
-            for i, g in enumerate(grains)
-        ]),
-        (grains[-1].outpos + grains[-1].dur) / 2
-    )
-    
-    f = open(filename, 'wb')
-    f.write(bz2.compress(outstr))
-    f.close()
+def make_tones(freqs, duration=1.0, amplitude=1.0, rate=44100):
+    tonelen = duration * rate
 
-def simple_grain_train(coords, sounds, length=10, graindur=(500, 2000), jumpdev=60):
-    """
-    Simplest synthesis algorithm. Creates a sequence of overlapping grains, each selected from a different source
-    recording. The source recording is randomly selected, weighted according to which recording is closest to the input
-    coordinates. Each grain has a random duration, sampled from a beta distribution (a = 2, b = 5) on the interval 
-    [100, 2000] milliseconds. Each grain is copied from that point in the selected source recording that is closest to 
-    the input coordinates with a random offset, selected from a normal distribution with mean = 0, variance = 60 
-    seconds.
+    tones = [Recording() for i in range(len(freqs))]
 
-    Args:
-        coords (list or numpy.ndarray): barycentric coordinates to sample synthesis.
-        sounds (list): list of instances of soundwalk, one per source edge.
-        length (number): duration of granular synthesis in seconds.
-        graindur ((number, number)): range of duration of grains in milliseconds, (low, high)
-        jumpdev (number): standard deviation of grain-to-grain start time differences in seconds. 
+    tonefunc =lambda x: np.sin(x * 2) * np.fmod(x, 2 * np.pi) / (2 * np.pi)
 
-    Returns:
-        list of grains
-    """
+    for i in range(len(tones)):
+        tones[i].wav = tonefunc(np.linspace(0, tonelen * 2 - 1, tonelen * 2) * 2 * np.pi * freqs[i] / rate) * amplitude
+        tones[i].rate = rate
+
+    return tones
+
+def append_nums(recording, outname, wait=0, npath='./', ncount=0, namp=1.0):
+    nums = []
+    soundmax = np.amax(np.abs(recording.wav))
     
-    coords = np.array(coords)
-    
-    # Percentage completion along each soundwalk (side).
-    sideproj = baryedges(coords)
-    percs = baryedges(coords, sidecoords=True)[:,1]
-    
-    # Prior probability of playing each soundwalk (side).
-    sidecart = bary2cart(sideproj)
-    cart = bary2cart(coords)
-    prob = np.array([np.linalg.norm(sc - cart) for sc in sidecart])
-    prob = np.log(prob + np.finfo(float).eps)
-    prob /= np.sum(prob)
-    
-    # Create list of sound grains. Eeach grain is a tuple of frame numbers: (output frame offset, duration in frames,
-    # source recording frame offset, source # (0-2))
-    grains = []
-    rate = min([s.rate for s in sounds])
-    pos = 0
-    
-    while pos < rate * length:
-        g = Grain()
+    for i in range(ncount):
+        num = np.random.randint(9) + 1
+        nums.append(num)
         
-        # Random source.
-        g.src = int(np.random.choice(range(len(sounds)), p=prob))
-        g.dur = int(np.random.randint(graindur[0] / 1000. * rate, graindur[1] / 1000. * rate))
+        numsnd = Recording(os.path.join(npath, '%d.wav' % num))
+        nummax = np.amax(np.abs(numsnd.wav))
         
-        # Random offset from closest source point.
-        jump = int(np.random.randn() * rate * jumpdev)
-        frame = int(percs[g.src] * sounds[g.src].len + sounds[g.src].start)
-
-        g.srcpos = frame + jump
-        g.srcpos = int(min(g.srcpos, sounds[g.src].end - g.dur * rate))
-        g.srcpos = int(max(g.srcpos, sounds[g.src].start))
+        recording.wav[-(recording.rate / 4):] *= np.linspace(1, 0, recording.rate / 4)
         
-        g.outpos = 0
-        grains.append(g)
-        
-        # If this isn't the first grain, overlap the grains to crossfade.
-        if len(grains) > 1:
-            fadedur = int(min(grains[-1].dur, grains[-2].dur) / 2)
-            grains[-1].outpos = grains[-2].outpos + grains[-2].dur - fadedur
-        
-        pos = grains[-1].outpos + grains[-1].dur
-        
-    grains[-1].dur = int(min(grains[-1].dur, rate * length - grains[-1].outpos))
-
-    return grains
-
-def mix_grain_train(grains, rate, sounds, envtype='cosine'):
-    sound = Recording()
-    sound.rate = rate
+        recording.append_frames(np.zeros(wait * numsnd.rate))
+        recording.append_frames(numsnd.wav * (soundmax / nummax) * namp)
     
-    for i, g in enumerate(grains):
-        g.data = np.array(sounds[g.src].wav[g.srcpos:g.srcpos + g.dur])
-        g.env = np.ones(g.data.shape)
-        
-        # Apply window halves exiting previous grain, entering current grain.
-        if i > 0:
-            p = grains[i - 1]
-            fadedur = p.outpos + p.dur - g.outpos
-            
-            envelope = None
-            
-            if envtype == 'cosine':
-                envelope = 1 - (np.cos(np.linspace(0, np.pi, fadedur)) + 1) / 2
-            elif envtype == 'linear':
-                envelope = np.linspace(0, 1, fadedur)
-            
-            assert envelope is not None, 'Invalid mixing envelope: %s' % envtype
-            
-            if len(p.data[-fadedur:]):
-                p.env[-fadedur:] *= 1 - envelope
-            
-            if len(g.data[:fadedur]):
-                g.env[:fadedur] *= envelope
+    recording.filename = outname + '-nums-' + ''.join(str(n) for n in nums) + '.wav'
     
-    length = max([g.outpos + g.dur for g in grains])
-    sound.wav = np.zeros(length, dtype=grains[0].data.dtype)
-    
-    for g in [g for g in grains if len(g.data)]:
-        sound.wav[g.outpos:g.outpos + g.dur] += g.data * g.env
-    
-    sound.len = len(sound.wav)
-    
-    return sound
-
-def plot_grain_train(grains, rate, framesize=512, hopsize=256, cmap=cm.gist_rainbow, npoints=3):
-    """
-    Plot three subplots:
-        a) An illustration of placement of grain waveforms and their envelopes before mixing.
-        b) The final mixed waveform.
-        c) The final mixed spectrogram.
-    
-    Args:
-        grains (list): the list of Grain objects in the grain train.
-        rate (int): the sampling rate of the resulting mixed waveform.
-        framesize (int): number of samples per frame in the waveform plots.
-        hopsize (int): number of samples between frames in the waveform plots.
-        cmap (matplotlib.colors.Colormap): color map to use for coloring waveforms.
-        npoints (int): number of percentile points to use for waveforms.
-    """
-        
-    sources = np.unique([g.src for g in grains])
-    nsrc = len(sources)
-    maxsrc = float(np.amax(sources))
-    minsrc = float(np.amin(sources))
-    
-    oldpos = 0
-    layer = False
-
-    for i, g in enumerate(grains):
-        # If two grains overlap, draw them stacked amongst two layers.
-        if oldpos > g.outpos:
-            layer = not layer
-        
-        oldpos = g.outpos + len(g.data)
-
-        ymin = 0 if not layer else 0.5
-        xmin, xmax = g.outpos / rate, (g.outpos + len(g.data)) / rate
-        
-        # Resample envelope.
-        envx = np.linspace(xmin, xmax, len(g.env) / framesize)
-        envmax = np.interp(envx, np.linspace(xmin, xmax, len(g.env)), g.env)
-        envmax = np.interp(envmax, [0, 1], [ymin+.25, ymin+.5])
-
-        # Draw envelope on top of waveform.
-        pp.fill_between(
-            envx, 
-            envmax, 
-            np.zeros(envx.shape) + ymin + .25, 
-            color=cmap(g.src / maxsrc), 
-            alpha=.5
-        )
-        
-        # Draw waveform under envelope.
-        plot_waveform(
-            g.data * g.env, 
-            framesize, hopsize,
-            npoints=npoints,
-            xmin=xmin, xmax=xmax,
-            ymin=ymin, ymax=ymin+.25,
-            color=cmap(g.src / maxsrc),
-            alpha=.25
-        )
-    
-    # Tighten axes.
-    tmin = np.amin([g.outpos for g in grains]) / rate
-    tmax = np.amax([g.outpos + len(g.data) for g in grains]) / rate
-    
-    pp.ylim(-0.05, 1.05)
-    pp.xlim(tmin, tmax)
-
-def write_grain_train(config, sounds, outname, verbosity=0):
+def write_simple(config, sounds, name):
     """
     Full process for making a simple grain train. Called by main function in a multiprocessing.Pool.
     
     Args:
         config (dict): dictionary of configuration values.
         sounds (list): list of instances of Soundwalk
-        outname (str): path + basename for output files (no extension).
-        verbosity (float): debug verbosity (default 0).
+        name (str): path + basename for output files (no extension).
     """
     
-    grains = simple_grain_train(
+    train = gt.make_simple_train(
         config['coordinates'], 
         sounds, 
         config['trainlength'], 
-        config['grainlength'], 
-        config['jumpdev'],
+        config['simple']['grainlength'], 
+        config['simple']['jumpdev'],
     )
     
-    sound = mix_grain_train(grains, sounds[0].rate, sounds, config['envelope'])
-
-    # 4. Save wavfile.
-    if config['save']['wav']:
-        if config['endnumbers'] > 0:
-            nums = []
-            for i in range(confing['endnumbers']):
-                num = np.random.randint(9) + 1
-                nums.append(num)
-                
-                numsnd = al.Sndfile(
-                    os.path.join(confing['numpath'], '%d.wav' % num),
-                    mode='r',
-                    format=al.Format(),
-                    channels=1,
-                    samplerate=sound.rate
-                )
-                
-                sound.append_frames(numsnd.read_frames(numsnd.nframes))
-            
-            sound.filename = outname + '-nums-' + ''.join(nums) + '.wav'
-        else:
-            sound.filename = outname + '.wav'
-        
-        sound.save()
+    train.basename = name
+    train.mixdown(envtype=config['simple']['envelope'])
 
     # 5. Save Sonic Visualiser annotation layer.
-    if config['save']['svl']:
-        annotate_grain_train(grains, sounds[0].rate, outname + '.wav', outname + '.svl')
+    if config['simple']['svl']:
+        train.save_svl()
+
+    if config['simple']['plot']:
+        train.save_plot()
     
-    if config['save']['plot']:
-        pp.figure(figsize=(16,8))
-        
-        # 1. Plot grain train.
-        pp.subplot(311)
-        
-        pp.title('simple grain train')
-        plot_grain_train(grains, rate=sounds[0].rate)
-        pp.xlim(0, sound.len / sounds[0].rate)
-        pp.xticks([])
-        pp.yticks([])
-        pp.ylabel('enveloped grains')
-        pp.gca().yaxis.set_label_coords(-.04, 0.5)
-
-        lines = [
-            matplotlib.lines.Line2D(
-                range(1), 
-                range(1), 
-                color=cm.gist_rainbow(float(i) / (len(sounds) - 1)), 
-                markerfacecolor=cm.gist_rainbow(float(i) / (len(sounds) - 1)),
-                markeredgecolor=cm.gist_rainbow(float(i) / (len(sounds) - 1)),
-                alpha=0.5,
-                marker='s'
-            )
-            for i in range(len(sounds))
-        ]
-
-        pp.legend(
-            lines,
-            [os.path.splitext(os.path.split(s.filename)[1])[0] for s in sounds], 
-            numpoints=1, 
-            loc='upper right',
-            bbox_to_anchor=(1.0, 1.2125),
-            markerscale=1.5,
-            ncol=len(sounds),
-            handlelength=0,
-            frameon=False
+    # 4. Save wavfile.
+    if config['numbers']['count'] > 0:
+        append_nums(
+            train.sound,
+            train.basename,
+            wait=config['numbers']['wait'],
+            npath=config['numbers']['path'],
+            ncount=config['numbers']['count'],
+            namp=config['numbers']['amplitude']
         )
-        
-        # 2. Plot mixed waveform.
-        pp.subplot(312)
-        plot_waveform(
-            sound.wav,
-            512, 256,
-            xmin=0, xmax=sound.len / sound.rate,
-            ymin=-1, ymax=1,
-            npoints=5,
-        )
-        
-        pp.xlim(0, sound.len / sounds[0].rate)
-        pp.xticks([])
-        pp.ylabel('mixed waveform')
-        pp.gca().yaxis.set_label_coords(-.04, 0.5)
+    else:
+        sound.filename = train.basename + '.wav'
+    
+    train.sound.save()
 
-        # 3. Plot mixed spectrogram.
-        pp.subplot(313)
-        pxx, freqs, bins, im = pp.specgram(sound.wav, Fs=sound.rate)
-        pp.xlim(0, sound.len / sounds[0].rate)
-        pp.ylim(freqs[0], freqs[-1])
-        pp.yticks(range(0, 20001, 5000), range(0, 21, 5))
-        pp.ylabel('frequency (KHz)')
-        pp.xlabel('time (s)')
-        pp.gca().yaxis.set_label_coords(-.04, 0.5)
-
-        pp.savefig(outname + '.pdf')
-
-def write_source_sounds(config, sounds, outname):
+def write_sources(config, sounds, name):
     """
     Save portions of the source Recordings nearest to the config's sampling coordinates.
     
     Args:
         config (dict): configuration dictionary.
         sounds (list): list of source Recordings.
-        outname (str): base path / name for output. Filenames will be formatted as follows:
+        name (str): base path / name for output. Filenames will be formatted as follows:
             [head]/[fn]-[tail].wav, where outname is [head]/[tail] for each source Recording named [fn].wav.
     """
     
@@ -413,13 +156,47 @@ def write_source_sounds(config, sounds, outname):
     for s, e, sound in izip(starts, ends, sounds):
         soundpart = Recording()
         
-        outparts = os.path.split(outname)
-        sndbase = os.path.splitext(os.path.split(sound.filename)[1])[0]
+        srcbase = os.path.splitext(os.path.split(sound.filename)[1])[0]
         
-        soundpart.filename = '%s/%s-source-%s.wav' % (outparts[0], sndbase, outparts[1])
         soundpart.rate = sound.rate
         soundpart.wav = sound.wav[s:e]
+        
+        outpath = '%s-%s' % (name, srcbase)
+        
+        if config['numbers']['count'] > 0:
+            append_nums(
+                soundpart, 
+                config,
+                outpath
+            )
+        else:
+            soundpart.filename = outpath + '.wav'
+        
         soundpart.save()
+
+def write_tones(config, sounds, name):    
+    train = gt.make_tone_train(
+        sounds,
+        traindur=config['trainlength'],
+        tonedur=config['tones']['length'],
+        amplitude=config['tones']['amplitude'],
+    )
+    
+    train.basename = name
+    sound = train.mixdown(envtype=config['tones']['envelope'])
+    sound.wav = sound.wav[:int(config['trainlength'] * config['tones']['rate'])]
+    
+    if config['numbers']['count'] > 0:
+        append_nums(
+            sound, 
+            name, 
+            wait=config['tones']['wait'], 
+            npath=config['tones']['path'], 
+            ncount=config['tones']['count'], 
+            namp=config['tones']['amplitude']
+        )
+    
+    sound.save()
 
 def process_group(intuple):
     """
@@ -429,79 +206,100 @@ def process_group(intuple):
         intuple (tuple): tupled arguments for write_grain_train / write_source_sounds. Components are:
             configs (list): list of configuration dictionaries, one for each call.
             sounds (list): list of source Recordings to use for mixes / sources.
-            outnames (list): list of output file basenames, one for each call.
+            names (list): list of output file basenames, one for each call.
             verbosity (int): debug verbosity.
     """
         
-    configs, sounds, outnames, verbosity, func = intuple
+    configs, sounds, names = intuple
     
     # Need to randomize seed, as the seed is copied to the new process in everything but Windows.
     np.random.seed(int((time() + mp.current_process().pid * 1000)))
     
-    for config, outname in izip(configs, outnames):
-        if verbosity > 0:
-            print mp.current_process().name, outname
-        
-        func(config, sounds, outname)
+    for config, name in izip(configs, names):
+        if config['verbosity'] > 0:
+            print mp.current_process().name, name
+               
+        if config['mix'] == 'simple':
+            write_simple(config, sounds, name)
+        elif config['mix'] == 'sources':
+            write_sources(config, sounds, name)
+        elif config['mix'] == 'tones':
+            write_tones(config, sounds, name)
+
+def parallel_pool(func, cpus, args):
+    if cpus > 1:
+        mp.Pool(processes=cpus).map(func, args)
+    else:
+        map(func, args)
 
 def main():
     """Just here for PyCharm structure listing :)"""
     
     parser = argparse.ArgumentParser(description='Create a mixture of two or more sound textures.')
-    parser.add_argument('inputs', metavar='wav', nargs='+', type=str, help='wav or sv files to mix.')
-    parser.add_argument('-c', '--config', type=str, default='config.yaml', help='YAML config file.')
-    parser.add_argument('-o', '--output', metavar='file', default='output.wav', type=str, help='wav file for output')
+    parser.add_argument('config', type=str, default='config.yaml', help='YAML config file.')
     args = parser.parse_args()
     
     # 1. YAML config. Enumerate over combinations of list values for studies.
     config = yaml.load(open(args.config))
-    config.setdefault('coordinates', {'@': 'lattice'})
+    
+    config.setdefault('outpath', '')
+    config.setdefault('sources', [])
+    config.setdefault('mix', 'simple')
+    config.setdefault('coordinates', [1, 0, 0])
     config.setdefault('processes', mp.cpu_count())
-    config.setdefault('trainlength', 15.0)
-    config.setdefault('grainlength', [500, 2000])
-    config.setdefault('envelope', 'cosine')
-    config.setdefault('jumpdev', 5.0)
-    config.setdefault('endnumbers', 2)
-    config.setdefault('save', {})
-    config['save'].setdefault('plot', False)
-    config['save'].setdefault('wav', False)
-    config['save'].setdefault('svl', False)
+    
+    config.setdefault('simple', {})
+    config['simple'].setdefault('svl', False)
+    config['simple'].setdefault('plot', False)
+    config['simple'].setdefault('jumpdev', 5.0)
+    config['simple'].setdefault('trainlength', 15.0)
+    config['simple'].setdefault('envelope', 'cosine')
+    config['simple'].setdefault('grainlength', [500, 2000])
+    
+    config.setdefault('numbers', {})
+    config['numbers'].setdefault('count', 0)
+    config['numbers'].setdefault('wait', 1.0)
+    config['numbers'].setdefault('amplitude', 1.0)
+    config['numbers'].setdefault('path', 'numbers/')
+    
+    config.setdefault('tones', {})
+    config['tones'].setdefault('count', 0)
+    config['tones'].setdefault('rate', 44100)
+    config['tones'].setdefault('minfreq', 2000)
+    config['tones'].setdefault('maxfreq', 5000)
+    config['tones'].setdefault('amplitude', 1.0)
+    config['tones'].setdefault('envelope', 'cosine')
     
     if type(config['coordinates']) == dict:
         if config['coordinates'][config['coordinates'].keys()[0]] == 'lattice':
-            config['coordinates'] = {config['coordinates'].keys()[0]: lattice(len(args.inputs))}
+            config['coordinates'] = {config['coordinates'].keys()[0]: lattice(len(config['sources']))}
     
-    batchdict = pybatchdict.BatchDict(config)
-    outnames = [os.path.join(args.output, outname) for outname in batchdict.hyphenate_changes()]
+    # 2. Load soundwalks.
+    sounds = []
     
-    # 2. Load soundwalklss.
-    sounds = [Recording(s) for s in args.inputs]
-    
-    # 3. Create grain trains in parallel.
-    cpus = min(config['processes'], mp.cpu_count())
-    outnames = [outnames[i::cpus] for i in range(min(cpus, len(outnames)))]
-    combos = [batchdict.combos[i::cpus] for i in range(min(cpus, len(batchdict.combos)))]
-    
-    if cpus > 1:
-        mp.Pool(processes=cpus).map(
-            process_group, [(c, sounds, on, 1, write_grain_train) for c, on in izip(combos, outnames)]
+    if config['mix'] == 'tones':
+        sounds = make_tones(
+            config['tones']['freqs'], 
+            duration=config['trainlength'], 
+            amplitude=config['tones']['amplitude'], 
+            rate=config['tones']['rate']
         )
     else:
-        map(process_group, [(c, sounds, on, 1, write_grain_train) for c, on in izip(combos, outnames)])
+        sounds = [Recording(s) for s in config['sources']]
     
-    # 4. Create source sounds nearest to the mixing coordinates.
-    del config['mix']
-    del config['iteration']
+    # 3. Create groups of processes to do in parallellsl.
+    # Split into group of number of CPUs to avoid copying pickled recordings for every single execution. I think.
+    cpus = min(config['processes'], mp.cpu_count())
     
-    batchdict = pybatchdict.BatchDict(config)
-    outnames = [os.path.join(args.output, outname) for outname in batchdict.hyphenate_changes()]
+    batch = pybatchdict.BatchDict(config)
     
-    outnames = [outnames[i::cpus] for i in range(min(cpus, len(outnames)))]
-    combos = [batchdict.combos[i::cpus] for i in range(min(cpus, len(batchdict.combos)))]
+    names = [os.path.join(config['outpath'], 'mix-' + config['mix'] + '-' + name) for name in batch.hyphenate_changes()]
+    names = [names[i::cpus] for i in range(min(cpus, len(names)))]
     
-    mp.Pool(processes=cpus).map(
-        process_group, [(c, sounds, on, 1, write_source_sounds) for c, on in izip(combos, outnames)]
-    )
+    combos = [batch.combos[i::cpus] for i in range(min(cpus, len(batch.combos)))]
+    groups = [(c, sounds, on) for c, on in izip(combos, names)]
+    
+    parallel_pool(process_group, cpus, groups)
         
 if __name__ == '__main__':
     main()
