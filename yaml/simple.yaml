@@ -1,0 +1,62 @@
+mix: 'simple'
+
+outpath: '/Users/brandon/jasa-el/sounds/test/'
+
+sources:
+  - /Users/brandon/jasa-el/sounds/input/db.wav
+  - /Users/brandon/jasa-el/sounds/input/nb.wav
+  - /Users/brandon/jasa-el/sounds/input/sg.wav
+
+coordinates: 
+  '@1': 'lattice'
+
+trainlength: 10
+
+processes: 1
+verbosity: 1
+
+simple:
+  grainlength: [1500, 2500]
+  envelope: 'cosine'
+  jumpdev: 5
+  plot: True
+  svl: True
+
+numbers:
+  path: /Users/brandon/jasa-el/sounds/numbers/
+  wait: 1.0
+  count: 2
+  amplitude: 1.5
+
+iteration: 
+  '@2':
+    - '00'
+    - '01'
+    - '02'
+    - '03'
+    - '04'
+    - '05'
+    - '06'
+    - '07'
+    - '08'
+    - '09'
+    - '10'
+    - '11'
+    - '12'
+    - '13'
+    - '14'
+    - '15'
+    - '16'
+    - '17'
+    - '18'
+    - '19'
+    - '20'
+    - '21'
+    - '22'
+    - '23'
+    - '24'
+    - '25'
+    - '26'
+    - '27'
+    - '28'
+    - '29'

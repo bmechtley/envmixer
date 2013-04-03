@@ -1,0 +1,22 @@
+mix: 'sources'
+
+outpath: '/Users/brandon/jasa-el/sounds/test/'
+
+sources:
+  - /Users/brandon/jasa-el/sounds/input/db.wav
+  - /Users/brandon/jasa-el/sounds/input/nb.wav
+  - /Users/brandon/jasa-el/sounds/input/sg.wav
+
+coordinates: 
+  '@1': 'lattice'
+
+trainlength: 10
+
+processes: 4
+verbosity: 1
+
+numbers:
+  path: /Users/brandon/jasa-el/sounds/numbers/
+  amplitude: 1.5
+  wait: 1.0
+  count: 2
