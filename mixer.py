@@ -161,13 +161,16 @@ def write_sources(config, sounds, name):
         soundpart.rate = sound.rate
         soundpart.wav = sound.wav[s:e]
         
-        outpath = '%s-%s' % (name, srcbase)
+        outpath = '%s-source-%s' % (name, srcbase)
         
         if config['numbers']['count'] > 0:
             append_nums(
-                soundpart, 
-                config,
-                outpath
+                soundpart,
+                outpath,
+                wait=config['numbers']['wait'],
+                npath=config['numbers']['path'],
+                ncount=config['numbers']['count'],
+                namp=config['numbers']['amplitude']
             )
         else:
             soundpart.filename = outpath + '.wav'
@@ -190,10 +193,10 @@ def write_tones(config, sounds, name):
         append_nums(
             sound, 
             name, 
-            wait=config['tones']['wait'], 
-            npath=config['tones']['path'], 
-            ncount=config['tones']['count'], 
-            namp=config['tones']['amplitude']
+            wait=config['numbers']['wait'], 
+            npath=config['numbers']['path'], 
+            ncount=config['numbers']['count'], 
+            namp=config['numbers']['amplitude']
         )
     
     sound.save()
