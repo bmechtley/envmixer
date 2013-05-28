@@ -1,0 +1,39 @@
+mix: 'simple'
+
+outpath: '/Users/brandon/jasa-el/sets/tune-simple/'
+
+sources:
+  - /Users/brandon/jasa-el/input/db.wav
+  - /Users/brandon/jasa-el/input/nb.wav
+  - /Users/brandon/jasa-el/input/sg.wav
+
+coordinates: 
+  '@coordinates': 'lattice'
+
+trainlength: 5
+
+processes: 3
+verbosity: 1
+
+simple:
+  grainlength:
+    '@grainlength':
+      - [.5, 1]
+      - [1, 2]
+      - [2, 4]
+  maxdist: 
+    '@maxdist': 
+      - 5
+      - 15
+      - 30
+  envelope: 'cosine'
+  plot: True
+  svl: False
+
+iteration: 
+  '@iteration':
+    - '00'
+    - '01'
+    - '02'
+    - '03'
+    - '04'
