@@ -1,47 +1,28 @@
-<link href='https://dl.dropbox.com/u/4286567/mp3-player-button.css' rel='stylesheet' type='text/css'/>
-<script src='https://dl.dropbox.com/u/4286567/mp3-player-button.js'></script>
-<script src='https://dl.dropbox.com/u/4286567/soundmanager2-nodebug-jsmin.js'></script>
+<!-- Instructions -->
 
-<h1>Test clip</h1>
+Each page of this study contains 10 pairs of sounds. Each pair contains 2 5-second sounds. These sounds may be purely synthetic tones, synthetic mixtures of real recordings, or portions of real outdoor recordings.
+
+For each pair, please listen to each sound in its entirety and report which sound is more realistic. Sometimes the sounds may be the exact same, in which case you can choose "No difference." If you can't tell which sound is more realistic, select "Don't know." 
+
+Please feel free to complete as many pages of this study as you would like. Your help is much appreciated!
+
+<!-- CML -->
+<link href="https://envmixer.s3.amazonaws.com/css/playbuttons.css" rel="stylesheet" type="text/css"/>
+
 <p>
-    <a target="_blank" href="https://envmixer.s3.amazonaws.com/simple-182085/{{test_hash}}.mp3" title="Play Test clip." class="sm2_button">https://envmixer.s3.amazonaws.com/simple-182085/{{test_hash}}.mp3</a> Play Test clip.
+  <a target="_blank" href="https://envmixer.s3.amazonaws.com/tune-simple-191231/{{s0_hash}}.mp3" title="Play Sound 1." class="testsound" id='s0{{rownum}}'>Play Sound 1.</a>
+  <a target="_blank" href="https://envmixer.s3.amazonaws.com/tune-simple-191231/{{s1_hash}}.mp3" title="Play Sound 2." class="testsound" id='s1{{rownum}}'>Play Sound 2.</a>
 </p>
-<cml:text name="response_test_nums" label="Numbers" class="" instructions="Please enter the numbers spoken at the end of the clip with no spaces, e.g. 12" default="" validates="required integer" gold="test_nums"/>
-<cml:textarea name="response_test_desc" label="Descriptive tags" class="" validates="required" default="" instructions="Please enter a few words to describe this sound, separate by commas, e.g. &quot;bird, chirp, outdoors, loud, pleasant&quot;"/>
-<cml:ratings name="response_test_pc" class="" from="Completely unrealistic" to="Real recording" label="Perceptual convincingness" instructions="Please rate how perceptually convincing this test clip is." points="5" validates="required" gold="test_pc"/>
 
-<hr/>
+<cml:radios label="Which sound was more realistic?" validates="required" gold="morepc_gold">
+  <cml:radio label="Sound 1." value="s0"></cml:radio>
+  <cml:radio label="Sound 2." value="s1"></cml:radio>
+  <cml:radio label="No difference." value="same"></cml:radio>
+  <cml:radio label="Don't know." value="null"></cml:radio>
+</cml:radios>
 
-<h1>Source 1</h1>
-<p>
-    <a target="_blank" href="https://envmixer.s3.amazonaws.com/simple-182085/{{s1_hash}}.mp3" title="Play Source 1 clip." class="sm2_button">https://envmixer.s3.amazonaws.com/simple-182085/{{s1_hash}}.mp3</a> Play Source 1 clip.
-    &#160;&#160;&#160;&#160;
-    (<a target="_blank" href="https://envmixer.s3.amazonaws.com/simple-182085/{{test_hash}}.mp3" title="Play test clip." class="sm2_button">https://envmixer.s3.amazonaws.com/simple-182085/{{test_hash}}.mp3</a> Repeat test clip if needed.)
-</p>
-<cml:text name="response_s1_nums" label="Numbers" class="" instructions="Please enter the numbers spoken at the end of the clip with no spaces, e.g. 12" default="" validates="required integer" gold="s1_nums"/>
-<cml:textarea name="response_s1_desc" label="Descriptive tags" class="" validates="required" default="" instructions="Please enter a few words to describe this sound, separate by commas, e.g. &quot;bird, chirp, outdoors, loud, pleasant&quot;"/>
-<cml:ratings name="response_s1_sim" class="" from="Completely different" to="Exactly the same" label="Similarity to Test clip" instructions="Please rate how similar this source clip is to the test clip." points="5" validates="required" gold="s1_sim"/>
+<script src="https://envmixer.s3.amazonaws.com/js/jquery-1.9.1.min.js"></script>
+<script src="https://envmixer.s3.amazonaws.com/js/soundmanager2-nodebug-jsmin.js"></script>
+<script src="https://envmixer.s3.amazonaws.com/js/playbuttons.js"></script>
 
-<hr/>
 
-<h1>Source 2</h1>
-<p>
-    <a target="_blank" href="https://envmixer.s3.amazonaws.com/simple-182085/{{s2_hash}}.mp3" title="Play Source 2 clip." class="sm2_button">https://envmixer.s3.amazonaws.com/simple-182085/{{s2_hash}}.mp3</a> Play Source 2 clip.
-    &#160;&#160;&#160;&#160;
-    (<a target="_blank" href="https://envmixer.s3.amazonaws.com/simple-182085/{{test_hash}}.mp3" title="Play test clip." class="sm2_button">https://envmixer.s3.amazonaws.com/simple-182085/{{test_hash}}.mp3</a> Repeat test clip if needed.)
-</p>
-<cml:text name="response_s2_nums" label="Numbers" class="" instructions="Please enter the numbers spoken at the end of the clip with no spaces, e.g. 12" default="" validates="required integer" gold="s2_nums"/>
-<cml:textarea name="response_s2_desc" label="Descriptive tags" class="" validates="required" default="" instructions="Please enter a few words to describe this sound, separate by commas, e.g. &quot;bird, chirp, outdoors, loud, pleasant&quot;"/>
-<cml:ratings name="response_s2_sim" class="" from="Completely different" to="Exactly the same" label="Similarity to Test clip" instructions="Please rate how similar this source clip is to the test clip." points="5" validates="required" gold="s2_sim"/>
-
-<hr/>
-
-<h1>Source 3</h1>
-<p>
-    <a target="_blank" href="https://envmixer.s3.amazonaws.com/simple-182085/{{s3_hash}}.mp3" title="Play source 3 clip." class="sm2_button">https://envmixer.s3.amazonaws.com/simple-182085/{{s3_hash}}.mp3</a> Play Source 3 clip.
-    &#160;&#160;&#160;&#160;
-    (<a target="_blank" href="https://envmixer.s3.amazonaws.com/simple-182085/{{test_hash}}.mp3" title="Play test clip." class="sm2_button">https://envmixer.s3.amazonaws.com/simple-182085/{{test_hash}}.mp3</a> Repeat test clip if needed.)
-</p>
-<cml:text name="response_s3_nums" label="Numbers" class="" instructions="Please enter the numbers spoken at the end of the clip with no spaces, e.g. 12" default="" validates="required integer" gold="s3_nums"/>
-<cml:textarea name="response_s3_desc" label="Descriptive tags" class="" validates="required" default="" instructions="Please enter a few words to describe this sound, separate by commas, e.g. &quot;bird, chirp, outdoors, loud, pleasant&quot;"/>
-<cml:ratings name="response_s3_sim" class="" from="Completely different" to="Exactly the same" label="Similarity to Test clip" instructions="Please rate how similar this source clip is to the test clip." points="5" validates="required" gold="s3_sim"/>

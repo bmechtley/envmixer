@@ -46,14 +46,12 @@ import GrainTrain as gt
 from Recording import Recording
 from barycentric import lattice, baryedges, bary2cart
 
-
-
 def make_tones(freqs, duration=1.0, amplitude=1.0, rate=44100):
     tonelen = duration * rate
 
     tones = [Recording() for i in range(len(freqs))]
 
-    tonefunc =lambda x: np.sin(x * 2) * np.fmod(x, 2 * np.pi) / (2 * np.pi)
+    tonefunc =lambda x: np.sin(x * 2) #* np.fmod(x, 2 * np.pi) / (2 * np.pi)
 
     for i in range(len(tones)):
         tones[i].wav = tonefunc(np.linspace(0, tonelen * 2 - 1, tonelen * 2) * 2 * np.pi * freqs[i] / rate) * amplitude
@@ -94,7 +92,7 @@ def write_simple(config, sounds, name):
         sounds, 
         config['trainlength'], 
         config['simple']['grainlength'], 
-        config['simple']['jumpdev'],
+        config['simple']['maxdist']
     )
     
     train.basename = name
@@ -108,17 +106,7 @@ def write_simple(config, sounds, name):
         train.save_plot()
     
     # 4. Save wavfile.
-    if config['numbers']['count'] > 0:
-        append_nums(
-            train.sound,
-            train.basename,
-            wait=config['numbers']['wait'],
-            npath=config['numbers']['path'],
-            ncount=config['numbers']['count'],
-            namp=config['numbers']['amplitude']
-        )
-    else:
-        sound.filename = train.basename + '.wav'
+    train.sound.filename = train.basename + '.wav'
     
     train.sound.save()
 
@@ -162,19 +150,7 @@ def write_sources(config, sounds, name):
         soundpart.wav = sound.wav[s:e]
         
         outpath = '%s-source-%s' % (name, srcbase)
-        
-        if config['numbers']['count'] > 0:
-            append_nums(
-                soundpart,
-                outpath,
-                wait=config['numbers']['wait'],
-                npath=config['numbers']['path'],
-                ncount=config['numbers']['count'],
-                namp=config['numbers']['amplitude']
-            )
-        else:
-            soundpart.filename = outpath + '.wav'
-        
+        soundpart.filename = outpath + '.wav'
         soundpart.save()
 
 def write_tones(config, sounds, name):    
@@ -183,22 +159,12 @@ def write_tones(config, sounds, name):
         traindur=config['trainlength'],
         tonedur=config['tones']['length'],
         amplitude=config['tones']['amplitude'],
+        fadedur=config['tones']['overlap']
     )
     
     train.basename = name
     sound = train.mixdown(envtype=config['tones']['envelope'])
     sound.wav = sound.wav[:int(config['trainlength'] * config['tones']['rate'])]
-    
-    if config['numbers']['count'] > 0:
-        append_nums(
-            sound, 
-            name, 
-            wait=config['numbers']['wait'], 
-            npath=config['numbers']['path'], 
-            ncount=config['numbers']['count'], 
-            namp=config['numbers']['amplitude']
-        )
-    
     sound.save()
 
 def process_group(intuple):
@@ -236,8 +202,6 @@ def parallel_pool(func, cpus, args):
         map(func, args)
 
 def main():
-    """Just here for PyCharm structure listing :)"""
-    
     parser = argparse.ArgumentParser(description='Create a mixture of two or more sound textures.')
     parser.add_argument('config', type=str, default='config.yaml', help='YAML config file.')
     args = parser.parse_args()
@@ -254,16 +218,10 @@ def main():
     config.setdefault('simple', {})
     config['simple'].setdefault('svl', False)
     config['simple'].setdefault('plot', False)
-    config['simple'].setdefault('jumpdev', 5.0)
+    config['simple'].setdefault('maxdist', 60.0)
     config['simple'].setdefault('trainlength', 15.0)
     config['simple'].setdefault('envelope', 'cosine')
     config['simple'].setdefault('grainlength', [500, 2000])
-    
-    config.setdefault('numbers', {})
-    config['numbers'].setdefault('count', 0)
-    config['numbers'].setdefault('wait', 1.0)
-    config['numbers'].setdefault('amplitude', 1.0)
-    config['numbers'].setdefault('path', 'numbers/')
     
     config.setdefault('tones', {})
     config['tones'].setdefault('count', 0)
@@ -276,6 +234,11 @@ def main():
     if type(config['coordinates']) == dict:
         if config['coordinates'][config['coordinates'].keys()[0]] == 'lattice':
             config['coordinates'] = {config['coordinates'].keys()[0]: lattice(len(config['sources']))}
+        
+        config['coordinates'][config['coordinates'].keys()[0]] = [
+            np.array(coord,dtype=float) / sum(coord) for coord in
+            config['coordinates'][config['coordinates'].keys()[0]]
+        ]
     
     # 2. Load soundwalks.
     sounds = []

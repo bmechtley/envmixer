@@ -17,7 +17,8 @@ tones:
   amplitude: 0.075
   envelope: cosine
   rate: 44100
-  tonelen: .5
+  overlap: .125
+  length: 1
   wait: 1
   freqs: 
       - 65.41
