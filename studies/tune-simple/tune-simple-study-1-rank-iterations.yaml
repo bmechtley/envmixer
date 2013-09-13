@@ -1,6 +1,0 @@
-'combine': 
-  - 'coordinates'
-  - 'simple.grainlength'
-  - 'simple.maxdist'
-'exclude': []
-'jobname': 'tune-simple-study-1-rank-iterations'

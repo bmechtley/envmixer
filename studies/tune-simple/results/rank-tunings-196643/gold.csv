@@ -1,0 +1,808 @@
+_id,_pct_missed,_judgments,_gold_case,_difficulty,_hidden,_contention,_pct_contested,_which_sound_was_more_realistic,morepc_gold,morepc_gold_reason,rownum,s0_simplegrainlength,s1_simplemaxdist,s0_coordinates,s0_name,s0_mix,s0_simplemaxdist,s1_simplegrainlength,s1_name,s1_iteration,s1_hash,s0_hash,s1_mix,s1_coordinates,s0_iteration,jobname,_golden
+283054162,0.25,4,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,360,None,30,None,mp3/mix-tones-iteration-03.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-30.mp3,03,e511237a89235dead47051afedcf2b06,d6586c064366081bc03656b73da40eb4,simple,0.00_0.00_1.00,03,tune-simple-study-2-1-intracoord,True
+283054163,0.12,8,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,361,0.50_1.00,30,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-30.mp3,03,e511237a89235dead47051afedcf2b06,e511237a89235dead47051afedcf2b06,simple,0.00_0.00_1.00,03,tune-simple-study-2-1-intracoord,True
+283054164,0.50,4,,0,false,"",0.0,"s1
+null
+same
+s0",s1,Sound 1 is obviously a series of synthesized tones.,362,None,15,None,mp3/mix-tones-iteration-02.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-15.mp3,04,ef7bcc9362c41758b98ca29543ee9599,a12a927747db44ef0122d0ecc867ad67,simple,0.00_0.00_1.00,02,tune-simple-study-2-1-intracoord,True
+283054165,0.20,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,363,0.50_1.00,15,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-15.mp3,04,ef7bcc9362c41758b98ca29543ee9599,ef7bcc9362c41758b98ca29543ee9599,simple,0.00_0.00_1.00,04,tune-simple-study-2-1-intracoord,True
+283054166,0.17,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,364,None,5,None,mp3/mix-tones-iteration-01.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-5.mp3,04,1b31c6d31ec8a87e029807d16397747f,0881e99d24a3cb576f8e194c4314ea77,simple,0.00_0.00_1.00,01,tune-simple-study-2-1-intracoord,True
+283054167,0.00,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,365,0.50_1.00,5,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-5.mp3,04,1b31c6d31ec8a87e029807d16397747f,1b31c6d31ec8a87e029807d16397747f,simple,0.00_0.00_1.00,04,tune-simple-study-2-1-intracoord,True
+283054168,0.00,3,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,366,1.00_2.00,None,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-03.mp3,03,d6586c064366081bc03656b73da40eb4,efbf1a3f1b2d0abd794438ea171ba9e1,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054169,0.00,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,367,1.00_2.00,15,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,00,efbf1a3f1b2d0abd794438ea171ba9e1,efbf1a3f1b2d0abd794438ea171ba9e1,simple,0.00_0.00_1.00,00,tune-simple-study-2-1-intracoord,True
+283054170,0.25,4,,0,false,"",0.0,"s1
+null
+s0
+same",s1,Sound 1 is obviously a series of synthesized tones.,368,None,30,None,mp3/mix-tones-iteration-02.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,03,52d04de2e3d78ca343186e9a6aaa4152,a12a927747db44ef0122d0ecc867ad67,simple,0.00_0.00_1.00,02,tune-simple-study-2-1-intracoord,True
+283054171,0.00,3,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,369,1.00_2.00,30,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,03,52d04de2e3d78ca343186e9a6aaa4152,52d04de2e3d78ca343186e9a6aaa4152,simple,0.00_0.00_1.00,03,tune-simple-study-2-1-intracoord,True
+283054172,0.00,4,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,370,None,5,None,mp3/mix-tones-iteration-04.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,03,384d6089998b4fb4b668579b8f1a8c0a,dcddb696d2dbff2d47c4ab016491afef,simple,0.00_0.00_1.00,04,tune-simple-study-2-1-intracoord,True
+283054173,0.00,3,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,371,1.00_2.00,5,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,03,384d6089998b4fb4b668579b8f1a8c0a,384d6089998b4fb4b668579b8f1a8c0a,simple,0.00_0.00_1.00,03,tune-simple-study-2-1-intracoord,True
+283054174,0.00,2,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,372,2.00_4.00,None,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-02.mp3,02,a12a927747db44ef0122d0ecc867ad67,dbbad57da10f5d284c09ad71e1333007,tones,None,01,tune-simple-study-2-1-intracoord,True
+283054175,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,373,2.00_4.00,15,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-15.mp3,01,dbbad57da10f5d284c09ad71e1333007,dbbad57da10f5d284c09ad71e1333007,simple,0.00_0.00_1.00,01,tune-simple-study-2-1-intracoord,True
+283054176,0.67,3,,0,false,"",0.0,"same
+null
+s1
+s0",s1,Sound 1 is obviously a series of synthesized tones.,374,None,30,None,mp3/mix-tones-iteration-02.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-30.mp3,02,4d197d79cf4c61e067685162b704d1e9,a12a927747db44ef0122d0ecc867ad67,simple,0.00_0.00_1.00,02,tune-simple-study-2-1-intracoord,True
+283054177,0.50,10,,0,false,"",0.0,"same
+s1
+s0
+null","same
+null",Sounds are the same.,375,2.00_4.00,30,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-30.mp3,02,4d197d79cf4c61e067685162b704d1e9,4d197d79cf4c61e067685162b704d1e9,simple,0.00_0.00_1.00,02,tune-simple-study-2-1-intracoord,True
+283054178,0.00,2,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,376,2.00_4.00,None,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,030959fc8f48589985ad721e06b5298a,tones,None,03,tune-simple-study-2-1-intracoord,True
+283054179,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,377,2.00_4.00,5,0.00_0.00_1.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.00_0.00_1.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-5.mp3,03,030959fc8f48589985ad721e06b5298a,030959fc8f48589985ad721e06b5298a,simple,0.00_0.00_1.00,03,tune-simple-study-2-1-intracoord,True
+283054180,0.50,4,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,378,0.50_1.00,None,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-04.mp3,04,dcddb696d2dbff2d47c4ab016491afef,f0364e1d1ba5906ed7d03d59eccc139e,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054181,0.00,8,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,379,0.50_1.00,30,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-30.mp3,00,f0364e1d1ba5906ed7d03d59eccc139e,f0364e1d1ba5906ed7d03d59eccc139e,simple,0.00_1.00_0.00,00,tune-simple-study-2-1-intracoord,True
+283054182,0.25,8,,0,false,"",0.0,"s1
+s0
+same
+null",s1,Sound 1 is obviously a series of synthesized tones.,380,None,5,None,mp3/mix-tones-iteration-00.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,00,b6428dd541bed99c28fd8f4fdd973b50,0b1f9635282b5445671290fe7205e2ac,simple,0.00_1.00_0.00,00,tune-simple-study-2-1-intracoord,True
+283054183,0.00,6,,0,false,"",0.0,"same
+null
+s0
+s1","same
+null",Sounds are the same.,381,0.50_1.00,5,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,00,b6428dd541bed99c28fd8f4fdd973b50,b6428dd541bed99c28fd8f4fdd973b50,simple,0.00_1.00_0.00,00,tune-simple-study-2-1-intracoord,True
+283054184,0.33,6,,0,false,"",0.0,"s0
+s1
+null
+same",s0,Sound 2 is obviously a series of synthesized tones.,382,0.50_1.00,None,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-04.mp3,04,dcddb696d2dbff2d47c4ab016491afef,0219932f948a3247ed485c45549ebd82,tones,None,01,tune-simple-study-2-1-intracoord,True
+283054185,0.17,6,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,383,0.50_1.00,15,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,01,0219932f948a3247ed485c45549ebd82,0219932f948a3247ed485c45549ebd82,simple,0.00_1.00_0.00,01,tune-simple-study-2-1-intracoord,True
+283054186,0.11,9,,0,false,"",0.0,"s1
+null
+s0
+same",s1,Sound 1 is obviously a series of synthesized tones.,384,None,30,None,mp3/mix-tones-iteration-02.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-30.mp3,01,c3f6b4d4778269803f199bbc9e3ba0bd,a12a927747db44ef0122d0ecc867ad67,simple,0.00_1.00_0.00,02,tune-simple-study-2-1-intracoord,True
+283054187,0.00,6,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,385,1.00_2.00,30,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-30.mp3,01,c3f6b4d4778269803f199bbc9e3ba0bd,c3f6b4d4778269803f199bbc9e3ba0bd,simple,0.00_1.00_0.00,01,tune-simple-study-2-1-intracoord,True
+283054188,0.25,4,,0,false,"",0.0,"s1
+null
+s0
+same",s1,Sound 1 is obviously a series of synthesized tones.,386,None,15,None,mp3/mix-tones-iteration-04.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,02,73682dd4c1d77ce6270c9472d82f5531,dcddb696d2dbff2d47c4ab016491afef,simple,0.00_1.00_0.00,04,tune-simple-study-2-1-intracoord,True
+283054189,0.00,9,,0,false,"",0.0,"same
+null
+s0
+s1","same
+null",Sounds are the same.,387,1.00_2.00,15,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,02,73682dd4c1d77ce6270c9472d82f5531,73682dd4c1d77ce6270c9472d82f5531,simple,0.00_1.00_0.00,02,tune-simple-study-2-1-intracoord,True
+283054190,0.25,8,,0,false,"",0.0,"s0
+s1
+null
+same",s0,Sound 2 is obviously a series of synthesized tones.,388,1.00_2.00,None,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,4eeda00e82592843ae4b458c3f4fa4eb,tones,None,04,tune-simple-study-2-1-intracoord,True
+283054191,0.25,8,,0,false,"",0.0,"same
+s0
+s1
+null","same
+null",Sounds are the same.,389,1.00_2.00,5,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,04,4eeda00e82592843ae4b458c3f4fa4eb,4eeda00e82592843ae4b458c3f4fa4eb,simple,0.00_1.00_0.00,04,tune-simple-study-2-1-intracoord,True
+283054192,0.50,6,,0,false,"",0.0,"s1
+s0
+null
+same",s0,Sound 2 is obviously a series of synthesized tones.,390,2.00_4.00,None,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-02.mp3,02,a12a927747db44ef0122d0ecc867ad67,9c51371bc88822d8353421bf83a9d8f6,tones,None,02,tune-simple-study-2-1-intracoord,True
+283054193,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,391,2.00_4.00,15,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,02,9c51371bc88822d8353421bf83a9d8f6,9c51371bc88822d8353421bf83a9d8f6,simple,0.00_1.00_0.00,02,tune-simple-study-2-1-intracoord,True
+283054194,0.17,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,392,None,30,None,mp3/mix-tones-iteration-04.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-30.mp3,03,72088d18393de361e5afdb46b743c557,dcddb696d2dbff2d47c4ab016491afef,simple,0.00_1.00_0.00,04,tune-simple-study-2-1-intracoord,True
+283054195,0.22,9,,0,false,"",0.0,"same
+s0
+s1
+null","same
+null",Sounds are the same.,393,2.00_4.00,30,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-30.mp3,03,72088d18393de361e5afdb46b743c557,72088d18393de361e5afdb46b743c557,simple,0.00_1.00_0.00,03,tune-simple-study-2-1-intracoord,True
+283054196,0.00,4,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,394,None,5,None,mp3/mix-tones-iteration-01.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-5.mp3,03,22bf295056ea2a5a126896d1502185e0,0881e99d24a3cb576f8e194c4314ea77,simple,0.00_1.00_0.00,01,tune-simple-study-2-1-intracoord,True
+283054197,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,395,2.00_4.00,5,0.00_1.00_0.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.00_1.00_0.00-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-5.mp3,03,22bf295056ea2a5a126896d1502185e0,22bf295056ea2a5a126896d1502185e0,simple,0.00_1.00_0.00,03,tune-simple-study-2-1-intracoord,True
+283054198,0.00,3,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,396,0.50_1.00,None,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-03.mp3,03,d6586c064366081bc03656b73da40eb4,5ff251bcc9fd1cda4149d294dcf373c4,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054199,0.20,5,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,397,0.50_1.00,5,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,00,5ff251bcc9fd1cda4149d294dcf373c4,5ff251bcc9fd1cda4149d294dcf373c4,simple,0.11_0.44_0.44,00,tune-simple-study-2-1-intracoord,True
+283054200,0.25,4,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,398,None,15,None,mp3/mix-tones-iteration-00.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,01,bdb2ae55b6e3a792aeee38154af9fe33,0b1f9635282b5445671290fe7205e2ac,simple,0.11_0.44_0.44,00,tune-simple-study-2-1-intracoord,True
+283054201,0.33,6,,0,false,"",0.1667,"same
+s0
+null
+s1","same
+null",Sounds are the same.,399,0.50_1.00,15,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,01,bdb2ae55b6e3a792aeee38154af9fe33,bdb2ae55b6e3a792aeee38154af9fe33,simple,0.11_0.44_0.44,01,tune-simple-study-2-1-intracoord,True
+283054202,0.00,7,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,400,None,30,None,mp3/mix-tones-iteration-04.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,02,a919e38aac37c4e6da29e0acdfb80a73,dcddb696d2dbff2d47c4ab016491afef,simple,0.11_0.44_0.44,04,tune-simple-study-2-1-intracoord,True
+283054203,0.20,5,,0,false,"",0.0,"same
+null
+s0
+s1","same
+null",Sounds are the same.,401,0.50_1.00,30,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,02,a919e38aac37c4e6da29e0acdfb80a73,a919e38aac37c4e6da29e0acdfb80a73,simple,0.11_0.44_0.44,02,tune-simple-study-2-1-intracoord,True
+283054204,0.33,3,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,402,None,30,None,mp3/mix-tones-iteration-03.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-30.mp3,00,6275814a3483508b6d9be7b017257680,d6586c064366081bc03656b73da40eb4,simple,0.11_0.44_0.44,03,tune-simple-study-2-1-intracoord,True
+283054205,0.14,7,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,403,1.00_2.00,30,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-30.mp3,00,6275814a3483508b6d9be7b017257680,6275814a3483508b6d9be7b017257680,simple,0.11_0.44_0.44,00,tune-simple-study-2-1-intracoord,True
+283054206,0.00,4,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,404,None,5,None,mp3/mix-tones-iteration-00.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-5.mp3,02,7e339c6a35a76eb8c2b4c42b277260bb,0b1f9635282b5445671290fe7205e2ac,simple,0.11_0.44_0.44,00,tune-simple-study-2-1-intracoord,True
+283054207,0.25,8,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,405,1.00_2.00,5,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-5.mp3,02,7e339c6a35a76eb8c2b4c42b277260bb,7e339c6a35a76eb8c2b4c42b277260bb,simple,0.11_0.44_0.44,02,tune-simple-study-2-1-intracoord,True
+283054208,0.00,6,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,406,1.00_2.00,None,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-04.mp3,04,dcddb696d2dbff2d47c4ab016491afef,635a18bff1e849103bbf30fc65803718,tones,None,04,tune-simple-study-2-1-intracoord,True
+283054209,0.25,4,,0,false,"",0.25,"same
+s0
+null
+s1","same
+null",Sounds are the same.,407,1.00_2.00,15,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-15.mp3,04,635a18bff1e849103bbf30fc65803718,635a18bff1e849103bbf30fc65803718,simple,0.11_0.44_0.44,04,tune-simple-study-2-1-intracoord,True
+283054210,0.00,5,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,408,None,30,None,mp3/mix-tones-iteration-03.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-30.mp3,02,d6f30e2acf4ff79d6295076e0770831c,d6586c064366081bc03656b73da40eb4,simple,0.11_0.44_0.44,03,tune-simple-study-2-1-intracoord,True
+283054211,0.00,3,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,409,2.00_4.00,30,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-30.mp3,02,d6f30e2acf4ff79d6295076e0770831c,d6f30e2acf4ff79d6295076e0770831c,simple,0.11_0.44_0.44,02,tune-simple-study-2-1-intracoord,True
+283054212,0.10,10,,0,false,"",0.0,"s0
+s1
+null
+same",s0,Sound 2 is obviously a series of synthesized tones.,410,2.00_4.00,None,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,ea132160f5a18244589d0fa8adab5af3,tones,None,02,tune-simple-study-2-1-intracoord,True
+283054213,0.14,7,,0,false,"",0.1429,"same
+s0
+null
+s1","same
+null",Sounds are the same.,411,2.00_4.00,5,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,02,ea132160f5a18244589d0fa8adab5af3,ea132160f5a18244589d0fa8adab5af3,simple,0.11_0.44_0.44,02,tune-simple-study-2-1-intracoord,True
+283054214,0.00,8,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,412,2.00_4.00,None,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-02.mp3,02,a12a927747db44ef0122d0ecc867ad67,bc76b087e8c87eedb8cfc3121c5fdd07,tones,None,03,tune-simple-study-2-1-intracoord,True
+283054215,0.00,6,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,413,2.00_4.00,15,0.11_0.44_0.44,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.11_0.44_0.44-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,03,bc76b087e8c87eedb8cfc3121c5fdd07,bc76b087e8c87eedb8cfc3121c5fdd07,simple,0.11_0.44_0.44,03,tune-simple-study-2-1-intracoord,True
+283054216,0.20,10,,0,false,"",0.0,"s0
+s1
+null
+same",s0,Sound 2 is obviously a series of synthesized tones.,414,0.50_1.00,None,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,46566b2928cb80bade59a809d3b2b905,tones,None,01,tune-simple-study-2-1-intracoord,True
+283054217,0.00,3,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,415,0.50_1.00,5,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-5.mp3,01,46566b2928cb80bade59a809d3b2b905,46566b2928cb80bade59a809d3b2b905,simple,0.17_0.17_0.67,01,tune-simple-study-2-1-intracoord,True
+283054218,0.00,8,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,416,0.50_1.00,None,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-02.mp3,02,a12a927747db44ef0122d0ecc867ad67,421b5aeb22c6250d67a4f41b5c28834d,tones,None,02,tune-simple-study-2-1-intracoord,True
+283054219,0.00,2,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,417,0.50_1.00,15,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-15.mp3,02,421b5aeb22c6250d67a4f41b5c28834d,421b5aeb22c6250d67a4f41b5c28834d,simple,0.17_0.17_0.67,02,tune-simple-study-2-1-intracoord,True
+283054220,0.00,8,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,418,0.50_1.00,None,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,ea33531e981bbe562ee3b80444b62fe1,tones,None,02,tune-simple-study-2-1-intracoord,True
+283054221,0.25,4,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,419,0.50_1.00,30,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,02,ea33531e981bbe562ee3b80444b62fe1,ea33531e981bbe562ee3b80444b62fe1,simple,0.17_0.17_0.67,02,tune-simple-study-2-1-intracoord,True
+283054222,0.00,5,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,420,None,15,None,mp3/mix-tones-iteration-01.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,02,c7d012c003f9a36d4e2f01ba82bd09c9,0881e99d24a3cb576f8e194c4314ea77,simple,0.17_0.17_0.67,01,tune-simple-study-2-1-intracoord,True
+283054223,0.00,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,421,1.00_2.00,15,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,02,c7d012c003f9a36d4e2f01ba82bd09c9,c7d012c003f9a36d4e2f01ba82bd09c9,simple,0.17_0.17_0.67,02,tune-simple-study-2-1-intracoord,True
+283054224,0.00,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,422,None,30,None,mp3/mix-tones-iteration-00.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,03,efe88c82f63bfa6cf85ba10142b3da7e,0b1f9635282b5445671290fe7205e2ac,simple,0.17_0.17_0.67,00,tune-simple-study-2-1-intracoord,True
+283054225,0.18,11,,0,false,"",0.0,"same
+s0
+s1
+null","same
+null",Sounds are the same.,423,1.00_2.00,30,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,03,efe88c82f63bfa6cf85ba10142b3da7e,efe88c82f63bfa6cf85ba10142b3da7e,simple,0.17_0.17_0.67,03,tune-simple-study-2-1-intracoord,True
+283054226,0.17,6,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,424,1.00_2.00,None,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,be2cf5eb4e4319c76483d8cb530a56ef,tones,None,04,tune-simple-study-2-1-intracoord,True
+283054227,0.20,5,,0,false,"",0.0,"same
+null
+s1
+s0","same
+null",Sounds are the same.,425,1.00_2.00,5,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,04,be2cf5eb4e4319c76483d8cb530a56ef,be2cf5eb4e4319c76483d8cb530a56ef,simple,0.17_0.17_0.67,04,tune-simple-study-2-1-intracoord,True
+283054228,0.00,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,426,None,15,None,mp3/mix-tones-iteration-03.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-15.mp3,00,8e87253863c3798583757379b9bad1d1,d6586c064366081bc03656b73da40eb4,simple,0.17_0.17_0.67,03,tune-simple-study-2-1-intracoord,True
+283054229,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,427,2.00_4.00,15,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-15.mp3,00,8e87253863c3798583757379b9bad1d1,8e87253863c3798583757379b9bad1d1,simple,0.17_0.17_0.67,00,tune-simple-study-2-1-intracoord,True
+283054230,0.00,3,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,428,2.00_4.00,None,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-02.mp3,02,a12a927747db44ef0122d0ecc867ad67,438dca2d25145eccef0983fd01d123f8,tones,None,02,tune-simple-study-2-1-intracoord,True
+283054231,0.33,6,,0,false,"",0.0,"same
+s0
+s1
+null","same
+null",Sounds are the same.,429,2.00_4.00,5,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,02,438dca2d25145eccef0983fd01d123f8,438dca2d25145eccef0983fd01d123f8,simple,0.17_0.17_0.67,02,tune-simple-study-2-1-intracoord,True
+283054232,0.20,5,,0,false,"",0.0,"s1
+null
+s0
+same",s1,Sound 1 is obviously a series of synthesized tones.,430,None,30,None,mp3/mix-tones-iteration-00.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-30.mp3,04,856292180a6b839304bbeb51a3f0fdc1,0b1f9635282b5445671290fe7205e2ac,simple,0.17_0.17_0.67,00,tune-simple-study-2-1-intracoord,True
+283054233,0.00,0,,0,false,"",0,"","same
+null",Sounds are the same.,431,2.00_4.00,30,0.17_0.17_0.67,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.17_0.67-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-30.mp3,04,856292180a6b839304bbeb51a3f0fdc1,856292180a6b839304bbeb51a3f0fdc1,simple,0.17_0.17_0.67,04,tune-simple-study-2-1-intracoord,True
+283054234,0.14,7,,0,false,"",0.0,"s0
+null
+same
+s1",s0,Sound 2 is obviously a series of synthesized tones.,432,0.50_1.00,None,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,3a1868af43431d2ba992cde3b66a3599,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054235,0.12,8,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,433,0.50_1.00,15,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-15.mp3,00,3a1868af43431d2ba992cde3b66a3599,3a1868af43431d2ba992cde3b66a3599,simple,0.17_0.67_0.17,00,tune-simple-study-2-1-intracoord,True
+283054236,0.00,1,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,434,None,30,None,mp3/mix-tones-iteration-04.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,02,a204fa94175c35a7eeb39421e92e4c40,dcddb696d2dbff2d47c4ab016491afef,simple,0.17_0.67_0.17,04,tune-simple-study-2-1-intracoord,True
+283054237,0.17,6,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,435,0.50_1.00,30,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-30.mp3,02,a204fa94175c35a7eeb39421e92e4c40,a204fa94175c35a7eeb39421e92e4c40,simple,0.17_0.67_0.17,02,tune-simple-study-2-1-intracoord,True
+283054238,0.12,8,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,436,None,5,None,mp3/mix-tones-iteration-01.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-5.mp3,04,5d4fc09c318849799e3a7a8d81cf6f0c,0881e99d24a3cb576f8e194c4314ea77,simple,0.17_0.67_0.17,01,tune-simple-study-2-1-intracoord,True
+283054239,0.20,5,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,437,0.50_1.00,5,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-0.50_1.00-iteration-04-simple.maxdist-5.mp3,04,5d4fc09c318849799e3a7a8d81cf6f0c,5d4fc09c318849799e3a7a8d81cf6f0c,simple,0.17_0.67_0.17,04,tune-simple-study-2-1-intracoord,True
+283054240,0.00,2,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,438,1.00_2.00,None,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,7f5ef771ba7ea260bbca600f89908ac5,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054241,0.12,8,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,439,1.00_2.00,30,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-30.mp3,00,7f5ef771ba7ea260bbca600f89908ac5,7f5ef771ba7ea260bbca600f89908ac5,simple,0.17_0.67_0.17,00,tune-simple-study-2-1-intracoord,True
+283054242,0.00,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,440,None,15,None,mp3/mix-tones-iteration-02.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-15.mp3,03,ded67b8a71c7d84e938d495ee3370593,a12a927747db44ef0122d0ecc867ad67,simple,0.17_0.67_0.17,02,tune-simple-study-2-1-intracoord,True
+283054243,0.57,7,,0,false,"",0.0,"same
+s1
+s0
+null","same
+null",Sounds are the same.,441,1.00_2.00,15,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-15.mp3,03,ded67b8a71c7d84e938d495ee3370593,ded67b8a71c7d84e938d495ee3370593,simple,0.17_0.67_0.17,03,tune-simple-study-2-1-intracoord,True
+283054244,0.00,5,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,442,None,5,None,mp3/mix-tones-iteration-02.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,03,e1c0b414aa4dcf648c4d70a4d44d3267,a12a927747db44ef0122d0ecc867ad67,simple,0.17_0.67_0.17,02,tune-simple-study-2-1-intracoord,True
+283054245,0.00,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,443,1.00_2.00,5,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,03,e1c0b414aa4dcf648c4d70a4d44d3267,e1c0b414aa4dcf648c4d70a4d44d3267,simple,0.17_0.67_0.17,03,tune-simple-study-2-1-intracoord,True
+283054246,0.00,8,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,444,None,15,None,mp3/mix-tones-iteration-02.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-15.mp3,00,4fc2d32d9fac89489c797bd594c20ae5,a12a927747db44ef0122d0ecc867ad67,simple,0.17_0.67_0.17,02,tune-simple-study-2-1-intracoord,True
+283054247,0.00,3,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,445,2.00_4.00,15,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-15.mp3,00,4fc2d32d9fac89489c797bd594c20ae5,4fc2d32d9fac89489c797bd594c20ae5,simple,0.17_0.67_0.17,00,tune-simple-study-2-1-intracoord,True
+283054248,0.00,2,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,446,None,5,None,mp3/mix-tones-iteration-04.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,02,c44868b0468256cb150de9cbed538d20,dcddb696d2dbff2d47c4ab016491afef,simple,0.17_0.67_0.17,04,tune-simple-study-2-1-intracoord,True
+283054249,0.60,5,,0,false,"",0.0,"same
+s0
+s1
+null","same
+null",Sounds are the same.,447,2.00_4.00,5,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,02,c44868b0468256cb150de9cbed538d20,c44868b0468256cb150de9cbed538d20,simple,0.17_0.67_0.17,02,tune-simple-study-2-1-intracoord,True
+283054250,0.17,6,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,448,2.00_4.00,None,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,4914ac5b07c21847ed72c803bb6efe47,tones,None,03,tune-simple-study-2-1-intracoord,True
+283054251,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,449,2.00_4.00,30,0.17_0.67_0.17,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.17_0.67_0.17-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-30.mp3,03,4914ac5b07c21847ed72c803bb6efe47,4914ac5b07c21847ed72c803bb6efe47,simple,0.17_0.67_0.17,03,tune-simple-study-2-1-intracoord,True
+283054252,0.14,7,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,450,None,15,None,mp3/mix-tones-iteration-02.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,01,d92d50c676d9e5eb478f33b784073e16,a12a927747db44ef0122d0ecc867ad67,simple,0.33_0.33_0.33,02,tune-simple-study-2-1-intracoord,True
+283054253,0.00,4,,0,false,"",0.0,"same
+null
+s0
+s1","same
+null",Sounds are the same.,451,0.50_1.00,15,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,01,d92d50c676d9e5eb478f33b784073e16,d92d50c676d9e5eb478f33b784073e16,simple,0.33_0.33_0.33,01,tune-simple-study-2-1-intracoord,True
+283054254,0.00,7,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,452,None,30,None,mp3/mix-tones-iteration-03.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,01,9d0b70c265f398cc4df6669a0fbb3569,d6586c064366081bc03656b73da40eb4,simple,0.33_0.33_0.33,03,tune-simple-study-2-1-intracoord,True
+283054255,0.20,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,453,0.50_1.00,30,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,01,9d0b70c265f398cc4df6669a0fbb3569,9d0b70c265f398cc4df6669a0fbb3569,simple,0.33_0.33_0.33,01,tune-simple-study-2-1-intracoord,True
+283054256,0.33,6,,0,false,"",0.1667,"s0
+same
+s1
+null",s0,Sound 2 is obviously a series of synthesized tones.,454,0.50_1.00,None,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,27989362d51aadb06666100b95435bd2,tones,None,03,tune-simple-study-2-1-intracoord,True
+283054257,0.11,9,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,455,0.50_1.00,5,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-5.mp3,03,27989362d51aadb06666100b95435bd2,27989362d51aadb06666100b95435bd2,simple,0.33_0.33_0.33,03,tune-simple-study-2-1-intracoord,True
+283054258,0.00,2,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,456,None,15,None,mp3/mix-tones-iteration-03.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,00,19eff24d6f12fc2cf3bcfbde5d9e1efa,d6586c064366081bc03656b73da40eb4,simple,0.33_0.33_0.33,03,tune-simple-study-2-1-intracoord,True
+283054259,0.12,8,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,457,1.00_2.00,15,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,00,19eff24d6f12fc2cf3bcfbde5d9e1efa,19eff24d6f12fc2cf3bcfbde5d9e1efa,simple,0.33_0.33_0.33,00,tune-simple-study-2-1-intracoord,True
+283054260,0.00,5,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,458,1.00_2.00,None,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,0a62fc459a75c37b1322bb86cc958fff,tones,None,01,tune-simple-study-2-1-intracoord,True
+283054261,0.29,7,,0,false,"",0.0,"same
+s0
+s1
+null","same
+null",Sounds are the same.,459,1.00_2.00,5,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-5.mp3,01,0a62fc459a75c37b1322bb86cc958fff,0a62fc459a75c37b1322bb86cc958fff,simple,0.33_0.33_0.33,01,tune-simple-study-2-1-intracoord,True
+283054262,0.12,8,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,460,1.00_2.00,None,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-02.mp3,02,a12a927747db44ef0122d0ecc867ad67,32b0c578b3645ce141d1852acff3c6c4,tones,None,04,tune-simple-study-2-1-intracoord,True
+283054263,0.75,4,,0,false,"",0.25,"s1
+same
+null
+s0","same
+null",Sounds are the same.,461,1.00_2.00,30,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,04,32b0c578b3645ce141d1852acff3c6c4,32b0c578b3645ce141d1852acff3c6c4,simple,0.33_0.33_0.33,04,tune-simple-study-2-1-intracoord,True
+283054264,0.00,6,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,462,2.00_4.00,None,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,022c82a7c4450c39d99712333d40f985,tones,None,01,tune-simple-study-2-1-intracoord,True
+283054265,0.57,7,,0,false,"",0.0,"same
+s1
+s0
+null","same
+null",Sounds are the same.,463,2.00_4.00,5,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-5.mp3,01,022c82a7c4450c39d99712333d40f985,022c82a7c4450c39d99712333d40f985,simple,0.33_0.33_0.33,01,tune-simple-study-2-1-intracoord,True
+283054266,0.50,6,,0,false,"",0.0,"s1
+same
+s0
+null",s1,Sound 1 is obviously a series of synthesized tones.,464,None,15,None,mp3/mix-tones-iteration-01.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-15.mp3,04,be767d26309d94da8a65362a6454b956,0881e99d24a3cb576f8e194c4314ea77,simple,0.33_0.33_0.33,01,tune-simple-study-2-1-intracoord,True
+283054267,0.40,5,,0,false,"",0.2,"same
+s0
+s1
+null","same
+null",Sounds are the same.,465,2.00_4.00,15,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-15.mp3,04,be767d26309d94da8a65362a6454b956,be767d26309d94da8a65362a6454b956,simple,0.33_0.33_0.33,04,tune-simple-study-2-1-intracoord,True
+283054268,0.00,3,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,466,2.00_4.00,None,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,e15b5abf5f5f7f117a0b77e7c8066dbf,tones,None,04,tune-simple-study-2-1-intracoord,True
+283054269,0.25,4,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,467,2.00_4.00,30,0.33_0.33_0.33,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.33_0.33_0.33-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-30.mp3,04,e15b5abf5f5f7f117a0b77e7c8066dbf,e15b5abf5f5f7f117a0b77e7c8066dbf,simple,0.33_0.33_0.33,04,tune-simple-study-2-1-intracoord,True
+283054270,0.12,8,,0,false,"",0.0,"s1
+null
+s0
+same",s1,Sound 1 is obviously a series of synthesized tones.,468,None,30,None,mp3/mix-tones-iteration-00.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,01,ca64137d13daaf8a3e712104d0abc25e,0b1f9635282b5445671290fe7205e2ac,simple,0.44_0.11_0.44,00,tune-simple-study-2-1-intracoord,True
+283054271,0.25,8,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,469,0.50_1.00,30,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,01,ca64137d13daaf8a3e712104d0abc25e,ca64137d13daaf8a3e712104d0abc25e,simple,0.44_0.11_0.44,01,tune-simple-study-2-1-intracoord,True
+283054272,0.00,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,470,None,15,None,mp3/mix-tones-iteration-00.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-15.mp3,02,d5c5cf848a3c1808f5f6b14679710de5,0b1f9635282b5445671290fe7205e2ac,simple,0.44_0.11_0.44,00,tune-simple-study-2-1-intracoord,True
+283054273,0.17,6,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,471,0.50_1.00,15,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-15.mp3,02,d5c5cf848a3c1808f5f6b14679710de5,d5c5cf848a3c1808f5f6b14679710de5,simple,0.44_0.11_0.44,02,tune-simple-study-2-1-intracoord,True
+283054274,0.00,6,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,472,0.50_1.00,None,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,9bf86ac51475848330df5cb82d443878,tones,None,02,tune-simple-study-2-1-intracoord,True
+283054275,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,473,0.50_1.00,5,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-5.mp3,02,9bf86ac51475848330df5cb82d443878,9bf86ac51475848330df5cb82d443878,simple,0.44_0.11_0.44,02,tune-simple-study-2-1-intracoord,True
+283054276,0.20,5,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,474,None,15,None,mp3/mix-tones-iteration-04.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-15.mp3,01,be1baac3842008ff3bb6c418dd62d3f7,dcddb696d2dbff2d47c4ab016491afef,simple,0.44_0.11_0.44,04,tune-simple-study-2-1-intracoord,True
+283054277,0.00,2,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,475,1.00_2.00,15,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-15.mp3,01,be1baac3842008ff3bb6c418dd62d3f7,be1baac3842008ff3bb6c418dd62d3f7,simple,0.44_0.11_0.44,01,tune-simple-study-2-1-intracoord,True
+283054278,0.00,6,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,476,1.00_2.00,None,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-03.mp3,03,d6586c064366081bc03656b73da40eb4,d2b269825c60a12a132d76f8393cc6d9,tones,None,03,tune-simple-study-2-1-intracoord,True
+283054279,0.40,5,,0,false,"",0.2,"same
+s0
+s1
+null","same
+null",Sounds are the same.,477,1.00_2.00,5,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-5.mp3,03,d2b269825c60a12a132d76f8393cc6d9,d2b269825c60a12a132d76f8393cc6d9,simple,0.44_0.11_0.44,03,tune-simple-study-2-1-intracoord,True
+283054280,0.14,7,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,478,1.00_2.00,None,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,4a934593e30e7044341ab1625064346a,tones,None,04,tune-simple-study-2-1-intracoord,True
+283054281,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,479,1.00_2.00,30,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,04,4a934593e30e7044341ab1625064346a,4a934593e30e7044341ab1625064346a,simple,0.44_0.11_0.44,04,tune-simple-study-2-1-intracoord,True
+283054282,0.00,2,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,480,2.00_4.00,None,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-03.mp3,03,d6586c064366081bc03656b73da40eb4,fdc31b062565ccd4acbe80b5174711f0,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054283,0.25,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,481,2.00_4.00,5,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-5.mp3,00,fdc31b062565ccd4acbe80b5174711f0,fdc31b062565ccd4acbe80b5174711f0,simple,0.44_0.11_0.44,00,tune-simple-study-2-1-intracoord,True
+283054284,0.00,4,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,482,None,30,None,mp3/mix-tones-iteration-02.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-30.mp3,01,e9924badae6be51bb62b54bc878e2300,a12a927747db44ef0122d0ecc867ad67,simple,0.44_0.11_0.44,02,tune-simple-study-2-1-intracoord,True
+283054285,0.20,10,,0,false,"",0.0,"same
+s0
+s1
+null","same
+null",Sounds are the same.,483,2.00_4.00,30,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-30.mp3,01,e9924badae6be51bb62b54bc878e2300,e9924badae6be51bb62b54bc878e2300,simple,0.44_0.11_0.44,01,tune-simple-study-2-1-intracoord,True
+283054286,0.17,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,484,None,15,None,mp3/mix-tones-iteration-04.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,02,5749aae894c8dc27c6d72d17b0ccfe47,dcddb696d2dbff2d47c4ab016491afef,simple,0.44_0.11_0.44,04,tune-simple-study-2-1-intracoord,True
+283054287,0.00,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,485,2.00_4.00,15,0.44_0.11_0.44,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.11_0.44-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,02,5749aae894c8dc27c6d72d17b0ccfe47,5749aae894c8dc27c6d72d17b0ccfe47,simple,0.44_0.11_0.44,02,tune-simple-study-2-1-intracoord,True
+283054288,0.00,6,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,486,0.50_1.00,None,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-02.mp3,02,a12a927747db44ef0122d0ecc867ad67,750516010956c0a437e8f9fb10a96880,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054289,0.17,6,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,487,0.50_1.00,15,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-15.mp3,00,750516010956c0a437e8f9fb10a96880,750516010956c0a437e8f9fb10a96880,simple,0.44_0.44_0.11,00,tune-simple-study-2-1-intracoord,True
+283054290,0.11,9,,0,false,"",0.0,"s0
+s1
+null
+same",s0,Sound 2 is obviously a series of synthesized tones.,488,0.50_1.00,None,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-03.mp3,03,d6586c064366081bc03656b73da40eb4,f630f043790942d6fb6c957b4efa92e3,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054291,0.33,6,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,489,0.50_1.00,5,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-5.mp3,00,f630f043790942d6fb6c957b4efa92e3,f630f043790942d6fb6c957b4efa92e3,simple,0.44_0.44_0.11,00,tune-simple-study-2-1-intracoord,True
+283054292,0.00,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,490,None,30,None,mp3/mix-tones-iteration-01.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-30.mp3,03,dacc36fc3c083af6acde9efb6befbafb,0881e99d24a3cb576f8e194c4314ea77,simple,0.44_0.44_0.11,01,tune-simple-study-2-1-intracoord,True
+283054293,0.17,6,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,491,0.50_1.00,30,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-30.mp3,03,dacc36fc3c083af6acde9efb6befbafb,dacc36fc3c083af6acde9efb6befbafb,simple,0.44_0.44_0.11,03,tune-simple-study-2-1-intracoord,True
+283054294,0.00,2,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,492,1.00_2.00,None,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-04.mp3,04,dcddb696d2dbff2d47c4ab016491afef,8879a1c290ec8d71a55e8f93255fabaa,tones,None,01,tune-simple-study-2-1-intracoord,True
+283054295,0.43,7,,0,false,"",0.1429,"same
+s1
+s0
+null","same
+null",Sounds are the same.,493,1.00_2.00,15,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-15.mp3,01,8879a1c290ec8d71a55e8f93255fabaa,8879a1c290ec8d71a55e8f93255fabaa,simple,0.44_0.44_0.11,01,tune-simple-study-2-1-intracoord,True
+283054296,0.00,4,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,494,1.00_2.00,None,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-02.mp3,02,a12a927747db44ef0122d0ecc867ad67,a2f2a0f4961dcff6929fc9fbd5da5005,tones,None,01,tune-simple-study-2-1-intracoord,True
+283054297,0.25,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,495,1.00_2.00,5,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-5.mp3,01,a2f2a0f4961dcff6929fc9fbd5da5005,a2f2a0f4961dcff6929fc9fbd5da5005,simple,0.44_0.44_0.11,01,tune-simple-study-2-1-intracoord,True
+283054298,0.00,8,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,496,None,30,None,mp3/mix-tones-iteration-00.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,04,16c6a954b06ce27c2534a0a0cccba2c6,0b1f9635282b5445671290fe7205e2ac,simple,0.44_0.44_0.11,00,tune-simple-study-2-1-intracoord,True
+283054299,0.40,5,,0,false,"",0.0,"same
+s0
+s1
+null","same
+null",Sounds are the same.,497,1.00_2.00,30,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-30.mp3,04,16c6a954b06ce27c2534a0a0cccba2c6,16c6a954b06ce27c2534a0a0cccba2c6,simple,0.44_0.44_0.11,04,tune-simple-study-2-1-intracoord,True
+283054300,0.00,4,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,498,None,30,None,mp3/mix-tones-iteration-03.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-30.mp3,00,06c4750b6e007553891cccec2ffe0267,d6586c064366081bc03656b73da40eb4,simple,0.44_0.44_0.11,03,tune-simple-study-2-1-intracoord,True
+283054301,0.00,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,499,2.00_4.00,30,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-30.mp3,00,06c4750b6e007553891cccec2ffe0267,06c4750b6e007553891cccec2ffe0267,simple,0.44_0.44_0.11,00,tune-simple-study-2-1-intracoord,True
+283054302,0.29,7,,0,false,"",0.0,"s1
+same
+null
+s0",s1,Sound 1 is obviously a series of synthesized tones.,500,None,5,None,mp3/mix-tones-iteration-04.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,02,f1dc33a6d1913034edb2d972c35924a2,dcddb696d2dbff2d47c4ab016491afef,simple,0.44_0.44_0.11,04,tune-simple-study-2-1-intracoord,True
+283054303,0.00,3,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,501,2.00_4.00,5,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,02,f1dc33a6d1913034edb2d972c35924a2,f1dc33a6d1913034edb2d972c35924a2,simple,0.44_0.44_0.11,02,tune-simple-study-2-1-intracoord,True
+283054304,0.00,5,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,502,None,15,None,mp3/mix-tones-iteration-04.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,03,67b337ed141beebb31c9058914e5d870,dcddb696d2dbff2d47c4ab016491afef,simple,0.44_0.44_0.11,04,tune-simple-study-2-1-intracoord,True
+283054305,0.00,4,,0,false,"",0.0,"same
+null
+s0
+s1","same
+null",Sounds are the same.,503,2.00_4.00,15,0.44_0.44_0.11,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.44_0.44_0.11-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,03,67b337ed141beebb31c9058914e5d870,67b337ed141beebb31c9058914e5d870,simple,0.44_0.44_0.11,03,tune-simple-study-2-1-intracoord,True
+283054306,0.00,1,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,504,None,30,None,mp3/mix-tones-iteration-01.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,01,1a821d3e4ec895d6cfd6a74f796f4e29,0881e99d24a3cb576f8e194c4314ea77,simple,0.67_0.17_0.17,01,tune-simple-study-2-1-intracoord,True
+283054307,0.11,9,,0,false,"",0.0,"same
+null
+s1
+s0","same
+null",Sounds are the same.,505,0.50_1.00,30,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-30.mp3,01,1a821d3e4ec895d6cfd6a74f796f4e29,1a821d3e4ec895d6cfd6a74f796f4e29,simple,0.67_0.17_0.17,01,tune-simple-study-2-1-intracoord,True
+283054308,0.14,7,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,506,None,5,None,mp3/mix-tones-iteration-04.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-5.mp3,01,8ea513631d294951fd0d21ed7ae57ea7,dcddb696d2dbff2d47c4ab016491afef,simple,0.67_0.17_0.17,04,tune-simple-study-2-1-intracoord,True
+283054309,0.00,3,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,507,0.50_1.00,5,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-5.mp3,01,8ea513631d294951fd0d21ed7ae57ea7,8ea513631d294951fd0d21ed7ae57ea7,simple,0.67_0.17_0.17,01,tune-simple-study-2-1-intracoord,True
+283054310,0.67,3,,0,false,"",0.0,"s1
+s0
+null
+same",s0,Sound 2 is obviously a series of synthesized tones.,508,0.50_1.00,None,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-01.mp3,01,0881e99d24a3cb576f8e194c4314ea77,2376f3da3e2046dac72429b0422a687a,tones,None,03,tune-simple-study-2-1-intracoord,True
+283054311,0.00,3,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,509,0.50_1.00,15,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-0.50_1.00-iteration-03-simple.maxdist-15.mp3,03,2376f3da3e2046dac72429b0422a687a,2376f3da3e2046dac72429b0422a687a,simple,0.67_0.17_0.17,03,tune-simple-study-2-1-intracoord,True
+283054312,0.00,2,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,510,1.00_2.00,None,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,3d5dc737b49231c3b8366a47c9a6eae6,tones,None,02,tune-simple-study-2-1-intracoord,True
+283054313,0.11,9,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,511,1.00_2.00,15,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-02-simple.maxdist-15.mp3,02,3d5dc737b49231c3b8366a47c9a6eae6,3d5dc737b49231c3b8366a47c9a6eae6,simple,0.67_0.17_0.17,02,tune-simple-study-2-1-intracoord,True
+283054314,0.00,4,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,512,1.00_2.00,None,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,9250ab45987febf76ff5d621e5cc240a,tones,None,03,tune-simple-study-2-1-intracoord,True
+283054315,0.20,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,513,1.00_2.00,30,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-03-simple.maxdist-30.mp3,03,9250ab45987febf76ff5d621e5cc240a,9250ab45987febf76ff5d621e5cc240a,simple,0.67_0.17_0.17,03,tune-simple-study-2-1-intracoord,True
+283054316,0.00,4,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,514,1.00_2.00,None,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-00.mp3,00,0b1f9635282b5445671290fe7205e2ac,eacb5aaf67b693a6e4cd2be4d2f22c1d,tones,None,04,tune-simple-study-2-1-intracoord,True
+283054317,0.20,5,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,515,1.00_2.00,5,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,04,eacb5aaf67b693a6e4cd2be4d2f22c1d,eacb5aaf67b693a6e4cd2be4d2f22c1d,simple,0.67_0.17_0.17,04,tune-simple-study-2-1-intracoord,True
+283054318,0.00,1,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,516,None,30,None,mp3/mix-tones-iteration-03.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-30.mp3,01,3d424bc09e18010939ba3c0016ce3942,d6586c064366081bc03656b73da40eb4,simple,0.67_0.17_0.17,03,tune-simple-study-2-1-intracoord,True
+283054319,0.33,3,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,517,2.00_4.00,30,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-01-simple.maxdist-30.mp3,01,3d424bc09e18010939ba3c0016ce3942,3d424bc09e18010939ba3c0016ce3942,simple,0.67_0.17_0.17,01,tune-simple-study-2-1-intracoord,True
+283054320,0.00,3,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,518,None,15,None,mp3/mix-tones-iteration-04.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,03,e1676801178ed4b862558859c7c4435e,dcddb696d2dbff2d47c4ab016491afef,simple,0.67_0.17_0.17,04,tune-simple-study-2-1-intracoord,True
+283054321,0.14,7,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,519,2.00_4.00,15,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-03-simple.maxdist-15.mp3,03,e1676801178ed4b862558859c7c4435e,e1676801178ed4b862558859c7c4435e,simple,0.67_0.17_0.17,03,tune-simple-study-2-1-intracoord,True
+283054322,0.00,4,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,520,2.00_4.00,None,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-5.mp3,simple,5,None,mp3/mix-tones-iteration-03.mp3,03,d6586c064366081bc03656b73da40eb4,7fa35f14d67eca11eef68dc535f31102,tones,None,04,tune-simple-study-2-1-intracoord,True
+283054323,0.33,6,,0,false,"",0.1667,"same
+s0
+s1
+null","same
+null",Sounds are the same.,521,2.00_4.00,5,0.67_0.17_0.17,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-0.67_0.17_0.17-simple.grainlength-2.00_4.00-iteration-04-simple.maxdist-5.mp3,04,7fa35f14d67eca11eef68dc535f31102,7fa35f14d67eca11eef68dc535f31102,simple,0.67_0.17_0.17,04,tune-simple-study-2-1-intracoord,True
+283054324,0.00,7,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,522,0.50_1.00,None,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-04.mp3,04,dcddb696d2dbff2d47c4ab016491afef,96e75b53ff7cd3d80f585ad5bd992c24,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054325,0.17,6,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,523,0.50_1.00,30,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-30.mp3,simple,30,0.50_1.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-00-simple.maxdist-30.mp3,00,96e75b53ff7cd3d80f585ad5bd992c24,96e75b53ff7cd3d80f585ad5bd992c24,simple,1.00_0.00_0.00,00,tune-simple-study-2-1-intracoord,True
+283054326,0.00,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,524,None,15,None,mp3/mix-tones-iteration-00.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,01,9f37360fcc7532bfa8ae3772fd0ae2cc,0b1f9635282b5445671290fe7205e2ac,simple,1.00_0.00_0.00,00,tune-simple-study-2-1-intracoord,True
+283054327,0.40,5,,0,false,"",0.2,"same
+s0
+null
+s1","same
+null",Sounds are the same.,525,0.50_1.00,15,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,simple,15,0.50_1.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-01-simple.maxdist-15.mp3,01,9f37360fcc7532bfa8ae3772fd0ae2cc,9f37360fcc7532bfa8ae3772fd0ae2cc,simple,1.00_0.00_0.00,01,tune-simple-study-2-1-intracoord,True
+283054328,0.00,4,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,526,None,5,None,mp3/mix-tones-iteration-04.mp3,tones,None,0.50_1.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-5.mp3,02,b3966d828f7eb90bbdfb12f29e1112d9,dcddb696d2dbff2d47c4ab016491afef,simple,1.00_0.00_0.00,04,tune-simple-study-2-1-intracoord,True
+283054329,0.00,5,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,527,0.50_1.00,5,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-5.mp3,simple,5,0.50_1.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-0.50_1.00-iteration-02-simple.maxdist-5.mp3,02,b3966d828f7eb90bbdfb12f29e1112d9,b3966d828f7eb90bbdfb12f29e1112d9,simple,1.00_0.00_0.00,02,tune-simple-study-2-1-intracoord,True
+283054330,0.00,6,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,528,1.00_2.00,None,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,simple,15,None,mp3/mix-tones-iteration-04.mp3,04,dcddb696d2dbff2d47c4ab016491afef,16985dee23b5544bd329f27ea68a4683,tones,None,00,tune-simple-study-2-1-intracoord,True
+283054331,0.12,8,,0,false,"",0.0,"same
+null
+s0
+s1","same
+null",Sounds are the same.,529,1.00_2.00,15,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,simple,15,1.00_2.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-00-simple.maxdist-15.mp3,00,16985dee23b5544bd329f27ea68a4683,16985dee23b5544bd329f27ea68a4683,simple,1.00_0.00_0.00,00,tune-simple-study-2-1-intracoord,True
+283054332,0.00,4,,0,false,"",0.0,"s0
+same
+null
+s1",s0,Sound 2 is obviously a series of synthesized tones.,530,1.00_2.00,None,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-30.mp3,simple,30,None,mp3/mix-tones-iteration-04.mp3,04,dcddb696d2dbff2d47c4ab016491afef,e221b96575784c3e7c5ca11af371e090,tones,None,01,tune-simple-study-2-1-intracoord,True
+283054333,0.50,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,531,1.00_2.00,30,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-30.mp3,simple,30,1.00_2.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-01-simple.maxdist-30.mp3,01,e221b96575784c3e7c5ca11af371e090,e221b96575784c3e7c5ca11af371e090,simple,1.00_0.00_0.00,01,tune-simple-study-2-1-intracoord,True
+283054334,0.00,11,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,532,None,5,None,mp3/mix-tones-iteration-00.mp3,tones,None,1.00_2.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,04,ac69bece7b72730f6c316622dbe5b720,0b1f9635282b5445671290fe7205e2ac,simple,1.00_0.00_0.00,00,tune-simple-study-2-1-intracoord,True
+283054335,0.33,3,,0,false,"",0.0,"same
+null
+s1
+s0","same
+null",Sounds are the same.,533,1.00_2.00,5,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,simple,5,1.00_2.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-1.00_2.00-iteration-04-simple.maxdist-5.mp3,04,ac69bece7b72730f6c316622dbe5b720,ac69bece7b72730f6c316622dbe5b720,simple,1.00_0.00_0.00,04,tune-simple-study-2-1-intracoord,True
+283054336,0.00,6,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,534,None,30,None,mp3/mix-tones-iteration-04.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-30.mp3,00,7e94017b84042737ac6966bd66dd9fad,dcddb696d2dbff2d47c4ab016491afef,simple,1.00_0.00_0.00,04,tune-simple-study-2-1-intracoord,True
+283054337,0.00,10,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,535,2.00_4.00,30,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-30.mp3,simple,30,2.00_4.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-00-simple.maxdist-30.mp3,00,7e94017b84042737ac6966bd66dd9fad,7e94017b84042737ac6966bd66dd9fad,simple,1.00_0.00_0.00,00,tune-simple-study-2-1-intracoord,True
+283054338,0.14,7,,0,false,"",0.0,"s1
+same
+null
+s0",s1,Sound 1 is obviously a series of synthesized tones.,536,None,15,None,mp3/mix-tones-iteration-02.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,02,e5273acce3cd7c61c42c1e8c059dcad3,a12a927747db44ef0122d0ecc867ad67,simple,1.00_0.00_0.00,02,tune-simple-study-2-1-intracoord,True
+283054339,0.33,3,,0,false,"",0.0,"same
+s1
+null
+s0","same
+null",Sounds are the same.,537,2.00_4.00,15,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,simple,15,2.00_4.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-15.mp3,02,e5273acce3cd7c61c42c1e8c059dcad3,e5273acce3cd7c61c42c1e8c059dcad3,simple,1.00_0.00_0.00,02,tune-simple-study-2-1-intracoord,True
+283054340,0.09,11,,0,false,"",0.0,"s1
+s0
+null
+same",s1,Sound 1 is obviously a series of synthesized tones.,538,None,5,None,mp3/mix-tones-iteration-03.mp3,tones,None,2.00_4.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,02,c1c68f45a20a93b930c24fed571b01c3,d6586c064366081bc03656b73da40eb4,simple,1.00_0.00_0.00,03,tune-simple-study-2-1-intracoord,True
+283054341,0.00,4,,0,false,"",0.0,"same
+s0
+null
+s1","same
+null",Sounds are the same.,539,2.00_4.00,5,1.00_0.00_0.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,simple,5,2.00_4.00,mp3/mix-simple-coordinates-1.00_0.00_0.00-simple.grainlength-2.00_4.00-iteration-02-simple.maxdist-5.mp3,02,c1c68f45a20a93b930c24fed571b01c3,c1c68f45a20a93b930c24fed571b01c3,simple,1.00_0.00_0.00,02,tune-simple-study-2-1-intracoord,True

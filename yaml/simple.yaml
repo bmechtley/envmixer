@@ -1,29 +1,29 @@
-mix: 'simple'
+mix: simple
 
-outpath: '/Users/brandon/jasa-el/sounds/test/'
+outpath: ~/jasa-el/sounds/test/
 
 sources:
-  - /Users/brandon/jasa-el/sounds/input/db.wav
-  - /Users/brandon/jasa-el/sounds/input/nb.wav
-  - /Users/brandon/jasa-el/sounds/input/sg.wav
+  - ~/jasa-el/input/db.wav
+  - ~/jasa-el/input/nb.wav
+  - ~/jasa-el/input/sg.wav
 
 coordinates: 
-  '@1': 'lattice'
+  '@1': lattice
 
-trainlength: 10
+trainlength: 5
 
 processes: 1
 verbosity: 1
 
 simple:
   grainlength: [1500, 2500]
-  envelope: 'cosine'
+  envelope: cosine
   jumpdev: 5
   plot: True
   svl: True
 
 numbers:
-  path: /Users/brandon/jasa-el/sounds/numbers/
+  path: ~/jasa-el/sounds/numbers/
   wait: 1.0
   count: 2
   amplitude: 1.5

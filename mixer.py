@@ -42,14 +42,14 @@ import yaml
 
 # Local.
 import pybatchdict
-import GrainTrain as gt
-from Recording import Recording
-from barycentric import lattice, baryedges, bary2cart
+import train as gt
+import recordings as rec
+import barycentric as bary
 
 def make_tones(freqs, duration=1.0, amplitude=1.0, rate=44100):
     tonelen = duration * rate
 
-    tones = [Recording() for i in range(len(freqs))]
+    tones = [rec.Recording() for i in range(len(freqs))]
 
     tonefunc =lambda x: np.sin(x * 2) #* np.fmod(x, 2 * np.pi) / (2 * np.pi)
 
@@ -67,7 +67,7 @@ def append_nums(recording, outname, wait=0, npath='./', ncount=0, namp=1.0):
         num = np.random.randint(9) + 1
         nums.append(num)
         
-        numsnd = Recording(os.path.join(npath, '%d.wav' % num))
+        numsnd = rec.Recording(os.path.join(npath, '%d.wav' % num))
         nummax = np.amax(np.abs(numsnd.wav))
         
         recording.wav[-(recording.rate / 4):] *= np.linspace(1, 0, recording.rate / 4)
@@ -76,7 +76,54 @@ def append_nums(recording, outname, wait=0, npath='./', ncount=0, namp=1.0):
         recording.append_frames(numsnd.wav * (soundmax / nummax) * namp)
     
     recording.filename = outname + '-nums-' + ''.join(str(n) for n in nums) + '.wav'
+
+def write_simple_mix(config, sounds, name):
+    """
+    Full process for making a mix of three simple grain trains. Called by main function in a multiprocessing.Pool.
     
+    Args:
+        config (dict): dictionary of configuration values.
+        sounds (list): list of instances of Soundwalk
+        name (str): path + basename for output files (no extension).
+    """
+    
+    coords = np.array(config['coordinates'])
+
+    # Percentage completion along each soundwalk (side).
+    sideproj = bary.baryedges(coords)
+    percs = bary.baryedges(coords, sidecoords=True)[:,1]
+    
+    # Prior probability of playing each soundwalk (side).
+    sidecart = bary.bary2cart(sideproj)
+    cart = bary.bary2cart(coords)
+    prob = np.array([np.linalg.norm(sc - cart) for sc in sidecart])
+    prob = np.log(prob + np.finfo(float).eps)
+    prob /= np.sum(prob)
+
+    trains = gt.make_simple_mix_trains(
+        config['coordinates'],
+        sounds,
+        config['trainlength'],
+        config['simplemix']['grainlength'],
+        config['simplemix']['maxdist']
+    )
+    
+    for t in range(len(trains)):
+        trains[t].fillgrains(envtype=config['simplemix']['envelope'])
+        trains[t].mixdown()
+        trains[t].sound.wav = trains[t].sound.wav[:int(config['trainlength'] * trains[t].sound.rate)]
+        print t, len(trains[t].sound.wav), len(trains[t].sound.wav) / trains[t].sound.rate
+
+    mixed = rec.Recording()
+    mixed.rate = trains[0].sound.rate
+    mixed.wav = np.zeros(len(trains[0].sound.wav))
+    
+    for t in range(len(trains)):
+        mixed.wav += trains[t].sound.wav * prob[t]
+    
+    mixed.filename = name + '.wav'
+    mixed.save()
+
 def write_simple(config, sounds, name):
     """
     Full process for making a simple grain train. Called by main function in a multiprocessing.Pool.
@@ -96,7 +143,9 @@ def write_simple(config, sounds, name):
     )
     
     train.basename = name
-    train.mixdown(envtype=config['simple']['envelope'])
+    train.fillgrains(envtype=config['simple']['envelope'])
+    train.mixdown()#envtype=config['simple']['envelope'])
+    train.sound.wav = train.sound.wav[:int(config['trainlength'] * train.sound.rate)]
 
     # 5. Save Sonic Visualiser annotation layer.
     if config['simple']['svl']:
@@ -121,7 +170,7 @@ def write_sources(config, sounds, name):
             [head]/[fn]-[tail].wav, where outname is [head]/[tail] for each source Recording named [fn].wav.
     """
     
-    percs = baryedges(np.array(config['coordinates']), sidecoords=True)[:,1]
+    percs = bary.baryedges(np.array(config['coordinates']), sidecoords=True)[:,1]
     frames = [int(p * s.len) for p, s in izip(percs, sounds)]
     fs = zip(frames, sounds)
     
@@ -142,7 +191,7 @@ def write_sources(config, sounds, name):
     
     # Write the source wav files.
     for s, e, sound in izip(starts, ends, sounds):
-        soundpart = Recording()
+        soundpart = rec.Recording()
         
         srcbase = os.path.splitext(os.path.split(sound.filename)[1])[0]
         
@@ -190,6 +239,8 @@ def process_group(intuple):
                
         if config['mix'] == 'simple':
             write_simple(config, sounds, name)
+        elif config['mix'] == 'simplemix':
+            write_simple_mix(config, sounds, name)
         elif config['mix'] == 'sources':
             write_sources(config, sounds, name)
         elif config['mix'] == 'tones':
@@ -205,16 +256,17 @@ def main():
     parser = argparse.ArgumentParser(description='Create a mixture of two or more sound textures.')
     parser.add_argument('config', type=str, default='config.yaml', help='YAML config file.')
     args = parser.parse_args()
-    
+
     # 1. YAML config. Enumerate over combinations of list values for studies.
     config = yaml.load(open(args.config))
-    
+
     config.setdefault('outpath', '')
     config.setdefault('sources', [])
     config.setdefault('mix', 'simple')
     config.setdefault('coordinates', [1, 0, 0])
     config.setdefault('processes', mp.cpu_count())
-    
+    config.setdefault('interactive', False)
+
     config.setdefault('simple', {})
     config['simple'].setdefault('svl', False)
     config['simple'].setdefault('plot', False)
@@ -222,7 +274,7 @@ def main():
     config['simple'].setdefault('trainlength', 15.0)
     config['simple'].setdefault('envelope', 'cosine')
     config['simple'].setdefault('grainlength', [500, 2000])
-    
+
     config.setdefault('tones', {})
     config['tones'].setdefault('count', 0)
     config['tones'].setdefault('rate', 44100)
@@ -230,42 +282,44 @@ def main():
     config['tones'].setdefault('maxfreq', 5000)
     config['tones'].setdefault('amplitude', 1.0)
     config['tones'].setdefault('envelope', 'cosine')
-    
+
     if type(config['coordinates']) == dict:
         if config['coordinates'][config['coordinates'].keys()[0]] == 'lattice':
-            config['coordinates'] = {config['coordinates'].keys()[0]: lattice(len(config['sources']))}
-        
+            config['coordinates'] = {config['coordinates'].keys()[0]: bary.lattice(len(config['sources']))}
+
         config['coordinates'][config['coordinates'].keys()[0]] = [
             np.array(coord,dtype=float) / sum(coord) for coord in
             config['coordinates'][config['coordinates'].keys()[0]]
         ]
-    
+
+    print config['coordinates']
+
     # 2. Load soundwalks.
     sounds = []
-    
+
     if config['mix'] == 'tones':
         sounds = make_tones(
-            config['tones']['freqs'], 
-            duration=config['trainlength'], 
-            amplitude=config['tones']['amplitude'], 
+            config['tones']['freqs'],
+            duration=config['trainlength'],
+            amplitude=config['tones']['amplitude'],
             rate=config['tones']['rate']
         )
     else:
-        sounds = [Recording(s) for s in config['sources']]
-    
-    # 3. Create groups of processes to do in parallellsl.
-    # Split into group of number of CPUs to avoid copying pickled recordings for every single execution. I think.
-    cpus = min(config['processes'], mp.cpu_count())
-    
-    batch = pybatchdict.BatchDict(config)
-    
-    names = [os.path.join(config['outpath'], 'mix-' + config['mix'] + '-' + name) for name in batch.hyphenate_changes()]
-    names = [names[i::cpus] for i in range(min(cpus, len(names)))]
-    
-    combos = [batch.combos[i::cpus] for i in range(min(cpus, len(batch.combos)))]
-    groups = [(c, sounds, on) for c, on in izip(combos, names)]
-    
-    parallel_pool(process_group, cpus, groups)
-        
+        sounds = [rec.Recording(s) for s in config['sources']]
+
+        # 3. Create groups of processes to do in parallellsl.
+        # Split into group of number of CPUs to avoid copying pickled recordings for every single execution. I think.
+        cpus = min(config['processes'], mp.cpu_count())
+
+        batch = pybatchdict.BatchDict(config)
+
+        names = [os.path.join(config['outpath'], 'mix-' + config['mix'] + '-' + name) for name in batch.hyphenate_changes()]
+        names = [names[i::cpus] for i in range(min(cpus, len(names)))]
+
+        combos = [batch.combos[i::cpus] for i in range(min(cpus, len(batch.combos)))]
+        groups = [(c, sounds, on) for c, on in izip(combos, names)]
+
+        parallel_pool(process_group, cpus, groups)
+
 if __name__ == '__main__':
     main()
