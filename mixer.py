@@ -212,7 +212,8 @@ def write_tones(config, sounds, name):
     )
     
     train.basename = name
-    sound = train.mixdown(envtype=config['tones']['envelope'])
+    train.fillgrains(envtype=config['tones']['envelope'])
+    sound = train.mixdown()
     sound.wav = sound.wav[:int(config['trainlength'] * config['tones']['rate'])]
     sound.save()
 
@@ -292,8 +293,6 @@ def main():
             config['coordinates'][config['coordinates'].keys()[0]]
         ]
 
-    print config['coordinates']
-
     # 2. Load soundwalks.
     sounds = []
 
@@ -307,19 +306,19 @@ def main():
     else:
         sounds = [rec.Recording(s) for s in config['sources']]
 
-        # 3. Create groups of processes to do in parallellsl.
-        # Split into group of number of CPUs to avoid copying pickled recordings for every single execution. I think.
-        cpus = min(config['processes'], mp.cpu_count())
+    # 3. Create groups of processes to do in parallellsl.
+    # Split into group of number of CPUs to avoid copying pickled recordings for every single execution. I think.
+    cpus = min(config['processes'], mp.cpu_count())
 
-        batch = pybatchdict.BatchDict(config)
+    batch = pybatchdict.BatchDict(config)
 
-        names = [os.path.join(config['outpath'], 'mix-' + config['mix'] + '-' + name) for name in batch.hyphenate_changes()]
-        names = [names[i::cpus] for i in range(min(cpus, len(names)))]
+    names = [os.path.join(config['outpath'], 'mix-' + config['mix'] + '-' + name) for name in batch.hyphenate_changes()]
+    names = [names[i::cpus] for i in range(min(cpus, len(names)))]
 
-        combos = [batch.combos[i::cpus] for i in range(min(cpus, len(batch.combos)))]
-        groups = [(c, sounds, on) for c, on in izip(combos, names)]
+    combos = [batch.combos[i::cpus] for i in range(min(cpus, len(batch.combos)))]
+    groups = [(c, sounds, on) for c, on in izip(combos, names)]
 
-        parallel_pool(process_group, cpus, groups)
+    parallel_pool(process_group, cpus, groups)
 
 if __name__ == '__main__':
     main()
