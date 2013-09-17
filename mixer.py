@@ -124,6 +124,12 @@ def write_simple_mix(config, sounds, name):
     mixed.filename = name + '.wav'
     mixed.save()
 
+def write_wtl_mix(config, sounds, name):
+    pass
+
+def write_wtl(config, sounds, name):
+    pass
+
 def write_simple(config, sounds, name):
     """
     Full process for making a simple grain train. Called by main function in a multiprocessing.Pool.
@@ -146,10 +152,6 @@ def write_simple(config, sounds, name):
     train.fillgrains(envtype=config['simple']['envelope'])
     train.mixdown()#envtype=config['simple']['envelope'])
     train.sound.wav = train.sound.wav[:int(config['trainlength'] * train.sound.rate)]
-
-    # 5. Save Sonic Visualiser annotation layer.
-    if config['simple']['svl']:
-        train.save_svl()
 
     if config['simple']['plot']:
         train.save_plot()
@@ -246,6 +248,10 @@ def process_group(intuple):
             write_sources(config, sounds, name)
         elif config['mix'] == 'tones':
             write_tones(config, sounds, name)
+        elif config['mix'] == 'wtl':
+            write_wtl(config, sounds, name)
+        elif config['mix'] == 'wtlmix':
+            write_wtl_mix(config, sounds, name)
 
 def parallel_pool(func, cpus, args):
     if cpus > 1:

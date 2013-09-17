@@ -304,36 +304,6 @@ class GrainTrain:
         
         self.rate = sources[0].rate
         self.sources = sources
-    
-    def save_svl(self):
-        """
-        Save a SonicVisualiser/Annotator annotations file, treating each grain as a segment. The filename will be
-        self.basename + '.svl', so make sure self.basename is set first.
-        """
-        
-        assert len(self.basename), '.basename must be set before calling .save_svl()'
-        
-        wavname = self.basename + '.wav'
-        
-        outstr = open('data/template.xml', 'r').read() % (
-            wavname,
-            self.rate,
-            self.grains[-1].outpos + self.grains[-1].dur,
-            os.path.join(os.getcwd(), wavname),
-            self.rate,
-            self.grains[0].outpos,
-            self.grains[-1].outpos + self.grains[-1].dur,
-            len(self.grains),
-            '\n'.join([
-                '<point frame="%d" value="%d" duration="%d" label=""/>' % (g.outpos, i, g.dur)
-                for i, g in enumerate(self.grains)
-            ]),
-            (self.grains[-1].outpos + self.grains[-1].dur) / 2
-        )
-        
-        f = open(self.basename + '.svl', 'wb')
-        f.write(bz2.compress(outstr))
-        f.close()
 
     def fillgrains(self, envtype='cosine'):
         for i, g in enumerate(self.grains):
