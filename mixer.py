@@ -5,8 +5,9 @@ envmixer
 2012 Brandon Mechtley
 Arizona State University
 
-Creates a mixed environmental sound recording from 3 source recordings. Source recordings are assumed to be of equal
-duration. The paths that define along which they were recorded are fake, organized along on equilateral triangle:
+Creates a mixed environmental sound recording from 3 source recordings. Source 
+recordings are assumed to be of equal duration. The paths that define along
+which they were recorded are fake, organized along on equilateral triangle:
 
 ::
              p1 (.5, sin(pi / 3))
@@ -17,11 +18,14 @@ Soundwalk 0: p0->p1
 Soundwalk 1: p1->p2
 Soundwalk 2: p2->p0
 
-The mixed synthesized version will be fixed at coordinates (x, y) and last for the specified duration (in seconds).
+The mixed synthesized version will be fixed at coordinates (x, y) and last for
+the specified duration (in seconds).
 
-Various methods are used for resynthesis. See the appropriate functions for details. The basic rule of thumb is that
-the closer to a given walk the cursor is, the more similar the synthesized version will be to it. Additionally, the
-output should be most similar to the region of each soundwalk that is closest to the cursor.
+Various methods are used for resynthesis. See the appropriate functions for
+details. The basic rule of thumb is that the closer to a given walk the cursor
+is, the more similar the synthesized version will be to it. Additionally, the
+output should be most similar to the region of each soundwalk that is closest
+to the cursor.
 
 Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
 """
@@ -48,38 +52,23 @@ import barycentric as bary
 
 def make_tones(freqs, duration=1.0, amplitude=1.0, rate=44100):
     tonelen = duration * rate
-
     tones = [rec.Recording() for i in range(len(freqs))]
-
-    tonefunc =lambda x: np.sin(x * 2) #* np.fmod(x, 2 * np.pi) / (2 * np.pi)
+    tonefunc = lambda x: np.sin(x * 2) #* np.fmod(x, 2 * np.pi) / (2 * np.pi)
 
     for i in range(len(tones)):
-        tones[i].wav = tonefunc(np.linspace(0, tonelen * 2 - 1, tonelen * 2) * 2 * np.pi * freqs[i] / rate) * amplitude
+        tones[i].wav = tonefunc(
+            np.linspace(0, tonelen * 2 - 1, tonelen * 2) \
+            * 2 * np.pi * freqs[i] / rate
+        ) * amplitude
+
         tones[i].rate = rate
 
     return tones
 
-def append_nums(recording, outname, wait=0, npath='./', ncount=0, namp=1.0):
-    nums = []
-    soundmax = np.amax(np.abs(recording.wav))
-    
-    for i in range(ncount):
-        num = np.random.randint(9) + 1
-        nums.append(num)
-        
-        numsnd = rec.Recording(os.path.join(npath, '%d.wav' % num))
-        nummax = np.amax(np.abs(numsnd.wav))
-        
-        recording.wav[-(recording.rate / 4):] *= np.linspace(1, 0, recording.rate / 4)
-        
-        recording.append_frames(np.zeros(wait * numsnd.rate))
-        recording.append_frames(numsnd.wav * (soundmax / nummax) * namp)
-    
-    recording.filename = outname + '-nums-' + ''.join(str(n) for n in nums) + '.wav'
-
 def write_simple_mix(config, sounds, name):
     """
-    Full process for making a mix of three simple grain trains. Called by main function in a multiprocessing.Pool.
+    Full process for making a mix of three simple grain trains. Called by main
+    function in a multiprocessing.Pool.
     
     Args:
         config (dict): dictionary of configuration values.
@@ -111,8 +100,12 @@ def write_simple_mix(config, sounds, name):
     for t in range(len(trains)):
         trains[t].fillgrains(envtype=config['simplemix']['envelope'])
         trains[t].mixdown()
-        trains[t].sound.wav = trains[t].sound.wav[:int(config['trainlength'] * trains[t].sound.rate)]
-        print t, len(trains[t].sound.wav), len(trains[t].sound.wav) / trains[t].sound.rate
+        trains[t].sound.wav = trains[t].sound.wav[
+            :int(config['trainlength'] * trains[t].sound.rate)
+        ]
+
+        print t, len(trains[t].sound.wav), 
+        print len(trains[t].sound.wav) / trains[t].sound.rate
 
     mixed = rec.Recording()
     mixed.rate = trains[0].sound.rate
@@ -154,8 +147,12 @@ def write_wtl_mix(config, sounds, name):
         })
 
         trains[t].mixdown()
-        trains[t].sound.wav = trains[t].sound.wav[:int(config['trainlength'] * trains[t].sound.rate)]
-        print t, len(trains[t].sound.wav), len(trains[t].sound.wav) / trains[t].sound.rate
+        trains[t].sound.wav = trains[t].sound.wav[
+            :int(config['trainlength'] * trains[t].sound.rate)
+        ]
+        
+        print t, len(trains[t].sound.wav), 
+        print len(trains[t].sound.wav) / trains[t].sound.rate
 
     mixed = rec.Recording()
     mixed.rate = trains[0].sound.rate
@@ -183,8 +180,10 @@ def write_wtl(config, sounds, name):
         'maxlevel': config['wtl'].get('maxlevel', -1)
     })
 
-    train.mixdown()#envtype=config['simple']['envelope'])
-    train.sound.wav = train.sound.wav[:int(config['trainlength'] * train.sound.rate)]
+    train.mixdown()
+    train.sound.wav = train.sound.wav[
+        :int(config['trainlength'] * train.sound.rate)
+    ]
 
     if config['wtl']['plot']:
         train.save_plot()
@@ -196,7 +195,8 @@ def write_wtl(config, sounds, name):
 
 def write_simple(config, sounds, name):
     """
-    Full process for making a simple grain train. Called by main function in a multiprocessing.Pool.
+    Full process for making a simple grain train. Called by main function in a
+    multiprocessing.Pool.
     
     Args:
         config (dict): dictionary of configuration values.
@@ -214,8 +214,10 @@ def write_simple(config, sounds, name):
     
     train.basename = name
     train.fillgrains(envtype=config['simple']['envelope'])
-    train.mixdown()#envtype=config['simple']['envelope'])
-    train.sound.wav = train.sound.wav[:int(config['trainlength'] * train.sound.rate)]
+    train.mixdown()
+    train.sound.wav = train.sound.wav[
+        :int(config['trainlength'] * train.sound.rate)
+    ]
 
     if config['simple']['plot']:
         train.save_plot()
@@ -227,28 +229,42 @@ def write_simple(config, sounds, name):
 
 def write_sources(config, sounds, name):
     """
-    Save portions of the source Recordings nearest to the config's sampling coordinates.
+    Save portions of the source Recordings nearest to the config's sampling 
+    coordinates.
     
     Args:
         config (dict): configuration dictionary.
         sounds (list): list of source Recordings.
-        name (str): base path / name for output. Filenames will be formatted as follows:
-            [head]/[fn]-[tail].wav, where outname is [head]/[tail] for each source Recording named [fn].wav.
+        name (str): base path / name for output. Filenames will be formatted as 
+        follows:
+            [head]/[fn]-[tail].wav, where outname is [head]/[tail] for each
+            source Recording named [fn].wav.
     """
     
-    percs = bary.baryedges(np.array(config['coordinates']), sidecoords=True)[:,1]
+    percs = bary.baryedges(
+        np.array(config['coordinates']), sidecoords=True
+    )[:,1]
+
     frames = [int(p * s.len) for p, s in izip(percs, sounds)]
     fs = zip(frames, sounds)
     
-    # Get start frames and end frames. If we are too close to the start point, clip it to the beginning of the sound
-    # and adjust the end point.
-    starts = np.array([int(f - (config['trainlength'] * s.rate) / 2) for f, s in izip(frames, sounds)])
-    ends = np.array([int(f + (config['trainlength'] * s.rate) / 2) for f, s in izip(frames, sounds)])
+    # Get start frames and end frames. If we are too close to the start point, 
+    # clip it to the beginning of the sound and adjust the end point.
+    starts = np.array([
+        int(f - (config['trainlength'] * s.rate) / 2) 
+        for f, s in izip(frames, sounds)
+    ])
+
+    ends = np.array([
+        int(f + (config['trainlength'] * s.rate) / 2) 
+        for f, s in izip(frames, sounds)
+    ])
     
-    # If we are too close to the end point, clip it to the end of the sound and adjust the start point.
+    # If we are too close to the end point, clip it to the end of the sound and
+    # adjust the start point.
     for i in range(len(sounds)):
         seglen = int(sounds[i].rate * config['trainlength'])
-    
+        
         starts[i] = max(0, starts[i])
         ends[i] = min(starts[i] + seglen, sounds[i].len)
         starts[i] = max(0, ends[i] - seglen)
@@ -280,30 +296,38 @@ def write_tones(config, sounds, name):
     train.basename = name
     train.fillgrains(envtype=config['tones']['envelope'])
     sound = train.mixdown()
-    sound.wav = sound.wav[:int(config['trainlength'] * config['tones']['rate'])]
+    sound.wav = sound.wav[
+        :int(config['trainlength'] * config['tones']['rate'])
+    ]
+
     sound.save()
 
 def process_group(intuple):
     """
-    Process grain trains / source sounds in groups, rather than pooling all together, to save memory.
+    Process grain trains / source sounds in groups, rather than pooling all
+    together, to save memory.
     
     Args:
-        intuple (tuple): tupled arguments for write_grain_train / write_source_sounds. Components are:
-            configs (list): list of configuration dictionaries, one for each call.
-            sounds (list): list of source Recordings to use for mixes / sources.
+        intuple (tuple): tupled arguments for write_grain_train /
+            write_source_sounds. Components are:
+            configs (list): list of configuration dictionaries, one for each 
+                call.
+            sounds (list): list of source Recordings to use for mixes /
+                sources.
             names (list): list of output file basenames, one for each call.
             verbosity (int): debug verbosity.
     """
-        
+    
     configs, sounds, names = intuple
     
-    # Need to randomize seed, as the seed is copied to the new process in everything but Windows.
+    # Need to randomize seed, as the seed is copied to the new process in
+    # everything but Windows.
     np.random.seed(int((time() + mp.current_process().pid * 1000)))
     
     for config, name in izip(configs, names):
         if config['verbosity'] > 0:
             print mp.current_process().name, name
-               
+           
         if config['mix'] == 'simple':
             write_simple(config, sounds, name)
         elif config['mix'] == 'simplemix':
@@ -324,8 +348,17 @@ def parallel_pool(func, cpus, args):
         map(func, args)
 
 def main():
-    parser = argparse.ArgumentParser(description='Create a mixture of two or more sound textures.')
-    parser.add_argument('config', type=str, default='config.yaml', help='YAML config file.')
+    parser = argparse.ArgumentParser(
+        description='Create a mixture of two or more sound textures.'
+    )
+
+    parser.add_argument(
+        'config', 
+        type=str, 
+        default='config.yaml', 
+        help='YAML config file.'
+    )
+
     args = parser.parse_args()
 
     # 1. YAML config. Enumerate over combinations of list values for studies.
@@ -339,12 +372,22 @@ def main():
     config.setdefault('interactive', False)
 
     config.setdefault('simple', {})
-    config['simple'].setdefault('svl', False)
-    config['simple'].setdefault('plot', False)
-    config['simple'].setdefault('maxdist', 60.0)
-    config['simple'].setdefault('trainlength', 15.0)
-    config['simple'].setdefault('envelope', 'cosine')
-    config['simple'].setdefault('grainlength', [500, 2000])
+    config.setdefault('simplemix', {})
+    config.setdefault('wtl', {})
+    config.setdefault('wtlmix', {})
+
+    for method in ['simple', 'simplemix', 'wtl', 'wtlmix']:
+        config[method].setdefault('svl', False)
+        config[method].setdefault('plot', False)
+        config[method].setdefault('maxdist', 60.0)
+        config[method].setdefault('trainlength', 15.0)
+        config[method].setdefault('envelope', 'cosine')
+        config[method].setdefault('grainlength', [500, 2000])
+
+        if method in ['wtl', 'wtlmix']:
+            config[method].setdefault('k', 0.01)
+            config[method].setdefault('p', 0.8)
+            config[method].setdefault('maxlevel', -1)
 
     config.setdefault('tones', {})
     config['tones'].setdefault('count', 0)
@@ -356,7 +399,11 @@ def main():
 
     if type(config['coordinates']) == dict:
         if config['coordinates'][config['coordinates'].keys()[0]] == 'lattice':
-            config['coordinates'] = {config['coordinates'].keys()[0]: bary.lattice(len(config['sources']))}
+            config['coordinates'] = {
+            config['coordinates'].keys()[0]: bary.lattice(
+                len(config['sources'])
+            )
+        }
 
         config['coordinates'][config['coordinates'].keys()[0]] = [
             np.array(coord,dtype=float) / sum(coord) for coord in
@@ -376,17 +423,35 @@ def main():
     else:
         sounds = [rec.Recording(s) for s in config['sources']]
 
-    # 3. Create groups of processes to do in parallellsl.
-    # Split into group of number of CPUs to avoid copying pickled recordings for every single execution. I think.
+    # 3. Create groups of processes to do in parallel.
+    # Split into group of number of CPUs to avoid copying pickled recordings
+    # for every single execution. I think.
     cpus = min(config['processes'], mp.cpu_count())
 
     batch = pybatchdict.BatchDict(config)
 
-    names = [os.path.join(config['outpath'], 'mix-' + config['mix'] + '-' + name) for name in batch.hyphenate_changes()]
-    names = [names[i::cpus] for i in range(min(cpus, len(names)))]
+    names = [
+        os.path.join(
+            config['outpath'], 
+            'mix-' + config['mix'] + '-' + name
+        )
+        for name in batch.hyphenate_changes()
+    ]
 
-    combos = [batch.combos[i::cpus] for i in range(min(cpus, len(batch.combos)))]
-    groups = [(c, sounds, on) for c, on in izip(combos, names)]
+    names = [
+        names[i::cpus] 
+        for i in range(min(cpus, len(names)))
+    ]
+
+    combos = [
+        batch.combos[i::cpus] 
+        for i in range(min(cpus, len(batch.combos)))
+    ]
+
+    groups = [
+        (c, sounds, on) 
+        for c, on in izip(combos, names)
+    ]
 
     parallel_pool(process_group, cpus, groups)
 
