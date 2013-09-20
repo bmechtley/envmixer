@@ -1,6 +1,6 @@
-paper-jasael-2013
-============
+envmixer
+========
 
-Code / paper for an upcoming JASA Express Letters submission.
+Geographically inspired parametric mixing of environmental audio recordings.
 
 *Note: everything in here is messy and transient. :)*

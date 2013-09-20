@@ -125,10 +125,74 @@ def write_simple_mix(config, sounds, name):
     mixed.save()
 
 def write_wtl_mix(config, sounds, name):
-    pass
+    coords = np.array(config['coordinates'])
+
+    # Percentage completion along each soundwalk (side).
+    sideproj = bary.baryedges(coords)
+    percs = bary.baryedges(coords, sidecoords=True)[:,1]
+    
+    # Prior probability of playing each soundwalk (side).
+    sidecart = bary.bary2cart(sideproj)
+    cart = bary.bary2cart(coords)
+    prob = np.array([np.linalg.norm(sc - cart) for sc in sidecart])
+    prob = np.log(prob + np.finfo(float).eps)
+    prob /= np.sum(prob)
+
+    trains = gt.make_simple_mix_trains(
+        config['coordinates'],
+        sounds,
+        config['trainlength'],
+        config['wtlmix']['grainlength'],
+        config['wtlmix']['maxdist']
+    )
+    
+    for t in range(len(trains)):
+        trains[t].fillgrains(envtype=config['simplemix']['envelope'], wtl={
+            'k': config['wtlmix'].get('k', 0.01),
+            'p': config['wtlmix'].get('p', 0.8),
+            'maxlevel': config['wtlmix'].get('maxlevel', -1)
+        })
+
+        trains[t].mixdown()
+        trains[t].sound.wav = trains[t].sound.wav[:int(config['trainlength'] * trains[t].sound.rate)]
+        print t, len(trains[t].sound.wav), len(trains[t].sound.wav) / trains[t].sound.rate
+
+    mixed = rec.Recording()
+    mixed.rate = trains[0].sound.rate
+    mixed.wav = np.zeros(len(trains[0].sound.wav))
+    
+    for t in range(len(trains)):
+        mixed.wav += trains[t].sound.wav * prob[t]
+    
+    mixed.filename = name + '.wav'
+    mixed.save()
 
 def write_wtl(config, sounds, name):
-    pass
+     train = gt.make_simple_train(
+        config['coordinates'], 
+        sounds, 
+        config['trainlength'], 
+        config['wtl']['grainlength'], 
+        config['wtl']['maxdist']
+    )
+    
+    train.basename = name
+    train.fillgrains(envtype=config['simple']['envelope'], wtl={
+        'k': config['wtl'].get('k', 0.01),
+        'p': config['wtl'].get('p', 0.8),
+        'maxlevel': config['wtl'].get('maxlevel', -1)
+    })
+
+    train.mixdown()#envtype=config['simple']['envelope'])
+    train.sound.wav = train.sound.wav[:int(config['trainlength'] * train.sound.rate)]
+
+    if config['wtl']['plot']:
+        train.save_plot()
+    
+    # 4. Save wavfile.
+    train.sound.filename = train.basename + '.wav'
+    
+    train.sound.save()
 
 def write_simple(config, sounds, name):
     """

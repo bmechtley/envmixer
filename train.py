@@ -305,11 +305,23 @@ class GrainTrain:
         self.rate = sources[0].rate
         self.sources = sources
 
-    def fillgrains(self, envtype='cosine'):
+    def fillgrains(self, envtype='cosine', wtl=None):
         for i, g in enumerate(self.grains):
             g.data = np.array(self.sources[g.src].wav[g.srcpos:g.srcpos + g.dur])
-            g.env = np.ones(g.data.shape)
+            
+            if wtl:
+                wtlgrain = MRA()
+                wtlgrain.wav = g.data
+                wtlgrain.rate = self.sources[g.src].rate
+                
+                wtlgrain.calculate_mra()
+                wtlgrain.tap(**wtl)
+                wtlgrain.reconstruct_wav()
 
+                g.data = wtlgrain.wav
+                
+            g.env = np.ones(g.data.shape)
+            
             # Apply window halves exiting previous grain, entering current grain.
             if i > 0:
                 p = self.grains[i - 1]
