@@ -32,7 +32,7 @@ Usage: python mixer.py soundwalk0.sv soundwalk1.sv soundwalk2.sv x y duration
 
 # Standard.
 import os, argparse
-from time import time
+import time
 from itertools import izip
 import multiprocessing as mp
 
@@ -89,13 +89,17 @@ def write_simple_mix(config, sounds, name):
     prob = np.log(prob + np.finfo(float).eps)
     prob /= np.sum(prob)
 
-    trains = gt.make_simple_mix_trains(
-        config['coordinates'],
-        sounds,
-        config['trainlength'],
-        config['simplemix']['grainlength'],
-        config['simplemix']['maxdist']
-    )
+    trains = [
+        gt.make_simple_train(
+            config['coordinates'],
+            sounds,
+            config['trainlength'],
+            config['simplemix']['grainlength'],
+            config['simplemix']['maxdist'],
+            forcesource=t
+        )
+        for t in range(len(sounds))
+    ]
     
     for t in range(len(trains)):
         trains[t].fillgrains(envtype=config['simplemix']['envelope'])
@@ -130,15 +134,19 @@ def write_wtl_mix(config, sounds, name):
     prob = np.array([np.linalg.norm(sc - cart) for sc in sidecart])
     prob = np.log(prob + np.finfo(float).eps)
     prob /= np.sum(prob)
-
-    trains = gt.make_simple_mix_trains(
-        config['coordinates'],
-        sounds,
-        config['trainlength'],
-        config['wtlmix']['grainlength'],
-        config['wtlmix']['maxdist'],
-        pow2len=True
-    )
+    
+    trains = [
+        gt.make_simple_train(
+            config['coordinates'],
+            sounds,
+            config['trainlength'],
+            config['wtlmix']['grainlength'],
+            config['wtlmix']['maxdist'],
+            pow2len=True,
+            forcesource=t
+        )
+        for t in range(len(sounds))
+    ]
     
     for t in range(len(trains)):
         trains[t].fillgrains(envtype=config['wtlmix']['envelope'], wtl={
@@ -152,9 +160,6 @@ def write_wtl_mix(config, sounds, name):
             :int(config['trainlength'] * trains[t].sound.rate)
         ]
         
-        print t, len(trains[t].sound.wav), 
-        print len(trains[t].sound.wav) / trains[t].sound.rate
-
     mixed = rec.Recording()
     mixed.rate = trains[0].sound.rate
     mixed.wav = np.zeros(len(trains[0].sound.wav))
@@ -324,7 +329,7 @@ def process_group(intuple):
     
     # Need to randomize seed, as the seed is copied to the new process in
     # everything but Windows.
-    np.random.seed(int((time() + mp.current_process().pid * 1000)))
+    np.random.seed(int((time.time() + mp.current_process().pid * 1000)))
     
     for config, name in izip(configs, names):
         if config['verbosity'] > 0:

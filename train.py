@@ -42,104 +42,8 @@ def make_tone_train(tones, traindur=10.0, tonedur=1.0, amplitude=1.0, fadedur=0.
         train.grains[i].outpos = 0 if i == 0 else train.grains[i - 1].outpos + train.grains[i].dur - fadelen
     
     return train
-
-def make_simple_mix_trains(coords, sounds, length=10, graindur=[500,2000], maxdist=60, trains=None, pow2len=False):
-    coords = np.array(coords)
     
-    # Percentage completion along each soundwalk (side).
-    sideproj = bary.baryedges(coords)
-    percs = bary.baryedges(coords, sidecoords=True)[:,1]
-    
-    # Prior probability of playing each soundwalk (side).
-    sidecart = bary.bary2cart(sideproj)
-    cart = bary.bary2cart(coords)
-    prob = np.array([np.linalg.norm(sc - cart) for sc in sidecart])
-    prob = np.log(prob + np.finfo(float).eps)
-    prob /= np.sum(prob)
-    
-    if trains == None:
-        trains = [GrainTrain() for s in sounds]
-        
-        for t, train in enumerate(trains):
-            train.set_sources([sounds[t]])
-            train.maxdist = train.rate * float(maxdist)
-
-            train.meanframes = np.array([
-                int(percs[t] * train.sources[0].len + train.sources[0].start)
-                for i in range(len(percs))
-            ])
-
-    for t in range(len(trains)):
-        trains[t].grains = []
-        pos = 0
-        gmm = mixture.GMM(2)
-        
-        while pos < trains[t].rate * length:
-            g = Grain()
-            g.src = 0
-            g.dur = int(np.random.uniform(graindur[0], graindur[1]) * trains[t].rate)
-
-            if pow2len:
-                g.dur = 2 ** np.ceil(np.log2(g.dur))
-            
-            samesrc = [og for og in trains[t].grains if og.src == g.src]
-
-            if len(samesrc) < 1:
-                g.srcpos = trains[t].meanframes[g.src]
-            else:
-                og = samesrc[-1]
-                
-                offset = int(min(g.dur, og.dur) / 2.)
-                farleft = -g.dur                  # Beginning of previous grain.
-                centerleft = -offset              # Beginning crossfade point.
-                farright = og.dur                 # End of previous grain.
-                centerright = og.dur - offset     # Ending crossfade point.
-
-                gmm.means_ = np.array(((
-                    int(np.mean([farleft, centerleft])),
-                    int(np.mean([farright, centerright]))
-                ),)).transpose()
-
-                gmm.covars_ = np.array(((
-                    np.sqrt(centerleft - farleft),
-                    np.sqrt(farright - centerright)
-                ),)).transpose()
-
-                dist = min(1, abs(og.srcpos - g.srcpos) / trains[t].maxdist)
-
-                if og.srcpos > trains[t].meanframes[g.src]:
-                    gmm.weights_ = np.array((dist, 1 - dist))
-                elif og.srcpos < trains[t].meanframes[g.src]:
-                    gmm.weights_ = np.array((1 - dist, dist))
-                else:
-                    gmm.weights_ = np.array((.5, .5))
-
-                gmm.weights_ = np.sqrt(gmm.weights_)
-                gmm.weights_ /= sum(gmm.weights_)
-
-                dp = int(gmm.sample(1)[0][0])
-
-                g.srcpos = og.srcpos + dp
-
-            if g.srcpos + g.dur >= trains[t].sources[g.src].len:
-                g.srcpos = trains[t].sources[g.src].len - g.dur
-            elif g.srcpos < 0:
-                g.srcpos = 0
-
-            trains[t].grains.append(g)
-            
-            # If this isn't the first grain, overlap the grains to crossfade.
-            if len(trains[t].grains) > 1:
-                fadedur = int(min(trains[t].grains[-1].dur, trains[t].grains[-2].dur) / 2)
-                trains[t].grains[-1].outpos = trains[t].grains[-2].outpos + trains[t].grains[-2].dur - fadedur
-            else:
-                trains[t].grains[-1].outpos = 0
-
-            pos = trains[t].grains[-1].outpos + trains[t].grains[-1].dur
-
-    return trains
-    
-def make_simple_train(coords, sounds, length=10, graindur=(500, 2000), maxdist=60, train=None, pow2len=False):
+def make_simple_train(coords, sounds, length=10, graindur=(.5, 2), maxdist=60, train=None, pow2len=False, forcesource=-1):
     """
     Simplest mixing algorithm. Creates a new grain train, each grain selected from one of the source recording. The
     source recording is randomly selected, weighted according to which recording is closest to the input coordinates. 
@@ -193,7 +97,11 @@ def make_simple_train(coords, sounds, length=10, graindur=(500, 2000), maxdist=6
         g = Grain()
         
         # Random source.
-        g.src = int(np.random.choice(range(len(train.sources)), p=prob))
+        if forcesource > 0:
+            g.src = forcesource
+        else:
+            g.src = int(np.random.choice(range(len(train.sources)), p=prob))
+
         g.dur = int(np.random.uniform(graindur[0], graindur[1]) * train.rate)
         
         if pow2len:
@@ -296,6 +204,9 @@ class GrainTrain:
         self.rate = None
         self.basename = ''
     
+    def __str__(self):
+        return 'Train\n' + '\n'.join([str(g) for g in self.grains])
+
     def set_sources(self, sources):
         """
         Set the source list. Using this method is preferred to setting self.sources directly, as it ensures that every
