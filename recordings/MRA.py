@@ -8,6 +8,7 @@ Arizona State University
 
 import pywt
 import numpy as np
+import scipy.stats as stats
 from .Recording import Recording
 
 class MRANode:
@@ -70,8 +71,8 @@ class MRA(Recording):
     MRA tree creation/manipulation functions for a Recording.
     """
     
-    def __init__(self, filename):
-        super(Recording, self).__init__(filename)
+    def __init__(self, **kwargs):
+        super(Recording, self).__init__(**kwargs)
 
     def calculate_mra(self, wavelet='db10', mode='per'):
         """
@@ -116,13 +117,13 @@ class MRA(Recording):
 
         map(
             lambda c:
-                self.reconstruct(c, level + 1, index * 2 + c.parent.children.index(c))
+                self.reconstruct_wav(c, level + 1, index * 2 + c.parent.children.index(c))
                 if c else None,
             node.children
         )
 
         if not level:
-            return pywt.pywt.waverec(self.dwt, self.wavelet, mode=self.mode)
+            return pywt.waverec(self.dwt, self.wavelet, mode=self.mode)
 
     def ascore(self, c, nancestors, threshold):
         """
@@ -133,10 +134,10 @@ class MRA(Recording):
         threshold -- value under which two paths are considered similar. 
         """
         
-        cancestors = array([p.value for p in c.ancestors()])
-        ascores = abs(nancestors - cancestors)
-        ascores /= linspace(1, len(ascores), len(ascores))
-        return sum(cumsum(ascores) < threshold)
+        cancestors = np.array([p.value for p in c.ancestors()])
+        ascores = np.abs(nancestors - cancestors)
+        ascores /= np.linspace(1, len(ascores), len(ascores))
+        return np.sum(np.cumsum(ascores) < threshold)
         
     def pscore(self, c, npredecessors, nk, threshold):
         """Return wavelet tree learning predecessor similarity score.
@@ -147,9 +148,9 @@ class MRA(Recording):
         threshold -- value under which two paths are considered similar.
         """
         
-        cpredecessors = array([p.value for p in c.predecessors(nk)])
-        pscores =  abs(npredecessors - cpredecessors)
-        return sum(cumsum(pscores) < threshold)
+        cpredecessors = np.array([p.value for p in c.predecessors(nk)])
+        pscores = np.abs(npredecessors - cpredecessors)
+        return np.sum(np.cumsum(pscores) < threshold)
     
     def tap(self, p = 0.8, k = 0.01, maxlevel = -1):
         """
@@ -165,9 +166,9 @@ class MRA(Recording):
             regardless.
         """
         
-        threshold = scoreatpercentile([abs(n.value) for n in self.nodes], p * 100) * 2.0
-        parents = array([])
-        children = array([self.root])
+        threshold = stats.scoreatpercentile([abs(n.value) for n in self.nodes], p * 100) * 2.0
+        parents = np.array([])
+        children = np.array([self.root])
         
         while len(children) > 0:
             nodes = children.copy()
@@ -179,14 +180,14 @@ class MRA(Recording):
                 
                 # Choose new node ordering.
                 for i in range(0, len(nodes)):
-                    nancestors = array([p.value for p in nodes[i].ancestors()])
-                    npredecessors = array([p.value for p in nodes[i].predecessors(nk)])
+                    nancestors = np.array([p.value for p in nodes[i].ancestors()])
+                    npredecessors = np.array([p.value for p in nodes[i].predecessors(nk)])
                     
-                    ascores = array([self.ascore(c, nancestors, threshold) for c in nodes])
-                    pscores = array([self.pscore(c, npredecessors, nk, threshold) for c in nodes])
+                    ascores = np.array([self.ascore(c, nancestors, threshold) for c in nodes])
+                    pscores = np.array([self.pscore(c, npredecessors, nk, threshold) for c in nodes])
                     
-                    candidates = nodes[(ascores == max(ascores)) & (pscores == max(pscores))]
-                    selection = choice(candidates)
+                    candidates = nodes[(ascores == np.amax(ascores)) & (pscores == np.amax(pscores))]
+                    selection = np.random.choice(candidates)
                     new_nodes[i] = selection
                 
                 # Fix predecessor relationships.
@@ -198,5 +199,5 @@ class MRA(Recording):
                     parents[i].adopt(new_nodes[i * 2], new_nodes[i * 2 + 1])
             
             parents = nodes
-            children = array([c for c in array([n.children for n in nodes]).flat if c != None])
+            children = np.array([c for c in np.array([n.children for n in nodes]).flat if c != None])
             

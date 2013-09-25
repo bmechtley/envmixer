@@ -106,9 +106,20 @@ class Recording(object):
             self.filename = ''
             self.snd = None
     
+    def __str__(self):
+        try:
+            fn = self.filename
+        except:
+            fn = '(temporary buffer)'
+
+        return 'filename: %s\nrate:%f\nlen:%d\nstart:%d\nend:%d' % (fn, self.rate, self.len, self.start, self.end)
+    
     def init_after_load(self):
-        self.rate = float(self.snd.samplerate)
-        self.wav = self.snd.read_frames(self.snd.nframes)
+        try:
+            self.rate = float(self.snd.samplerate)
+            self.wav = self.snd.read_frames(self.snd.nframes)
+        except:
+            pass
         
         # Mixdown to mono for now.
         if len(self.wav.shape) > 1:

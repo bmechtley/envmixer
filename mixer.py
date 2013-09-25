@@ -136,11 +136,12 @@ def write_wtl_mix(config, sounds, name):
         sounds,
         config['trainlength'],
         config['wtlmix']['grainlength'],
-        config['wtlmix']['maxdist']
+        config['wtlmix']['maxdist'],
+        pow2len=True
     )
     
     for t in range(len(trains)):
-        trains[t].fillgrains(envtype=config['simplemix']['envelope'], wtl={
+        trains[t].fillgrains(envtype=config['wtlmix']['envelope'], wtl={
             'k': config['wtlmix'].get('k', 0.01),
             'p': config['wtlmix'].get('p', 0.8),
             'maxlevel': config['wtlmix'].get('maxlevel', -1)
@@ -165,16 +166,17 @@ def write_wtl_mix(config, sounds, name):
     mixed.save()
 
 def write_wtl(config, sounds, name):
-     train = gt.make_simple_train(
+    train = gt.make_simple_train(
         config['coordinates'], 
         sounds, 
         config['trainlength'], 
         config['wtl']['grainlength'], 
-        config['wtl']['maxdist']
+        config['wtl']['maxdist'],
+        pow2len=True
     )
     
     train.basename = name
-    train.fillgrains(envtype=config['simple']['envelope'], wtl={
+    train.fillgrains(envtype=config['wtl']['envelope'], wtl={
         'k': config['wtl'].get('k', 0.01),
         'p': config['wtl'].get('p', 0.8),
         'maxlevel': config['wtl'].get('maxlevel', -1)

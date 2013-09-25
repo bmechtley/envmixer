@@ -4,6 +4,7 @@ import os, bz2
 # Pylab.
 import numpy as np
 import matplotlib as mpl
+import scikits.audiolab as al
 import sklearn.mixture as mixture
 
 # Local.
@@ -42,7 +43,7 @@ def make_tone_train(tones, traindur=10.0, tonedur=1.0, amplitude=1.0, fadedur=0.
     
     return train
 
-def make_simple_mix_trains(coords, sounds, length=10, graindur=[500,2000], maxdist=60, trains=None):
+def make_simple_mix_trains(coords, sounds, length=10, graindur=[500,2000], maxdist=60, trains=None, pow2len=False):
     coords = np.array(coords)
     
     # Percentage completion along each soundwalk (side).
@@ -77,6 +78,10 @@ def make_simple_mix_trains(coords, sounds, length=10, graindur=[500,2000], maxdi
             g = Grain()
             g.src = 0
             g.dur = int(np.random.uniform(graindur[0], graindur[1]) * trains[t].rate)
+
+            if pow2len:
+                g.dur = 2 ** np.ceil(np.log2(g.dur))
+            
             samesrc = [og for og in trains[t].grains if og.src == g.src]
 
             if len(samesrc) < 1:
@@ -134,7 +139,7 @@ def make_simple_mix_trains(coords, sounds, length=10, graindur=[500,2000], maxdi
 
     return trains
     
-def make_simple_train(coords, sounds, length=10, graindur=(500, 2000), maxdist=60, train=None):
+def make_simple_train(coords, sounds, length=10, graindur=(500, 2000), maxdist=60, train=None, pow2len=False):
     """
     Simplest mixing algorithm. Creates a new grain train, each grain selected from one of the source recording. The
     source recording is randomly selected, weighted according to which recording is closest to the input coordinates. 
@@ -191,6 +196,9 @@ def make_simple_train(coords, sounds, length=10, graindur=(500, 2000), maxdist=6
         g.src = int(np.random.choice(range(len(train.sources)), p=prob))
         g.dur = int(np.random.uniform(graindur[0], graindur[1]) * train.rate)
         
+        if pow2len:
+            g.dur = 2 ** np.ceil(np.log2(g.dur))
+
         samesrc = [og for og in train.grains if og.src == g.src]
 
         if len(samesrc) < 1:
@@ -307,19 +315,29 @@ class GrainTrain:
 
     def fillgrains(self, envtype='cosine', wtl=None):
         for i, g in enumerate(self.grains):
-            g.data = np.array(self.sources[g.src].wav[g.srcpos:g.srcpos + g.dur])
+            g.data = np.array(self.sources[int(g.src)].wav[int(g.srcpos):int(g.srcpos + g.dur)])
             
             if wtl:
-                wtlgrain = MRA()
+                wtlgrain = rec.MRA()
                 wtlgrain.wav = g.data
                 wtlgrain.rate = self.sources[g.src].rate
                 
-                wtlgrain.calculate_mra()
-                wtlgrain.tap(**wtl)
-                wtlgrain.reconstruct_wav()
+                wtlgrain.init_after_load()
+                try: 
+                    wtlgrain.calculate_mra()
+                    wtlgrain.tap(**wtl)
+                except:
+                    print('Encountered error. Writing erroneous grain.')
+                    print('Grain: %s' % str(g))
+                    print wtlgrain
+                    print self.sources[g.src]
+                    newfile = al.Sndfile('error.wav', 'w', al.Format(), channels=1, samplerate=self.sources[g.src].rate)
+                    newfile.write_frames(g.data)
+                    exit(-1)
 
                 g.data = wtlgrain.wav
-                
+                wtlgrain.reconstruct_wav()
+
             g.env = np.ones(g.data.shape)
             
             # Apply window halves exiting previous grain, entering current grain.
@@ -338,11 +356,11 @@ class GrainTrain:
 
                 assert envelope is not None, 'Invalid mixing envelope: %s' % envtype
 
-                if len(p.data[-fadedur:]):
-                    p.env[-fadedur:] *= 1 - envelope
+                if len(p.data[-int(fadedur):]):
+                    p.env[-int(fadedur):] *= 1 - envelope
 
-                if len(g.data[:fadedur]):
-                    g.env[:fadedur] *= envelope
+                if len(g.data[:int(fadedur)]):
+                    g.env[:int(fadedur)] *= envelope
 
     def mixdown(self):
         """
@@ -365,12 +383,12 @@ class GrainTrain:
         self.sound.rate = self.rate
 
         length = max([g.outpos + g.dur for g in self.grains])
-        self.sound.wav = np.zeros(length, dtype=self.grains[0].data.dtype)
+        self.sound.wav = np.zeros(int(length), dtype=self.grains[0].data.dtype)
         
         for g in [g for g in self.grains]:
             if len(g.data):
-                if len(self.sound.wav[g.outpos:g.outpos+g.dur]):
-                    self.sound.wav[g.outpos:g.outpos + g.dur] += g.data * g.env
+                if len(self.sound.wav[int(g.outpos):int(g.outpos+g.dur)]):
+                    self.sound.wav[int(g.outpos):int(g.outpos + g.dur)] += g.data * g.env
                 else:
                     print 'invalid output region: %s' % str(g)
             else:
